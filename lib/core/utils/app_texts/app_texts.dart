@@ -14,6 +14,8 @@ class AppTexts {
   static const String loggingIn = "Logging in";
   static const String loggingOut = "Logging out";
   static const String gettingStarted = "Getting started";
+  static const String getStarted = "Get started";
+  static const String continueWithEmail = "Continue with Email";
   static const String cancel = "Cancel";
   static const String save = "Save";
 
@@ -37,6 +39,13 @@ class AppTexts {
   static const String noInternetButton = "Try again";
   static const String noInternetButtonDescription =
       "Please check your internet connection and try again.";
+
+  // Onboarding
+  static const String onboardingTaglineBold = "Big goals, tiny tasks. ";
+  static const String onboardingTaglineRegular =
+      "Every day you get new tasks to achieve your goal.";
+  static const String onboardingTerms =
+      "By clicking 'Get Started,' you confirm that you have read and agree to RegentPT's Terms and Privacy policies.";
 
   // Day names
   static const String dayMonday = "Monday";

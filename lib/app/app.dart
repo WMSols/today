@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:today/app/routes/app_pages.dart';
+import 'package:today/presentation/routes/app_pages.dart';
 import 'package:today/core/init/app_initializer.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';

@@ -1,4 +1,4 @@
-import 'package:today/app/routes/app_routes.dart';
+import 'package:today/presentation/routes/app_routes.dart';
 import 'package:today/core/config/env_config.dart';
 import 'package:today/core/init/app_system_ui.dart';
 import 'package:today/di/app_binding.dart';
