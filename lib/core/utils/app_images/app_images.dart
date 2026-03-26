@@ -14,13 +14,14 @@ class AppImages {
   static const String gem = 'assets/images/icons/gem.png';
   static const String goalsCreated = 'assets/images/icons/goals_created.png';
   static const String lifetimeStats = 'assets/images/icons/lifetime_stats.png';
-  static const String medal = 'assets/images/icons/medal.png';
   static const String proPlanTick = 'assets/images/icons/pro_plan_tick.png';
   static const String streak = 'assets/images/icons/streak.png';
   static const String tasksCompleted =
       'assets/images/icons/tasks_completed.png';
-  static const String tasksMedals = 'assets/images/icons/tasks_medal.png';
   static const String unlockPro = 'assets/images/icons/unlock_pro.png';
+  static const String medal1 = 'assets/images/icons/medal_1.png';
+  static const String medal2 = 'assets/images/icons/medal_2.png';
+  static const String medal3 = 'assets/images/icons/medal_3.png';
 
   // Bottom Navigation Icons
   static const String home = 'assets/images/icons/home.png';

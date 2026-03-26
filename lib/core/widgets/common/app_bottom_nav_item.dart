@@ -23,9 +23,9 @@ class AppBottomNavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isSelected = index == currentIndex;
-    final iconSize = AppResponsive.iconSize(
+    final targetIconSize = AppResponsive.iconSize(
       context,
-      factor: isSelected ? 1 : 1.3,
+      factor: isSelected ? 0.92 : 1.18,
     );
     return Expanded(
       child: GestureDetector(
@@ -36,10 +36,10 @@ class AppBottomNavItem extends StatelessWidget {
           curve: Curves.easeOutCubic,
           margin: EdgeInsets.symmetric(
             horizontal: AppResponsive.scaleSize(context, 2),
-            vertical: AppResponsive.scaleSize(context, 2),
+            vertical: AppResponsive.scaleSize(context, 1),
           ),
           padding: EdgeInsets.symmetric(
-            vertical: AppResponsive.scaleSize(context, 4),
+            vertical: AppResponsive.scaleSize(context, 2),
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(AppResponsive.radius(context)),
@@ -53,20 +53,28 @@ class AppBottomNavItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    iconPath,
-                    width: iconSize,
-                    height: iconSize,
-                    fit: BoxFit.contain,
+                  TweenAnimationBuilder<double>(
+                    tween: Tween<double>(end: targetIconSize),
+                    duration: const Duration(milliseconds: 260),
+                    curve: Curves.easeOutCubic,
+                    builder: (context, animatedSize, child) {
+                      return Image.asset(
+                        iconPath,
+                        width: animatedSize,
+                        height: animatedSize,
+                        fit: BoxFit.contain,
+                      );
+                    },
                   ),
                   if (isSelected) ...[
-                    SizedBox(height: AppResponsive.scaleSize(context, 2)),
+                    SizedBox(height: AppResponsive.scaleSize(context, 1)),
                     Text(
                       label,
                       style: AppTextStyles.hintText(context).copyWith(
                         color: AppColors.black,
                         fontWeight: FontWeight.w600,
-                        fontSize: AppResponsive.screenWidth(context) * 0.028,
+                        fontSize: AppResponsive.scaleSize(context, 10),
+                        height: 1,
                       ),
                     ),
                   ],
@@ -79,4 +87,3 @@ class AppBottomNavItem extends StatelessWidget {
     );
   }
 }
-

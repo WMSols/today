@@ -43,7 +43,7 @@ class AppBottomNavBarScaffold extends StatelessWidget {
   }
 }
 
-class AppBottomNavBar extends StatelessWidget {
+class AppBottomNavBar extends StatefulWidget {
   const AppBottomNavBar({
     super.key,
     required this.currentIndex,
@@ -52,6 +52,40 @@ class AppBottomNavBar extends StatelessWidget {
 
   final int currentIndex;
   final ValueChanged<int> onTap;
+
+  @override
+  State<AppBottomNavBar> createState() => _AppBottomNavBarState();
+}
+
+class _AppBottomNavBarState extends State<AppBottomNavBar>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  int _previousIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _previousIndex = widget.currentIndex;
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 780),
+    )..value = 1;
+  }
+
+  @override
+  void didUpdateWidget(covariant AppBottomNavBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.currentIndex != widget.currentIndex) {
+      _previousIndex = oldWidget.currentIndex;
+      _controller.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,58 +111,77 @@ class AppBottomNavBar extends StatelessWidget {
                 final totalWidth = constraints.maxWidth;
                 final itemWidth = totalWidth / itemsCount;
                 final bubbleInset = AppResponsive.scaleSize(context, 2);
-                return Stack(
-                  children: [
-                    AnimatedPositioned(
-                      duration: const Duration(milliseconds: 380),
-                      curve: Curves.easeOutCubic,
-                      left: itemWidth * currentIndex + bubbleInset,
-                      top: bubbleInset,
-                      width: itemWidth - (bubbleInset * 2),
-                      height: constraints.maxHeight - (bubbleInset * 2),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                          AppResponsive.scaleSize(context, 26),
-                        ),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.white.withValues(alpha: 0.34),
-                              borderRadius: BorderRadius.circular(
-                                AppResponsive.scaleSize(context, 26),
+                final prevLeft = itemWidth * _previousIndex + bubbleInset;
+                final targetLeft = itemWidth * widget.currentIndex + bubbleInset;
+                final baseWidth = itemWidth - (bubbleInset * 2);
+
+                return AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, child) {
+                    final moveT = Curves.easeInOutCubic.transform(
+                      _controller.value,
+                    );
+                    final stretchT = Curves.easeOutCubic.transform(
+                      _controller.value,
+                    );
+                    final left = lerpDouble(prevLeft, targetLeft, moveT)!;
+                    final stretch = AppResponsive.scaleSize(context, 8) *
+                        (1 - ((stretchT * 2) - 1).abs());
+                    final width = baseWidth + stretch;
+                    final correctedLeft = left - (stretch / 2);
+
+                    return Stack(
+                      children: [
+                        Positioned(
+                          left: correctedLeft,
+                          top: bubbleInset,
+                          width: width,
+                          height: constraints.maxHeight - (bubbleInset * 2),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                              AppResponsive.scaleSize(context, 26),
+                            ),
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.white.withValues(alpha: 0.34),
+                                  borderRadius: BorderRadius.circular(
+                                    AppResponsive.scaleSize(context, 26),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        AppBottomNavItem(
-                          index: 0,
-                          currentIndex: currentIndex,
-                          label: 'HOME',
-                          iconPath: AppImages.home,
-                          onTap: onTap,
-                        ),
-                        AppBottomNavItem(
-                          index: 1,
-                          currentIndex: currentIndex,
-                          label: 'GOALS',
-                          iconPath: AppImages.goals,
-                          onTap: onTap,
-                        ),
-                        AppBottomNavItem(
-                          index: 2,
-                          currentIndex: currentIndex,
-                          label: 'SETTINGS',
-                          iconPath: AppImages.settings,
-                          onTap: onTap,
+                        Row(
+                          children: [
+                            AppBottomNavItem(
+                              index: 0,
+                              currentIndex: widget.currentIndex,
+                              label: 'HOME',
+                              iconPath: AppImages.home,
+                              onTap: widget.onTap,
+                            ),
+                            AppBottomNavItem(
+                              index: 1,
+                              currentIndex: widget.currentIndex,
+                              label: 'GOALS',
+                              iconPath: AppImages.goals,
+                              onTap: widget.onTap,
+                            ),
+                            AppBottomNavItem(
+                              index: 2,
+                              currentIndex: widget.currentIndex,
+                              label: 'SETTINGS',
+                              iconPath: AppImages.settings,
+                              onTap: widget.onTap,
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                  ],
+                    );
+                  },
                 );
               },
             ),
