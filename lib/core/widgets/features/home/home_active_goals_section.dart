@@ -8,7 +8,9 @@ import 'package:today/core/utils/app_styles/app_text_styles.dart';
 import 'package:today/core/widgets/features/home/home_goal_item.dart';
 
 class HomeActiveGoalsSection extends StatelessWidget {
-  const HomeActiveGoalsSection({super.key});
+  const HomeActiveGoalsSection({super.key, this.onGoalTap});
+
+  final VoidCallback? onGoalTap;
 
   @override
   Widget build(BuildContext context) {
@@ -43,16 +45,22 @@ class HomeActiveGoalsSection extends StatelessWidget {
               AppResponsive.radius(context, factor: 5),
             ),
           ),
-          child: const Column(
+          child: Column(
             children: [
-              HomeGoalItem(title: 'Get fit in 30 days', subtitle: 'DAY 07 OF 30'),
               HomeGoalItem(
-                title: 'Speak French fluently',
-                subtitle: 'DAY 04 OF 18',
+                title: 'Get fit in 30 days',
+                subtitle: 'DAY 07 OF 30',
+                onTap: onGoalTap,
               ),
               HomeGoalItem(
                 title: 'Speak French fluently',
                 subtitle: 'DAY 04 OF 18',
+                onTap: onGoalTap,
+              ),
+              HomeGoalItem(
+                title: 'Speak French fluently',
+                subtitle: 'DAY 04 OF 18',
+                onTap: onGoalTap,
               ),
             ],
           ),

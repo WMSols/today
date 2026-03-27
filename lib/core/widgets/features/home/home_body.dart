@@ -6,9 +6,10 @@ import 'package:today/core/widgets/features/home/home_goal_entry_card.dart';
 import 'package:today/core/widgets/features/home/home_top_header.dart';
 
 class HomeBody extends StatelessWidget {
-  const HomeBody({super.key, required this.onDateTap});
+  const HomeBody({super.key, required this.onDateTap, required this.onGoalTap});
 
   final VoidCallback onDateTap;
+  final VoidCallback onGoalTap;
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +22,10 @@ class HomeBody extends StatelessWidget {
           AppSpacing.vertical(context, 0.02),
           const HomeGoalEntryCard(),
           AppSpacing.vertical(context, 0.018),
-          const HomeActiveGoalsSection(),
-          AppSpacing.vertical(context, 0.12),
+          HomeActiveGoalsSection(onGoalTap: onGoalTap),
+          AppSpacing.vertical(context, 0.1),
         ],
       ),
     );
   }
 }
-

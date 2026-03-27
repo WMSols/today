@@ -13,7 +13,10 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.black,
       body: SafeArea(
-        child: HomeBody(onDateTap: () => Get.toNamed(AppRoutes.homeCalendar)),
+        child: HomeBody(
+          onDateTap: () => Get.toNamed(AppRoutes.homeCalendar),
+          onGoalTap: () => Get.toNamed(AppRoutes.activeGoalDetails),
+        ),
       ),
     );
   }

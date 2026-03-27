@@ -1,5 +1,8 @@
 import 'package:get/get.dart';
+import 'package:today/presentation/routes/app_routes.dart';
 
 class PlannerController extends GetxController {
-  final RxList<String> tasks = <String>[].obs;
+  void onConfirmTap() {
+    Get.toNamed(AppRoutes.creatingPlan);
+  }
 }
