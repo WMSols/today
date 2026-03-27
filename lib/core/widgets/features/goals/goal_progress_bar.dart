@@ -4,10 +4,7 @@ import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 
 class GoalProgressBar extends StatelessWidget {
-  const GoalProgressBar({
-    super.key,
-    required this.progress,
-  });
+  const GoalProgressBar({super.key, required this.progress});
 
   final double progress;
 
@@ -15,14 +12,18 @@ class GoalProgressBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final clamped = progress.clamp(0, 1.0).toDouble();
     return ClipRRect(
-      borderRadius: BorderRadius.circular(AppResponsive.scaleSize(context, 10)),
+      borderRadius: BorderRadius.circular(
+        AppResponsive.radius(context, factor: 5),
+      ),
       child: LinearProgressIndicator(
         value: clamped,
         minHeight: AppResponsive.scaleSize(context, 8),
-        backgroundColor: AppColors.grey.withValues(alpha: 0.22),
+        backgroundColor: AppColors.lightGrey,
+        borderRadius: BorderRadius.circular(
+          AppResponsive.radius(context, factor: 5),
+        ),
         valueColor: const AlwaysStoppedAnimation<Color>(AppColors.white),
       ),
     );
   }
 }
-

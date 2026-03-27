@@ -22,4 +22,3 @@ class PlannerAvatar extends StatelessWidget {
     );
   }
 }
-

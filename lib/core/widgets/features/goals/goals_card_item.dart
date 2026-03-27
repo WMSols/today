@@ -18,6 +18,7 @@ class GoalsCardItem extends StatelessWidget {
     required this.totalTasksText,
     required this.progress,
     required this.iconPath,
+    this.onTap,
   });
 
   final String title;
@@ -28,106 +29,111 @@ class GoalsCardItem extends StatelessWidget {
   final String totalTasksText;
   final double progress;
   final String iconPath;
+  final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: AppSpacing.symmetric(context, h: 0.04, v: 0.04),
-      decoration: BoxDecoration(
-        color: AppColors.darkGrey,
-        borderRadius: BorderRadius.circular(
-          AppResponsive.radius(context, factor: 5),
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        width: double.infinity,
+        padding: AppSpacing.symmetric(context, h: 0.04, v: 0.04),
+        decoration: BoxDecoration(
+          color: AppColors.darkGrey,
+          borderRadius: BorderRadius.circular(
+            AppResponsive.radius(context, factor: 5),
+          ),
         ),
-      ),
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: AppTextStyles.heading(context).copyWith(
-                        color: AppColors.white.withValues(alpha: 0.9),
-                        fontWeight: FontWeight.w600,
-                        fontSize: AppResponsive.scaleSize(context, 14),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: AppTextStyles.heading(context).copyWith(
+                          color: AppColors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: AppResponsive.scaleSize(context, 14),
+                        ),
                       ),
-                    ),
-                    AppSpacing.vertical(context, 0.004),
-                    Text(
-                      dayText,
-                      style: AppTextStyles.labelText(context).copyWith(
-                        color: AppColors.grey,
-                        fontWeight: FontWeight.w700,
-                        fontSize: AppResponsive.scaleSize(context, 10),
+                      AppSpacing.vertical(context, 0.004),
+                      Text(
+                        dayText,
+                        style: AppTextStyles.labelText(context).copyWith(
+                          color: AppColors.grey,
+                          fontWeight: FontWeight.w700,
+                          fontSize: AppResponsive.scaleSize(context, 10),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Image.asset(
-                iconPath,
-                width: AppResponsive.iconSize(context, factor: 1.15),
-                height: AppResponsive.iconSize(context, factor: 1.15),
-              ),
-            ],
-          ),
-          AppSpacing.vertical(context, 0.03),
-          GoalProgressBar(progress: progress),
-          AppSpacing.vertical(context, 0.01),
-          Row(
-            children: [
-              Text(
-                tasksText,
-                style: AppTextStyles.labelText(context).copyWith(
-                  color: AppColors.grey,
-                  fontWeight: FontWeight.w700,
-                  fontSize: AppResponsive.scaleSize(context, 10),
+                Image.asset(
+                  iconPath,
+                  width: AppResponsive.iconSize(context, factor: 1.15),
+                  height: AppResponsive.iconSize(context, factor: 1.15),
                 ),
-              ),
-              const Spacer(),
-              Text(
-                percentText,
-                style: AppTextStyles.labelText(context).copyWith(
-                  color: AppColors.grey,
-                  fontWeight: FontWeight.w700,
-                  fontSize: AppResponsive.scaleSize(context, 10),
+              ],
+            ),
+            AppSpacing.vertical(context, 0.03),
+            GoalProgressBar(progress: progress),
+            AppSpacing.vertical(context, 0.01),
+            Row(
+              children: [
+                Text(
+                  tasksText,
+                  style: AppTextStyles.labelText(context).copyWith(
+                    color: AppColors.grey,
+                    fontWeight: FontWeight.w700,
+                    fontSize: AppResponsive.scaleSize(context, 10),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          AppSpacing.vertical(context, 0.03),
-          Row(
-            children: [
-              Image.asset(
-                AppImages.gem,
-                width: AppResponsive.iconSize(context, factor: 0.8),
-                height: AppResponsive.iconSize(context, factor: 0.8),
-              ),
-              AppSpacing.horizontal(context, 0.01),
-              Text(
-                gemsText,
-                style: AppTextStyles.labelText(context).copyWith(
-                  color: AppColors.grey,
-                  fontWeight: FontWeight.w700,
-                  fontSize: AppResponsive.scaleSize(context, 10),
+                const Spacer(),
+                Text(
+                  percentText,
+                  style: AppTextStyles.labelText(context).copyWith(
+                    color: AppColors.grey,
+                    fontWeight: FontWeight.w700,
+                    fontSize: AppResponsive.scaleSize(context, 10),
+                  ),
                 ),
-              ),
-              const Spacer(),
-              Text(
-                totalTasksText,
-                style: AppTextStyles.labelText(context).copyWith(
-                  color: AppColors.grey,
-                  fontWeight: FontWeight.w700,
-                  fontSize: AppResponsive.scaleSize(context, 10),
+              ],
+            ),
+            AppSpacing.vertical(context, 0.03),
+            Row(
+              children: [
+                Image.asset(
+                  AppImages.gem,
+                  width: AppResponsive.iconSize(context, factor: 0.8),
+                  height: AppResponsive.iconSize(context, factor: 0.8),
                 ),
-              ),
-            ],
-          ),
-        ],
+                AppSpacing.horizontal(context, 0.01),
+                Text(
+                  gemsText,
+                  style: AppTextStyles.labelText(context).copyWith(
+                    color: AppColors.grey,
+                    fontWeight: FontWeight.w700,
+                    fontSize: AppResponsive.scaleSize(context, 10),
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  totalTasksText,
+                  style: AppTextStyles.labelText(context).copyWith(
+                    color: AppColors.grey,
+                    fontWeight: FontWeight.w700,
+                    fontSize: AppResponsive.scaleSize(context, 10),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

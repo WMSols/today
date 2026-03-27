@@ -35,4 +35,3 @@ class HomeCalendarYearGrid extends StatelessWidget {
     );
   }
 }
-

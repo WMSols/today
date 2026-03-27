@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
-import 'package:today/core/utils/app_images/app_images.dart';
+import 'package:today/core/utils/app_lotties/app_lotties.dart';
+import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
+import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/common/app_custom_app_bar.dart';
+import 'package:today/core/widgets/features/goals/empty_goal.dart';
 import 'package:today/core/widgets/features/goals/goals_card_item.dart';
+import 'package:today/presentation/controllers/goals/goals_controller.dart';
 
-class GoalsBody extends StatelessWidget {
+class GoalsBody extends GetView<GoalsController> {
   const GoalsBody({super.key});
 
   @override
@@ -15,41 +21,47 @@ class GoalsBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const AppCustomAppBar.titleOnly(title: 'Goals'),
-          AppSpacing.vertical(context, 0.02),
-          const GoalsCardItem(
-            title: 'Get fit in 30 days',
-            dayText: 'DAY 07 OF 30',
-            tasksText: '2/6 TASKS',
-            percentText: '38%',
-            gemsText: '20 GEMS',
-            totalTasksText: '14 TASKS DONE IN TOTAL',
-            progress: 0.38,
-            iconPath: AppImages.medal1,
+          const AppCustomAppBar.titleOnly(title: AppTexts.goals),
+          Obx(
+            () => controller.isLoading.value
+                ? Center(
+                    child: Lottie.asset(
+                      AppLotties.loadingWhite,
+                      width: AppResponsive.scaleSize(context, 52),
+                      height: AppResponsive.scaleSize(context, 52),
+                      fit: BoxFit.contain,
+                    ),
+                  )
+                : controller.showEmptyGoal.value
+                ? const EmptyGoal()
+                : Column(
+                    children: [
+                      AppSpacing.vertical(context, 0.02),
+                      ...List.generate(controller.goalCards.length, (index) {
+                        final card = controller.goalCards[index];
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            bottom: index == controller.goalCards.length - 1
+                                ? 0
+                                : AppResponsive.scaleSize(context, 12),
+                          ),
+                          child: GoalsCardItem(
+                            title: card.title,
+                            dayText: card.dayText,
+                            tasksText: card.tasksText,
+                            percentText: card.percentText,
+                            gemsText: card.gemsText,
+                            totalTasksText: card.totalTasksText,
+                            progress: card.progress,
+                            iconPath: card.iconPath,
+                            onTap: controller.openEmptyGoal,
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
           ),
-          AppSpacing.vertical(context, 0.02),
-          const GoalsCardItem(
-            title: 'Speak French fluently',
-            dayText: 'DAY 07 OF 30',
-            tasksText: '0/6 TASKS',
-            percentText: '0%',
-            gemsText: '18 GEMS',
-            totalTasksText: '14 TASKS DONE IN TOTAL',
-            progress: 0,
-            iconPath: AppImages.medal2,
-          ),
-          AppSpacing.vertical(context, 0.02),
-          const GoalsCardItem(
-            title: 'Save \$500 in 45 days',
-            dayText: 'DAY 07 OF 45',
-            tasksText: '0/6 TASKS',
-            percentText: '0%',
-            gemsText: '18 GEMS',
-            totalTasksText: '14 TASKS DONE IN TOTAL',
-            progress: 0,
-            iconPath: AppImages.medal3,
-          ),
-          AppSpacing.vertical(context, 0.14),
+          AppSpacing.vertical(context, 0.1),
         ],
       ),
     );
