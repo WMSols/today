@@ -5,6 +5,8 @@ import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
+import 'package:today/core/utils/app_texts/app_texts.dart';
+import 'package:today/core/widgets/common/app_count_badge.dart';
 
 enum AppCustomAppBarVariant {
   homeStatus,
@@ -149,9 +151,9 @@ class AppCustomAppBar extends StatelessWidget {
                 ),
               ),
             ),
-            _TopCountBadge(iconPath: AppImages.gem, count: gemsCount ?? '8'),
+            AppCountBadge(iconPath: AppImages.gem, count: gemsCount ?? '8'),
             AppSpacing.horizontal(context, 0.02),
-            _TopCountBadge(
+            AppCountBadge(
               iconPath: AppImages.streak,
               count: streakCount ?? '8',
             ),
@@ -198,7 +200,7 @@ class AppCustomAppBar extends StatelessWidget {
                 style: AppTextStyles.heading(context).copyWith(
                   color: AppColors.grey,
                   fontWeight: FontWeight.w600,
-                  fontSize: AppResponsive.scaleSize(context, 28),
+                  fontSize: AppResponsive.scaleSize(context, 19),
                 ),
               ),
             ),
@@ -207,9 +209,9 @@ class AppCustomAppBar extends StatelessWidget {
         );
       case AppCustomAppBarVariant.unlockProChip:
         return Align(
-          alignment: Alignment.centerLeft,
+          alignment: Alignment.center,
           child: Material(
-            color: const Color(0xFF1D1A27),
+            color: AppColors.darkGrey,
             borderRadius: BorderRadius.circular(
               AppResponsive.radius(context, factor: 5),
             ),
@@ -228,12 +230,12 @@ class AppCustomAppBar extends StatelessWidget {
                   children: [
                     Image.asset(
                       AppImages.unlockPro,
-                      width: AppResponsive.iconSize(context, factor: 0.7),
-                      height: AppResponsive.iconSize(context, factor: 0.7),
+                      width: AppResponsive.scaleSize(context, 10),
+                      height: AppResponsive.scaleSize(context, 10),
                     ),
                     AppSpacing.horizontal(context, 0.01),
                     Text(
-                      'UNLOCK PRO',
+                      AppTexts.unlockPro,
                       style: AppTextStyles.labelText(context).copyWith(
                         color: AppColors.white,
                         fontWeight: FontWeight.w700,
@@ -247,43 +249,5 @@ class AppCustomAppBar extends StatelessWidget {
           ),
         );
     }
-  }
-}
-
-class _TopCountBadge extends StatelessWidget {
-  const _TopCountBadge({required this.iconPath, required this.count});
-
-  final String iconPath;
-  final String count;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: AppSpacing.symmetric(context, h: 0.04, v: 0.01),
-      decoration: BoxDecoration(
-        color: AppColors.white.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(
-          AppResponsive.radius(context, factor: 5),
-        ),
-      ),
-      child: Row(
-        children: [
-          Image.asset(
-            iconPath,
-            width: AppResponsive.iconSize(context, factor: 0.8),
-            height: AppResponsive.iconSize(context, factor: 0.8),
-          ),
-          AppSpacing.horizontal(context, 0.01),
-          Text(
-            count,
-            style: AppTextStyles.bodyText(context).copyWith(
-              color: AppColors.grey,
-              fontWeight: FontWeight.w500,
-              fontSize: AppResponsive.scaleSize(context, 14),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

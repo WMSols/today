@@ -16,6 +16,7 @@ class AppTexts {
   static const String gettingStarted = "Getting started";
   static const String getStarted = "Get started";
   static const String continueWithEmail = "Continue with Email";
+  static const String confirm = "Confirm";
   static const String cancel = "Cancel";
   static const String save = "Save";
 
@@ -46,6 +47,32 @@ class AppTexts {
       "Every day you get new tasks to achieve your goal.";
   static const String onboardingTerms =
       "By clicking 'Get Started,' you confirm that you have read and agree to RegentPT's Terms and Privacy policies.";
+  static const String plannerWelcomeMessage =
+      "Heyy 👋 and welcome to your daily task planner - Today";
+  static const String plannerNamePrompt = "What would you like to be called?";
+
+  // Planner
+  static const String creatingPlanTitle =
+      "Sit back and relax while we set your tasks for you.";
+  static const String didYouKnow = "DID YOU KNOW";
+  static const String didYouKnowDescription =
+      "Your brain uses less energy starting a task than avoiding it.";
+  // Goals
+  static const String goals = "Goals";
+  static const String emptyGoalTitle = "This is awkwardly empty.";
+  static const String emptyGoalSubtitle =
+      "Your future self is waiting - add a goal to get started.";
+
+  // Subscription
+  static const String subscriptionTitle = "You've hit your goal limit.";
+  static const String subscriptionSubtitle =
+      "Upgrade to keep the momentum going.\nUnlock more goals, smarter AI, and 2x gems.";
+  static const String subscriptionRestore =
+      "Restore purchase • Terms • Privacy";
+  static const String subscriptionCtaFree = "Current Free Plan";
+  static const String subscriptionCtaPro = "Start Pro - \$4.99 / month";
+  static const String subscriptionCtaLifetime = "Get Lifetime - \$59.99";
+  static const String unlockPro = "UNLOCK PRO";
 
   // Day names
   static const String dayMonday = "Monday";

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class AppHelper {
   AppHelper._();
 
@@ -44,6 +46,23 @@ class AppHelper {
         .map((e) => e.trim())
         .where((e) => e.isNotEmpty)
         .toList();
+  }
+}
+
+class AppHelpers {
+  AppHelpers._();
+
+  static Color taskLevelColor(String level) {
+    switch (level.toUpperCase()) {
+      case 'HARD':
+        return const Color(0xFFDD6237);
+      case 'EASY':
+        return const Color(0xFF3BEEB2);
+      case 'MEDIUM':
+        return const Color(0xFFFA75A8);
+      default:
+        return const Color(0xFFA5A5A5);
+    }
   }
 }
 

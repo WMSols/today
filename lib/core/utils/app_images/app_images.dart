@@ -13,6 +13,8 @@ class AppImages {
   static const String mediumTasks = 'assets/images/icons/medium_task.png';
   static const String gem = 'assets/images/icons/gem.png';
   static const String goalsCreated = 'assets/images/icons/goals_created.png';
+  static const String goalDetails = 'assets/images/icons/goal_details.png';
+  static const String emptyGoal = 'assets/images/icons/empty_goal.png';
   static const String lifetimeStats = 'assets/images/icons/lifetime_stats.png';
   static const String proPlanTick = 'assets/images/icons/pro_plan_tick.png';
   static const String streak = 'assets/images/icons/streak.png';

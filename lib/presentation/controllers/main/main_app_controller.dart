@@ -7,4 +7,3 @@ class MainAppController extends GetxController {
     selectedTabIndex.value = index;
   }
 }
-
