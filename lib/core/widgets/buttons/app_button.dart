@@ -108,14 +108,20 @@ class AppButton extends StatelessWidget {
 
     return Material(
       color: backgroundColor,
-      borderRadius: BorderRadius.circular(AppResponsive.radius(context,factor: 5)),
+      borderRadius: BorderRadius.circular(
+        AppResponsive.radius(context, factor: 5),
+      ),
       child: InkWell(
         onTap: isLoading ? null : onPressed,
-        borderRadius: BorderRadius.circular(AppResponsive.radius(context,factor: 5)),
+        borderRadius: BorderRadius.circular(
+          AppResponsive.radius(context, factor: 5),
+        ),
         child: Container(
           padding: AppSpacing.symmetric(context, h: 0.04, v: 0.015),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppResponsive.radius(context,factor: 5)),
+            borderRadius: BorderRadius.circular(
+              AppResponsive.radius(context, factor: 5),
+            ),
             border: border,
           ),
           child: child,

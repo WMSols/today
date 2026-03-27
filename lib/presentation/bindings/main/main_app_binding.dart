@@ -8,4 +8,3 @@ class MainAppBinding extends Bindings {
     Get.lazyPut<MainAppController>(MainAppController.new);
   }
 }
-

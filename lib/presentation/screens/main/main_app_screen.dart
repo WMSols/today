@@ -20,7 +20,10 @@ class MainAppScreen extends GetView<MainAppController> {
         onTap: controller.selectTab,
         backgroundColor: AppColors.black,
         children: [
-          HomeBody(onDateTap: () => Get.toNamed(AppRoutes.homeCalendar)),
+          HomeBody(
+            onDateTap: () => Get.toNamed(AppRoutes.homeCalendar),
+            onGoalTap: () => Get.toNamed(AppRoutes.activeGoalDetails),
+          ),
           const GoalsBody(),
           const SettingsBody(),
         ],
@@ -28,4 +31,3 @@ class MainAppScreen extends GetView<MainAppController> {
     );
   }
 }
-

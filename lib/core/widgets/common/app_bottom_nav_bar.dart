@@ -68,7 +68,7 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
     _previousIndex = widget.currentIndex;
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 780),
+      duration: const Duration(milliseconds: 820),
     )..value = 1;
   }
 
@@ -112,21 +112,18 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
                 final itemWidth = totalWidth / itemsCount;
                 final bubbleInset = AppResponsive.scaleSize(context, 2);
                 final prevLeft = itemWidth * _previousIndex + bubbleInset;
-                final targetLeft = itemWidth * widget.currentIndex + bubbleInset;
+                final targetLeft =
+                    itemWidth * widget.currentIndex + bubbleInset;
                 final baseWidth = itemWidth - (bubbleInset * 2);
 
                 return AnimatedBuilder(
                   animation: _controller,
                   builder: (context, child) {
-                    final moveT = Curves.easeInOutCubic.transform(
-                      _controller.value,
-                    );
-                    final stretchT = Curves.easeOutCubic.transform(
-                      _controller.value,
-                    );
-                    final left = lerpDouble(prevLeft, targetLeft, moveT)!;
-                    final stretch = AppResponsive.scaleSize(context, 8) *
-                        (1 - ((stretchT * 2) - 1).abs());
+                    final t = Curves.elasticOut.transform(_controller.value);
+                    final left = lerpDouble(prevLeft, targetLeft, t)!;
+                    final stretch =
+                        AppResponsive.scaleSize(context, 8) *
+                        (1 - ((t * 2) - 1).abs());
                     final width = baseWidth + stretch;
                     final correctedLeft = left - (stretch / 2);
 
@@ -145,7 +142,9 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
                               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: AppColors.white.withValues(alpha: 0.34),
+                                  color: AppColors.white.withValues(
+                                    alpha: 0.34,
+                                  ),
                                   borderRadius: BorderRadius.circular(
                                     AppResponsive.scaleSize(context, 26),
                                   ),

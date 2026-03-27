@@ -15,4 +15,3 @@ class ZenQuoteService {
     return (quote: 'Stay consistent every day.', author: 'Unknown');
   }
 }
-
