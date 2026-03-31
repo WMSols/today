@@ -3,14 +3,16 @@ import 'package:flutter/services.dart';
 
 /// Configures system UI overlay (status bar, navigation bar, etc.).
 abstract class AppSystemUi {
+  static const SystemUiOverlayStyle overlayStyle = SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.light,
+    statusBarBrightness: Brightness.dark,
+    systemNavigationBarColor: Colors.black,
+    systemNavigationBarIconBrightness: Brightness.light,
+  );
+
   /// Applies the default overlay style (transparent status bar, dark icons).
   static void setOverlayStyle() {
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-      ),
-    );
+    SystemChrome.setSystemUIOverlayStyle(overlayStyle);
   }
 }
