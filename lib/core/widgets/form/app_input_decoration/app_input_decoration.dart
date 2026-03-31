@@ -13,14 +13,15 @@ class AppInputDecoration {
   static InputDecoration decoration(
     BuildContext context, {
     String? hintText,
-    TextStyle? hintStyle,
     IconData? prefixIcon,
     Widget? suffixIcon,
   }) {
-    final radius = AppResponsive.radius(context);
+    final radius = AppResponsive.radius(context, factor: 5);
     return InputDecoration(
       hintText: hintText,
-      hintStyle: hintStyle ?? AppTextStyles.hintText(context),
+      hintStyle: AppTextStyles.hintText(
+        context,
+      ).copyWith(color: AppColors.darkGrey),
       prefixIcon: prefixIcon != null
           ? Icon(
               prefixIcon,
@@ -30,7 +31,7 @@ class AppInputDecoration {
           : null,
       suffixIcon: suffixIcon,
       filled: true,
-      fillColor: AppColors.primary.withValues(alpha: 0.3),
+      fillColor: AppColors.white,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(radius),
         borderSide: BorderSide.none,

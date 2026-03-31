@@ -20,6 +20,13 @@ class AppTexts {
   static const String cancel = "Cancel";
   static const String save = "Save";
 
+  // Home
+  static const String homeGoalEntryHint =
+      'Enter a goal you want to achieve ...';
+
+  // Planner
+  static const String plannerMessageInputHint = 'Type your message...';
+
   // No data yet
   static const String noDataYet = "No data yet";
   static const String notAvailable = "Not available";
