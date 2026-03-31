@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:today/domain/entities/active_goal_task_entity.dart';
 import 'package:today/domain/usecases/get_active_goal_tasks_usecase.dart';
@@ -10,10 +11,17 @@ class HomeController extends GetxController {
   final RxList<ActiveGoalTaskEntity> activeGoalTasks =
       <ActiveGoalTaskEntity>[].obs;
 
+  final TextEditingController goalInputController = TextEditingController();
+  final RxString goalDraft = ''.obs;
+
   @override
   Future<void> onInit() async {
     super.onInit();
     await loadActiveGoalTasks();
+  }
+
+  void setGoalDraft(String value) {
+    goalDraft.value = value;
   }
 
   Future<void> loadActiveGoalTasks() async {
@@ -24,5 +32,11 @@ class HomeController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  @override
+  void onClose() {
+    goalInputController.dispose();
+    super.onClose();
   }
 }

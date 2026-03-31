@@ -24,13 +24,17 @@ class AppIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconSize = size ?? AppResponsive.iconSize(context);
+    final iconSize = size ?? AppResponsive.iconSize(context, factor: 1.3);
     return Material(
       color: backgroundColor ?? Colors.transparent,
-      borderRadius: BorderRadius.circular(AppResponsive.radius(context)),
+      borderRadius: BorderRadius.circular(
+        AppResponsive.radius(context, factor: 5),
+      ),
       child: InkWell(
         onTap: onPressed,
-        borderRadius: BorderRadius.circular(AppResponsive.radius(context)),
+        borderRadius: BorderRadius.circular(
+          AppResponsive.radius(context, factor: 5),
+        ),
         child: Padding(
           padding: AppSpacing.all(context, factor: paddingFactor ?? 1),
           child: Icon(icon, size: iconSize, color: color ?? AppColors.primary),
