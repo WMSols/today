@@ -43,7 +43,7 @@ class HomeGoalItem extends StatelessWidget {
                     subtitle,
                     style: AppTextStyles.labelText(context).copyWith(
                       color: AppColors.lightGrey,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       fontSize: AppResponsive.scaleSize(context, 10),
                     ),
                   ),

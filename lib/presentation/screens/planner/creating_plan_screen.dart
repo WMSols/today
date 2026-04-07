@@ -41,8 +41,8 @@ class CreatingPlanScreen extends StatelessWidget {
               Text(
                 AppTexts.didYouKnow,
                 style: AppTextStyles.labelText(context).copyWith(
-                  color: AppColors.lightGrey,
-                  fontWeight: FontWeight.w700,
+                  color: AppColors.white.withValues(alpha: 0.7),
+                  fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 12),
                   letterSpacing: 0.8,
                 ),

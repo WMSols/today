@@ -21,7 +21,9 @@ class SubscriptionPlanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bgColor = isSelected ? AppColors.white : AppColors.darkGrey;
-    final titleColor = isSelected ? AppColors.grey : AppColors.white;
+    final titleColor = isSelected
+        ? Color(0XFF101010).withValues(alpha: 0.7)
+        : AppColors.white;
     final subtitleColor = AppColors.grey;
     return GestureDetector(
       onTap: onTap,
@@ -58,7 +60,7 @@ class SubscriptionPlanCard extends StatelessWidget {
                     plan.subtitle,
                     style: AppTextStyles.labelText(context).copyWith(
                       color: subtitleColor,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       fontSize: AppResponsive.scaleSize(context, 10),
                     ),
                   ),

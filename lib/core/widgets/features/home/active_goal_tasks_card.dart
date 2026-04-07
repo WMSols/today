@@ -39,7 +39,7 @@ class ActiveGoalTasksCard extends StatelessWidget {
                 'TODAYS TASKS',
                 style: AppTextStyles.labelText(context).copyWith(
                   color: AppColors.white,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 10),
                 ),
               ),

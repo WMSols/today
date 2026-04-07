@@ -66,7 +66,7 @@ class GoalsCardItem extends StatelessWidget {
                         dayText,
                         style: AppTextStyles.labelText(context).copyWith(
                           color: AppColors.grey,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           fontSize: AppResponsive.scaleSize(context, 10),
                         ),
                       ),
@@ -89,7 +89,7 @@ class GoalsCardItem extends StatelessWidget {
                   tasksText,
                   style: AppTextStyles.labelText(context).copyWith(
                     color: AppColors.grey,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     fontSize: AppResponsive.scaleSize(context, 10),
                   ),
                 ),
@@ -98,7 +98,7 @@ class GoalsCardItem extends StatelessWidget {
                   percentText,
                   style: AppTextStyles.labelText(context).copyWith(
                     color: AppColors.grey,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     fontSize: AppResponsive.scaleSize(context, 10),
                   ),
                 ),
@@ -117,7 +117,7 @@ class GoalsCardItem extends StatelessWidget {
                   gemsText,
                   style: AppTextStyles.labelText(context).copyWith(
                     color: AppColors.grey,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     fontSize: AppResponsive.scaleSize(context, 10),
                   ),
                 ),
@@ -126,7 +126,7 @@ class GoalsCardItem extends StatelessWidget {
                   totalTasksText,
                   style: AppTextStyles.labelText(context).copyWith(
                     color: AppColors.grey,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     fontSize: AppResponsive.scaleSize(context, 10),
                   ),
                 ),

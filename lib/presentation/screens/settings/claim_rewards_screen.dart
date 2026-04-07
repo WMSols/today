@@ -27,7 +27,7 @@ class ClaimRewardsScreen extends StatelessWidget {
                 'COMPLETED!!!',
                 style: AppTextStyles.labelText(context).copyWith(
                   color: AppColors.grey,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 12),
                 ),
               ),

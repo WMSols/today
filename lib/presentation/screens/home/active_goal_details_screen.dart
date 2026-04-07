@@ -34,7 +34,11 @@ class ActiveGoalDetailsScreen extends GetView<HomeController> {
               AppSpacing.vertical(context, 0.02),
               const ActiveGoalOverviewCard(),
               AppSpacing.vertical(context, 0.03),
-              Obx(() => ActiveGoalTasksCard(tasks: controller.activeGoalTasks)),
+              Obx(
+                () => ActiveGoalTasksCard(
+                  tasks: controller.activeGoalTasks.toList(),
+                ),
+              ),
             ],
           ),
         ),

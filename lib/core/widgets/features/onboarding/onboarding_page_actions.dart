@@ -66,7 +66,7 @@ class OnboardingPageActions extends StatelessWidget {
             legalText!,
             textAlign: TextAlign.center,
             style: AppTextStyles.hintText(context).copyWith(
-              color: AppColors.grey,
+              color: AppColors.white.withValues(alpha: 0.7),
               fontWeight: FontWeight.w500,
               fontSize: AppResponsive.screenWidth(context) * 0.028,
             ),

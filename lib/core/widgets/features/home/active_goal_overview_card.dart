@@ -30,7 +30,7 @@ class ActiveGoalOverviewCard extends StatelessWidget {
                 'DAY 01',
                 style: AppTextStyles.labelText(context).copyWith(
                   color: AppColors.lightGrey,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 10),
                 ),
               ),
@@ -39,7 +39,7 @@ class ActiveGoalOverviewCard extends StatelessWidget {
                 'OUT OF 10',
                 style: AppTextStyles.labelText(context).copyWith(
                   color: AppColors.lightGrey,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 10),
                 ),
               ),
@@ -60,7 +60,7 @@ class ActiveGoalOverviewCard extends StatelessWidget {
                 '0/6 TASKS',
                 style: AppTextStyles.labelText(context).copyWith(
                   color: AppColors.lightGrey,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 10),
                 ),
               ),
@@ -69,7 +69,7 @@ class ActiveGoalOverviewCard extends StatelessWidget {
                 '0%',
                 style: AppTextStyles.labelText(context).copyWith(
                   color: AppColors.lightGrey,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 10),
                 ),
               ),

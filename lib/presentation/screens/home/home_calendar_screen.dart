@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:today/core/network/zen_quote_service.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:today/core/utils/app_lotties/app_lotties.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
@@ -83,7 +85,7 @@ class _HomeCalendarScreenState extends State<HomeCalendarScreen> {
                                         6,
                                       ),
                                       letterSpacing: 0.6,
-                                      fontWeight: FontWeight.w700,
+                                      fontWeight: FontWeight.w600,
                                     ),
                               ),
                             ],
@@ -98,11 +100,13 @@ class _HomeCalendarScreenState extends State<HomeCalendarScreen> {
                       builder: (context, snapshot) {
                         final data = snapshot.data;
                         if (data == null) {
-                          return Text(
-                            'Loading quote...',
-                            style: AppTextStyles.bodyText(
-                              context,
-                            ).copyWith(color: AppColors.grey),
+                          return Center(
+                            child: Lottie.asset(
+                              AppLotties.loadingWhite,
+                              width: AppResponsive.screenWidth(context) * 0.8,
+                              height: AppResponsive.screenHeight(context) * 0.1,
+                              fit: BoxFit.contain,
+                            ),
                           );
                         }
                         return HomeDailyQuoteView(
