@@ -85,7 +85,7 @@ class _HomeCalendarScreenState extends State<HomeCalendarScreen> {
                                         6,
                                       ),
                                       letterSpacing: 0.6,
-                                      fontWeight: FontWeight.w700,
+                                      fontWeight: FontWeight.w600,
                                     ),
                               ),
                             ],

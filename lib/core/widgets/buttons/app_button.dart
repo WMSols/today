@@ -48,7 +48,7 @@ class AppButton extends StatelessWidget {
 
     final textColor = isDisabled
         ? AppColors.white
-        : (effectivePrimary ? AppColors.white : AppColors.primary);
+        : (effectivePrimary ? AppColors.white : Color(0XFF101010));
     final iconColor = textColor;
 
     final child = isLoading
@@ -59,7 +59,7 @@ class AppButton extends StatelessWidget {
               Text(
                 loadingLabel ?? _defaultLoadingLabel(label),
                 style: AppTextStyles.buttonText(context).copyWith(
-                  color: primary ? AppColors.white : AppColors.primary,
+                  color: primary ? AppColors.white : Color(0XFF101010),
                 ),
               ),
               AppSpacing.horizontal(context, 0.01),
@@ -101,10 +101,10 @@ class AppButton extends StatelessWidget {
 
     final backgroundColor = isDisabled
         ? AppColors.grey
-        : (effectivePrimary ? AppColors.primary : AppColors.white);
+        : (effectivePrimary ? Color(0XFF101010) : AppColors.white);
     final border = isDisabled
         ? null
-        : (effectivePrimary ? null : Border.all(color: AppColors.primary));
+        : (effectivePrimary ? null : Border.all(color: Color(0XFF101010)));
 
     return Material(
       color: backgroundColor,

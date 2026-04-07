@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
+import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
 
 /// Main onboarding content block with hero animation and tagline.
@@ -36,7 +37,7 @@ class OnboardingPageContent extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(height: AppResponsive.screenHeight(context) * 0.04),
+        AppSpacing.vertical(context, 0.04),
         SizedBox(
           width: AppResponsive.screenWidth(context) * 0.8,
           child: RichText(
@@ -54,7 +55,7 @@ class OnboardingPageContent extends StatelessWidget {
                   text: taglineRegular,
                   style: AppTextStyles.bodyText(context).copyWith(
                     fontWeight: FontWeight.w400,
-                    color: AppColors.white,
+                    color: AppColors.white.withValues(alpha: 0.7),
                     fontSize: AppResponsive.screenWidth(context) * 0.045,
                   ),
                 ),

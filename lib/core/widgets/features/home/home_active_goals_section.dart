@@ -29,7 +29,7 @@ class HomeActiveGoalsSection extends StatelessWidget {
               'ACTIVE GOALS',
               style: AppTextStyles.bodyText(context).copyWith(
                 color: AppColors.white,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 fontSize: AppResponsive.scaleSize(context, 10),
               ),
             ),

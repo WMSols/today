@@ -32,16 +32,16 @@ class SettingsProfileHeader extends StatelessWidget {
           'MARISOL ORTEGA',
           style: AppTextStyles.heading(context).copyWith(
             color: AppColors.white,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             fontSize: AppResponsive.scaleSize(context, 16),
           ),
         ),
         AppSpacing.vertical(context, 0.012),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             AppCountBadge(iconPath: AppImages.gem, count: '8'),
-            SizedBox(width: 12),
+            AppSpacing.horizontal(context, 0.02),
             AppCountBadge(iconPath: AppImages.streak, count: '8'),
           ],
         ),

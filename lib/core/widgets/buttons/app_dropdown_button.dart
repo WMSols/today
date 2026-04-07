@@ -55,7 +55,7 @@ class AppDropDownButton extends StatelessWidget {
                     item,
                     style: AppTextStyles.labelText(context).copyWith(
                       color: AppColors.white,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),

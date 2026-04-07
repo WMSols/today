@@ -46,8 +46,8 @@ class SettingsControlsCard extends StatelessWidget {
               Text(
                 'SETTINGS',
                 style: AppTextStyles.labelText(context).copyWith(
-                  color: AppColors.lightGrey,
-                  fontWeight: FontWeight.w700,
+                  color: AppColors.white,
+                  fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 10),
                 ),
               ),

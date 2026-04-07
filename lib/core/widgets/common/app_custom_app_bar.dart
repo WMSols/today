@@ -127,7 +127,7 @@ class AppCustomAppBar extends StatelessWidget {
                       '$dayLabel, ${current.day} $monthLabel',
                       style: AppTextStyles.bodyText(context).copyWith(
                         color: AppColors.lightGrey,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         fontSize: AppResponsive.scaleSize(context, 10),
                       ),
                     ),
@@ -238,7 +238,7 @@ class AppCustomAppBar extends StatelessWidget {
                       AppTexts.unlockPro,
                       style: AppTextStyles.labelText(context).copyWith(
                         color: AppColors.white,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         fontSize: AppResponsive.scaleSize(context, 10),
                       ),
                     ),

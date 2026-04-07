@@ -42,8 +42,8 @@ class PlannerMessageBubble extends StatelessWidget {
         padding: AppSpacing.symmetric(context, h: 0.04, v: 0.015),
         decoration: BoxDecoration(
           color: sender == PlannerMessageSender.ai
-              ? AppColors.darkGrey
-              : AppColors.white,
+              ? Color(0XFF1A1A1A)
+              : Color(0XFFF8F7EF),
           borderRadius: borderRadius,
         ),
         child: isTyping
@@ -56,9 +56,9 @@ class PlannerMessageBubble extends StatelessWidget {
                 message ?? '',
                 style: AppTextStyles.bodyText(context).copyWith(
                   color: sender == PlannerMessageSender.ai
-                      ? AppColors.white
+                      ? AppColors.white.withValues(alpha: 0.7)
                       : AppColors.black,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
       ),
