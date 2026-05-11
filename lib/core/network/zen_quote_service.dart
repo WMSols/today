@@ -1,10 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:today/core/config/env_config.dart';
 
 class ZenQuoteService {
   const ZenQuoteService();
 
   Future<({String quote, String author})> fetchTodayQuote() async {
-    final response = await Dio().get('https://zenquotes.io/api/today');
+    if (EnvConfig.zenQuotesUrl.isEmpty) {
+      return (quote: 'Stay consistent every day.', author: 'Unknown');
+    }
+    final response = await Dio().get(EnvConfig.zenQuotesUrl);
     final data = response.data;
     if (data is List && data.isNotEmpty && data.first is Map<String, dynamic>) {
       final item = data.first as Map<String, dynamic>;

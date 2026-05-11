@@ -6,7 +6,7 @@ class GetActiveGoalTasksUseCase {
 
   final ActiveGoalRepository _repository;
 
-  Future<List<ActiveGoalTaskEntity>> call() {
-    return _repository.getActiveGoalTasks();
+  Future<List<ActiveGoalTaskEntity>> call(String goalId) {
+    return _repository.getActiveGoalTasks(goalId);
   }
 }

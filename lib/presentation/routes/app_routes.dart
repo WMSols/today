@@ -1,6 +1,7 @@
 /// Named routes aligned with Figma main screens.
 abstract class AppRoutes {
   static const onboarding = '/onboarding';
+  static const auth = '/auth';
   static const mainApp = '/main-app';
   static const home = '/home';
   static const activeGoalDetails = '/active-goal-details';

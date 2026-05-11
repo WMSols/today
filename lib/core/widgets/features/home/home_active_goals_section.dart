@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_images/app_images.dart';
+import 'package:today/core/utils/app_lotties/app_lotties.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
 import 'package:today/core/widgets/features/home/home_goal_item.dart';
+import 'package:today/presentation/controllers/home/home_controller.dart';
 
-class HomeActiveGoalsSection extends StatelessWidget {
+class HomeActiveGoalsSection extends GetView<HomeController> {
   const HomeActiveGoalsSection({super.key, this.onGoalTap});
 
-  final VoidCallback? onGoalTap;
+  final ValueChanged<String>? onGoalTap;
 
   @override
   Widget build(BuildContext context) {
@@ -45,24 +49,39 @@ class HomeActiveGoalsSection extends StatelessWidget {
               AppResponsive.radius(context, factor: 5),
             ),
           ),
-          child: Column(
-            children: [
-              HomeGoalItem(
-                title: 'Get fit in 30 days',
-                subtitle: 'DAY 07 OF 30',
-                onTap: onGoalTap,
-              ),
-              HomeGoalItem(
-                title: 'Speak French fluently',
-                subtitle: 'DAY 04 OF 18',
-                onTap: onGoalTap,
-              ),
-              HomeGoalItem(
-                title: 'Speak French fluently',
-                subtitle: 'DAY 04 OF 18',
-                onTap: onGoalTap,
-              ),
-            ],
+          child: Obx(
+            () {
+              if (controller.isLoading.value && controller.goalCards.isEmpty) {
+                return Center(
+                  child: Lottie.asset(
+                    AppLotties.loadingWhite,
+                    width: AppResponsive.scaleSize(context, 52),
+                    height: AppResponsive.scaleSize(context, 52),
+                    fit: BoxFit.contain,
+                  ),
+                );
+              }
+              if (controller.goalCards.isEmpty) {
+                return Text(
+                  'No active goals yet',
+                  style: AppTextStyles.labelText(context).copyWith(
+                    color: AppColors.lightGrey,
+                    fontWeight: FontWeight.w600,
+                    fontSize: AppResponsive.scaleSize(context, 11),
+                  ),
+                );
+              }
+              return Column(
+                children: List.generate(controller.goalCards.length, (index) {
+                  final card = controller.goalCards[index];
+                  return HomeGoalItem(
+                    title: card.title,
+                    subtitle: card.dayText,
+                    onTap: onGoalTap == null ? null : () => onGoalTap!(card.goalId),
+                  );
+                }),
+              );
+            },
           ),
         ),
       ],

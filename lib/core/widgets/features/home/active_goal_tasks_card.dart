@@ -9,9 +9,16 @@ import 'package:today/core/utils/app_styles/app_text_styles.dart';
 import 'package:today/domain/entities/active_goal_task_entity.dart';
 
 class ActiveGoalTasksCard extends StatelessWidget {
-  const ActiveGoalTasksCard({super.key, required this.tasks});
+  const ActiveGoalTasksCard({
+    super.key,
+    required this.tasks,
+    this.onCompleteTap,
+    this.onSkipTask,
+  });
 
   final List<ActiveGoalTaskEntity> tasks;
+  final ValueChanged<String>? onCompleteTap;
+  final ValueChanged<String>? onSkipTask;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +59,11 @@ class ActiveGoalTasksCard extends StatelessWidget {
               padding: EdgeInsets.only(
                 bottom: AppResponsive.scaleSize(context, 16),
               ),
-              child: _ActiveGoalTaskRow(task: task),
+              child: _ActiveGoalTaskRow(
+                task: task,
+                onCompleteTap: onCompleteTap,
+                onSkipTask: onSkipTask,
+              ),
             );
           }),
         ],
@@ -62,9 +73,15 @@ class ActiveGoalTasksCard extends StatelessWidget {
 }
 
 class _ActiveGoalTaskRow extends StatelessWidget {
-  const _ActiveGoalTaskRow({required this.task});
+  const _ActiveGoalTaskRow({
+    required this.task,
+    this.onCompleteTap,
+    this.onSkipTask,
+  });
 
   final ActiveGoalTaskEntity task;
+  final ValueChanged<String>? onCompleteTap;
+  final ValueChanged<String>? onSkipTask;
 
   @override
   Widget build(BuildContext context) {
@@ -106,12 +123,19 @@ class _ActiveGoalTaskRow extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          width: AppResponsive.scaleSize(context, 14),
-          height: AppResponsive.scaleSize(context, 14),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.white),
+        GestureDetector(
+          onTap: onCompleteTap == null ? null : () => onCompleteTap!(task.id),
+          onLongPress: onSkipTask == null ? null : () => onSkipTask!(task.id),
+          child: Container(
+            width: AppResponsive.scaleSize(context, 14),
+            height: AppResponsive.scaleSize(context, 14),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.white),
+              color: task.status == 'completed'
+                  ? AppColors.white
+                  : Colors.transparent,
+            ),
           ),
         ),
       ],
