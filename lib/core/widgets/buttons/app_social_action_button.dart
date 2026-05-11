@@ -17,7 +17,7 @@ class SocialActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final tint = isDark ? AppColors.lightGrey : AppColors.grey;
+    final tint = isDark ? AppColors.lightGrey : AppColors.darkGrey;
     return Material(
       color: tint,
       borderRadius: BorderRadius.circular(

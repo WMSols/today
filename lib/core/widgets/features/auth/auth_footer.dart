@@ -34,7 +34,6 @@ class AuthFooter extends StatelessWidget {
               text: 'WMSols',
               style: baseStyle.copyWith(
                 color: isDark ? AppColors.white : AppColors.black,
-                decoration: TextDecoration.underline,
                 fontWeight: FontWeight.w700,
               ),
               recognizer: TapGestureRecognizer()..onTap = _openWebsite,

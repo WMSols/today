@@ -50,9 +50,11 @@ class AppButton extends StatelessWidget {
 
     final Color primaryBg = isDark ? AppColors.secondary : AppColors.primary;
     final Color primaryFg = isDark ? AppColors.primary : AppColors.secondary;
-    final Color secondaryBg = isDark ? AppColors.black : AppColors.secondary;
-    final Color secondaryFg = isDark ? AppColors.white : AppColors.primary;
-    final Color secondaryBorder = isDark ? AppColors.white : AppColors.primary;
+    final Color secondaryBg = isDark ? AppColors.secondary : Colors.transparent;
+    final Color secondaryFg = isDark ? AppColors.primary : AppColors.primary;
+    final Color secondaryBorder = isDark
+        ? Colors.transparent
+        : AppColors.primary;
 
     final textColor = isDisabled
         ? AppColors.grey

@@ -31,13 +31,13 @@ class OnboardingScreen extends GetView<OnboardingController> {
                   children: const [
                     OnboardingPageContent(
                       lottiePath: AppLotties.onboarding1,
-                      taglineBold: AppTexts.onboardingTaglineBold,
-                      taglineRegular: AppTexts.onboardingTaglineRegular,
+                      taglineBold: AppTexts.onboardingTaglineBold1,
+                      taglineRegular: AppTexts.onboardingTaglineRegular1,
                     ),
                     OnboardingPageContent(
                       lottiePath: AppLotties.onboarding2,
-                      taglineBold: AppTexts.onboardingTaglineBold,
-                      taglineRegular: AppTexts.onboardingTaglineRegular,
+                      taglineBold: AppTexts.onboardingTaglineBold2,
+                      taglineRegular: AppTexts.onboardingTaglineRegular2,
                     ),
                   ],
                 ),

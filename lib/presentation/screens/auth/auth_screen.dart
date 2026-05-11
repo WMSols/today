@@ -34,22 +34,22 @@ class AuthScreen extends GetView<AuthController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Image.asset(
-                        AppImages.appLogo,
+                        isDark
+                            ? AppImages.appLogoWhite
+                            : AppImages.appLogoBlack,
                         height: AppResponsive.screenHeight(context) * 0.15,
                       ),
                       Text(
                         AppTexts.authWelcomeTitle,
                         style: AppTextStyles.headline(context).copyWith(
-                          color:
-                              isDark ? AppColors.white : AppColors.black,
+                          color: isDark ? AppColors.white : AppColors.black,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
                         AppTexts.authWelcomeSubtitle,
                         style: AppTextStyles.bodyText(context).copyWith(
-                          color:
-                              isDark ? AppColors.lightGrey : AppColors.grey,
+                          color: isDark ? AppColors.lightGrey : AppColors.grey,
                         ),
                       ),
                       AppSpacing.vertical(context, 0.04),
@@ -107,8 +107,9 @@ class AuthScreen extends GetView<AuthController> {
                                             : Iconsax.eye_slash,
                                         onPressed:
                                             controller.togglePasswordVisibility,
-                                        color:
-                                            isDark ? AppColors.white : AppColors.black,
+                                        color: isDark
+                                            ? AppColors.white
+                                            : AppColors.black,
                                         backgroundColor: Colors.transparent,
                                       ),
                                       obscureText:
@@ -159,8 +160,9 @@ class AuthScreen extends GetView<AuthController> {
                                             : Iconsax.eye_slash,
                                         onPressed: controller
                                             .toggleSignupPasswordVisibility,
-                                        color:
-                                            isDark ? AppColors.white : AppColors.black,
+                                        color: isDark
+                                            ? AppColors.white
+                                            : AppColors.black,
                                         backgroundColor: Colors.transparent,
                                       ),
                                       obscureText: !controller
@@ -185,8 +187,9 @@ class AuthScreen extends GetView<AuthController> {
                                             : Iconsax.eye_slash,
                                         onPressed: controller
                                             .toggleSignupConfirmPasswordVisibility,
-                                        color:
-                                            isDark ? AppColors.white : AppColors.black,
+                                        color: isDark
+                                            ? AppColors.white
+                                            : AppColors.black,
                                         backgroundColor: Colors.transparent,
                                       ),
                                       obscureText: !controller
