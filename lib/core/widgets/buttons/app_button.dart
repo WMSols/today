@@ -29,6 +29,7 @@ class AppButton extends StatelessWidget {
 
   /// Shown next to the loading Lottie when [isLoading] is true. If null, derived from [label] (e.g. "Login" → "Logging In").
   final String? loadingLabel;
+  static const _animationDuration = Duration(milliseconds: 220);
 
   static String _defaultLoadingLabel(String label) {
     switch (label) {
@@ -107,7 +108,7 @@ class AppButton extends StatelessWidget {
         : (effectivePrimary ? null : Border.all(color: Color(0XFF101010)));
 
     return Material(
-      color: backgroundColor,
+      color: Colors.transparent,
       borderRadius: BorderRadius.circular(
         AppResponsive.radius(context, factor: 5),
       ),
@@ -116,9 +117,12 @@ class AppButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(
           AppResponsive.radius(context, factor: 5),
         ),
-        child: Container(
+        child: AnimatedContainer(
+          duration: _animationDuration,
+          curve: Curves.easeOutCubic,
           padding: AppSpacing.symmetric(context, h: 0.04, v: 0.015),
           decoration: BoxDecoration(
+            color: backgroundColor,
             borderRadius: BorderRadius.circular(
               AppResponsive.radius(context, factor: 5),
             ),

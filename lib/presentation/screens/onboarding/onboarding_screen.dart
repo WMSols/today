@@ -28,12 +28,12 @@ class OnboardingScreen extends GetView<OnboardingController> {
                   onPageChanged: controller.setPage,
                   children: const [
                     OnboardingPageContent(
-                      lottiePath: AppLotties.theoDocument,
+                      lottiePath: AppLotties.onboarding1,
                       taglineBold: AppTexts.onboardingTaglineBold,
                       taglineRegular: AppTexts.onboardingTaglineRegular,
                     ),
                     OnboardingPageContent(
-                      lottiePath: AppLotties.theoWaving,
+                      lottiePath: AppLotties.onboarding2,
                       taglineBold: AppTexts.onboardingTaglineBold,
                       taglineRegular: AppTexts.onboardingTaglineRegular,
                     ),
@@ -48,7 +48,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
                       : AppTexts.continueWithEmail,
                   onPrimaryTap: controller.currentPage.value == 0
                       ? controller.nextPage
-                      : () => Get.offAllNamed(AppRoutes.mainApp),
+                      : () => Get.toNamed(AppRoutes.auth),
                   onSocialTap: () => Get.offAllNamed(AppRoutes.planner),
                   showSocialButtons: controller.currentPage.value == 1,
                   legalText: controller.currentPage.value == 0

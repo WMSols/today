@@ -19,6 +19,18 @@ class AppTexts {
   static const String confirm = "Confirm";
   static const String cancel = "Cancel";
   static const String save = "Save";
+  static const String signUp = "Sign up";
+  static const String createAccount = "Create account";
+  static const String username = "Username";
+  static const String usernameHint = "Enter your username";
+  static const String password = "Password";
+  static const String passwordHint = "Enter your password";
+  static const String confirmPassword = "Confirm password";
+  static const String confirmPasswordHint = "Re-enter your password";
+  static const String rememberMe = "Remember me";
+  static const String authWelcomeTitle = "Welcome";
+  static const String authWelcomeSubtitle =
+      "Login or create your account to continue.";
 
   // Home
   static const String homeGoalEntryHint =
