@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:get/get.dart';
+
 import 'package:today/core/widgets/features/home/home_body.dart';
 import 'package:today/presentation/routes/app_routes.dart';
 
@@ -10,15 +11,14 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.black,
+      backgroundColor: isDark ? AppColors.black : AppColors.white,
       body: SafeArea(
         child: HomeBody(
           onDateTap: () => Get.toNamed(AppRoutes.homeCalendar),
-          onGoalTap: (goalId) => Get.toNamed(
-            AppRoutes.activeGoalDetails,
-            arguments: goalId,
-          ),
+          onGoalTap: (goalId) =>
+              Get.toNamed(AppRoutes.activeGoalDetails, arguments: goalId),
         ),
       ),
     );

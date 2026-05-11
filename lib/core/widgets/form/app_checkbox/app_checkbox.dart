@@ -17,23 +17,29 @@ class AppCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final borderAndLabel = isDark ? AppColors.white : AppColors.black;
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Checkbox(
           value: value,
           onChanged: onChanged,
-          activeColor: AppColors.white,
-          checkColor: AppColors.black,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
               AppResponsive.radius(context, factor: 5),
             ),
           ),
-          side: const BorderSide(color: AppColors.white),
+          side: BorderSide(color: borderAndLabel),
         ),
-        Text(
-          label,
-          style: AppTextStyles.labelText(context).copyWith(color: AppColors.white),
+        Flexible(
+          child: Text(
+            label,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.labelText(
+              context,
+            ).copyWith(color: borderAndLabel),
+          ),
         ),
       ],
     );

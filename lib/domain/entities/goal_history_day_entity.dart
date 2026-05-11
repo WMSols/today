@@ -19,4 +19,3 @@ class GoalHistoryDayEntity {
   final int pending;
   final List<ActiveGoalTaskEntity> tasks;
 }
-

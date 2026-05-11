@@ -1,7 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
 
@@ -16,8 +17,9 @@ class AuthFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final baseStyle = AppTextStyles.hintText(context).copyWith(
-      color: AppColors.white.withValues(alpha: 0.7),
+      color: isDark ? AppColors.white : AppColors.black,
       fontWeight: FontWeight.w500,
       fontSize: AppResponsive.screenWidth(context) * 0.03,
     );
@@ -31,7 +33,7 @@ class AuthFooter extends StatelessWidget {
             TextSpan(
               text: 'WMSols',
               style: baseStyle.copyWith(
-                color: AppColors.white,
+                color: isDark ? AppColors.white : AppColors.black,
                 decoration: TextDecoration.underline,
                 fontWeight: FontWeight.w700,
               ),

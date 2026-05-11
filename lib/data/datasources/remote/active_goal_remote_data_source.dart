@@ -31,12 +31,16 @@ class ActiveGoalRemoteDataSource {
   }
 
   Future<Map<String, dynamic>> getToday(String goalId) async {
-    final response = await _dio.get<Map<String, dynamic>>('/goals/$goalId/today');
+    final response = await _dio.get<Map<String, dynamic>>(
+      '/goals/$goalId/today',
+    );
     return response.data ?? <String, dynamic>{};
   }
 
   Future<List<Map<String, dynamic>>> getHistory(String goalId) async {
-    final response = await _dio.get<Map<String, dynamic>>('/goals/$goalId/history');
+    final response = await _dio.get<Map<String, dynamic>>(
+      '/goals/$goalId/history',
+    );
     final raw = response.data?['days'] as List<dynamic>? ?? const [];
     return raw.map((e) => e as Map<String, dynamic>).toList();
   }
@@ -53,7 +57,9 @@ class ActiveGoalRemoteDataSource {
   }
 
   Future<Map<String, dynamic>> skipTask(String taskId) async {
-    final response = await _dio.post<Map<String, dynamic>>('/tasks/$taskId/skip');
+    final response = await _dio.post<Map<String, dynamic>>(
+      '/tasks/$taskId/skip',
+    );
     return response.data ?? <String, dynamic>{};
   }
 
@@ -62,4 +68,3 @@ class ActiveGoalRemoteDataSource {
     return response.data?['ok'] == true;
   }
 }
-

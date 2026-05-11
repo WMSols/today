@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
@@ -12,12 +13,13 @@ class SubscriptionPerksList extends StatelessWidget {
   final List<String> perks;
 
   InlineSpan _buildPerkSpan(BuildContext context, String perk) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final words = perk.trim().split(RegExp(r'\s+'));
     if (words.length < 4) {
       return TextSpan(
         text: perk,
         style: AppTextStyles.heading(context).copyWith(
-          color: AppColors.white,
+          color: isDark ? AppColors.white : AppColors.black,
           fontWeight: FontWeight.w600,
           fontSize: AppResponsive.scaleSize(context, 16),
           height: 1.2,
@@ -35,7 +37,7 @@ class SubscriptionPerksList extends StatelessWidget {
         TextSpan(
           text: '$leading ',
           style: AppTextStyles.heading(context).copyWith(
-            color: AppColors.white,
+            color: isDark ? AppColors.white : AppColors.black,
             fontWeight: FontWeight.w600,
             fontSize: AppResponsive.scaleSize(context, 16),
             height: 1.2,

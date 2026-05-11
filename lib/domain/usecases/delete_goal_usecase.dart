@@ -9,4 +9,3 @@ class DeleteGoalUseCase {
     return _repository.deleteGoal(goalId);
   }
 }
-

@@ -35,7 +35,8 @@ class HomeController extends GetxController {
   final RxList<ActiveGoalTaskEntity> activeGoalTasks =
       <ActiveGoalTaskEntity>[].obs;
   final RxList<GoalCardEntity> goalCards = <GoalCardEntity>[].obs;
-  final RxList<GoalHistoryDayEntity> goalHistoryDays = <GoalHistoryDayEntity>[].obs;
+  final RxList<GoalHistoryDayEntity> goalHistoryDays =
+      <GoalHistoryDayEntity>[].obs;
 
   final TextEditingController goalInputController = TextEditingController();
   final RxString goalDraft = ''.obs;

@@ -13,18 +13,20 @@ class AppBottomNavBarScaffold extends StatelessWidget {
     required this.currentIndex,
     required this.onTap,
     required this.children,
-    this.backgroundColor = AppColors.black,
+    this.backgroundColor,
   });
 
   final int currentIndex;
   final ValueChanged<int> onTap;
   final List<Widget> children;
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final surface = isDark ? AppColors.black : AppColors.white;
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: backgroundColor ?? surface,
       body: Stack(
         children: [
           SafeArea(
@@ -89,9 +91,16 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final barHeight = AppResponsive.screenHeight(context) * 0.07;
     final radius = AppResponsive.radius(context, factor: 5);
     const itemsCount = 3;
+    final barTint = isDark
+        ? AppColors.secondary.withValues(alpha: 0.14)
+        : AppColors.secondary.withValues(alpha: 0.85);
+    final bubbleTint = isDark
+        ? AppColors.secondary.withValues(alpha: 0.24)
+        : AppColors.primary.withValues(alpha: 0.12);
 
     return Center(
       child: ClipRRect(
@@ -102,7 +111,7 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
             width: AppResponsive.screenWidth(context) * 0.7,
             height: barHeight,
             decoration: BoxDecoration(
-              color: AppColors.white.withValues(alpha: 0.8),
+              color: barTint,
               borderRadius: BorderRadius.circular(radius),
             ),
             padding: EdgeInsets.all(AppResponsive.scaleSize(context, 3)),
@@ -142,9 +151,7 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
                               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: AppColors.white.withValues(
-                                    alpha: 0.34,
-                                  ),
+                                  color: bubbleTint,
                                   borderRadius: BorderRadius.circular(
                                     AppResponsive.scaleSize(context, 26),
                                   ),

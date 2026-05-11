@@ -44,13 +44,24 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final isDisabled = !isLoading && onPressed == null;
     final effectivePrimary = primary && !isDisabled;
 
+    final Color primaryBg = isDark ? AppColors.secondary : AppColors.primary;
+    final Color primaryFg = isDark ? AppColors.primary : AppColors.secondary;
+    final Color secondaryBg = isDark ? AppColors.black : AppColors.secondary;
+    final Color secondaryFg = isDark ? AppColors.white : AppColors.primary;
+    final Color secondaryBorder = isDark ? AppColors.white : AppColors.primary;
+
     final textColor = isDisabled
-        ? AppColors.white
-        : (effectivePrimary ? AppColors.white : Color(0XFF101010));
+        ? AppColors.grey
+        : (effectivePrimary ? primaryFg : secondaryFg);
     final iconColor = textColor;
+
+    final String loadingLottie = effectivePrimary
+        ? (isDark ? AppLotties.loadingBlack : AppLotties.loadingWhite)
+        : (isDark ? AppLotties.loadingWhite : AppLotties.loadingBlack);
 
     final child = isLoading
         ? Row(
@@ -59,13 +70,13 @@ class AppButton extends StatelessWidget {
             children: [
               Text(
                 loadingLabel ?? _defaultLoadingLabel(label),
-                style: AppTextStyles.buttonText(context).copyWith(
-                  color: primary ? AppColors.white : Color(0XFF101010),
-                ),
+                style: AppTextStyles.buttonText(
+                  context,
+                ).copyWith(color: effectivePrimary ? primaryFg : secondaryFg),
               ),
               AppSpacing.horizontal(context, 0.01),
               Lottie.asset(
-                primary ? AppLotties.loadingBlack : AppLotties.loadingWhite,
+                loadingLottie,
                 width: AppResponsive.buttonLoaderSize(context),
                 fit: BoxFit.contain,
               ),
@@ -101,11 +112,13 @@ class AppButton extends StatelessWidget {
           );
 
     final backgroundColor = isDisabled
-        ? AppColors.grey
-        : (effectivePrimary ? Color(0XFF101010) : AppColors.white);
+        ? (isDark ? AppColors.darkGrey : AppColors.grey)
+        : (effectivePrimary ? primaryBg : secondaryBg);
     final border = isDisabled
         ? null
-        : (effectivePrimary ? null : Border.all(color: Color(0XFF101010)));
+        : (effectivePrimary
+              ? null
+              : Border.all(color: secondaryBorder.withValues(alpha: 0.85)));
 
     return Material(
       color: Colors.transparent,

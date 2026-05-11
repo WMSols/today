@@ -22,8 +22,10 @@ class AppDotsIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final active = activeColor ?? AppColors.primary;
-    final inactive = inactiveColor ?? AppColors.primary;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final def = isDark ? AppColors.secondary : AppColors.primary;
+    final active = activeColor ?? def;
+    final inactive = inactiveColor ?? def;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(

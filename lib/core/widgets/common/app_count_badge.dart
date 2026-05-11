@@ -23,6 +23,8 @@ class AppCountBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final card = isDark ? AppColors.darkGrey : AppColors.grey;
     return Container(
       padding: AppSpacing.symmetric(
         context,
@@ -30,7 +32,7 @@ class AppCountBadge extends StatelessWidget {
         v: verticalFactor,
       ),
       decoration: BoxDecoration(
-        color: AppColors.darkGrey,
+        color: card,
         borderRadius: BorderRadius.circular(
           AppResponsive.radius(context, factor: 5),
         ),

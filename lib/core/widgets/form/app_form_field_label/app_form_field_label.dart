@@ -1,6 +1,7 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+
 import 'package:today/core/utils/app_fonts/app_fonts.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
@@ -16,6 +17,7 @@ class AppFormFieldLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     if (label == null || label!.isEmpty) return const SizedBox.shrink();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,7 +31,7 @@ class AppFormFieldLabel extends StatelessWidget {
               style: AppTextStyles.bodyText(context).copyWith(
                 fontWeight: FontWeight.w500,
                 fontFamily: AppFonts.mainFont,
-                color: AppColors.black,
+                color: isDark ? AppColors.white : AppColors.black,
               ),
             ),
             if (required)

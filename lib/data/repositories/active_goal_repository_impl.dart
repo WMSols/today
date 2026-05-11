@@ -45,17 +45,19 @@ class ActiveGoalRepositoryImpl implements ActiveGoalRepository {
         final tasks = (today['tasks'] as List<dynamic>? ?? const [])
             .cast<Map<String, dynamic>>();
         final completed = tasks.where((e) => e['status'] == 'completed').length;
-        final target = (today['plan']?['tasks_target'] as num?)?.toInt() ??
+        final target =
+            (today['plan']?['tasks_target'] as num?)?.toInt() ??
             (item['tasks_per_day'] as num?)?.toInt() ??
             tasks.length;
-        final progress = target == 0 ? 0.0 : (completed / target).clamp(0, 1).toDouble();
+        final progress = target == 0
+            ? 0.0
+            : (completed / target).clamp(0, 1).toDouble();
         final walletBalance =
             (today['wallet']?['balance'] as num?)?.toInt() ?? 0;
         return GoalCardModel(
           goalId: goalId,
           title: item['goal_text'] as String? ?? 'Goal',
-          dayText:
-              'DAY 01 OF $duration',
+          dayText: 'DAY 01 OF $duration',
           tasksText: '$completed/$target TASKS',
           percentText: '${(progress * 100).round()}%',
           gemsText: '$walletBalance GEMS',
@@ -78,7 +80,8 @@ class ActiveGoalRepositoryImpl implements ActiveGoalRepository {
     final tasks = raw['tasks'] as List<dynamic>? ?? const [];
     return tasks.map((e) {
       final json = e as Map<String, dynamic>;
-      final difficulty = (json['difficulty'] as String? ?? 'medium').toLowerCase();
+      final difficulty = (json['difficulty'] as String? ?? 'medium')
+          .toLowerCase();
       final iconPath = switch (difficulty) {
         'easy' => AppImages.easyTasks,
         'hard' => AppImages.hardTasks,

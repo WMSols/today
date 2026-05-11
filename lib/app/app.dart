@@ -3,9 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'package:today/core/init/app_system_ui.dart';
+import 'package:today/core/theme/app_theme.dart';
+import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:today/presentation/controllers/theme/theme_controller.dart';
 import 'package:today/presentation/routes/app_pages.dart';
 import 'package:today/core/init/app_initializer.dart';
-import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 
 class TodayApp extends StatelessWidget {
@@ -13,25 +15,30 @@ class TodayApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: AppTexts.appName,
-      initialRoute: AppInitializer.initialRoute,
-      getPages: AppPages.pages,
-      builder: (context, child) {
-        return AnnotatedRegion<SystemUiOverlayStyle>(
-          value: AppSystemUi.overlayStyle,
-          child: child ?? const SizedBox.shrink(),
+    return GetBuilder<ThemeController>(
+      builder: (theme) {
+        return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: AppTexts.appName,
+          initialRoute: AppInitializer.initialRoute,
+          getPages: AppPages.pages,
+          theme: AppTheme.light(),
+          darkTheme: AppTheme.dark(),
+          themeMode: theme.themeMode,
+          builder: (context, child) {
+            final isDark = Theme.of(context).brightness == Brightness.dark;
+            final surface = isDark ? AppColors.black : AppColors.white;
+            final brightness = Theme.of(context).brightness;
+            return AnnotatedRegion<SystemUiOverlayStyle>(
+              value: AppSystemUi.overlayFor(brightness),
+              child: ColoredBox(
+                color: surface,
+                child: child ?? const SizedBox.shrink(),
+              ),
+            );
+          },
         );
       },
-      theme: ThemeData(
-        scaffoldBackgroundColor: AppColors.white,
-        primaryColor: AppColors.primary,
-        colorScheme: const ColorScheme.light(
-          primary: AppColors.primary,
-          secondary: AppColors.secondary,
-        ),
-      ),
     );
   }
 }

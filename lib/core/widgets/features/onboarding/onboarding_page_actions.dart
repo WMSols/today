@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
@@ -27,6 +28,7 @@ class OnboardingPageActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       children: [
         SizedBox(
@@ -66,7 +68,9 @@ class OnboardingPageActions extends StatelessWidget {
             legalText!,
             textAlign: TextAlign.center,
             style: AppTextStyles.hintText(context).copyWith(
-              color: AppColors.white.withValues(alpha: 0.7),
+              color: isDark
+                  ? AppColors.white.withValues(alpha: 0.7)
+                  : AppColors.black.withValues(alpha: 0.7),
               fontWeight: FontWeight.w500,
               fontSize: AppResponsive.screenWidth(context) * 0.028,
             ),

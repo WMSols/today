@@ -22,6 +22,8 @@ class AppBottomNavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final labelColor = isDark ? AppColors.white : AppColors.black;
     final isSelected = index == currentIndex;
     final targetIconSize = AppResponsive.iconSize(
       context,
@@ -71,7 +73,7 @@ class AppBottomNavItem extends StatelessWidget {
                     Text(
                       label,
                       style: AppTextStyles.hintText(context).copyWith(
-                        color: AppColors.black,
+                        color: labelColor,
                         fontWeight: FontWeight.w600,
                         fontSize: AppResponsive.scaleSize(context, 10),
                         height: 1,

@@ -7,4 +7,3 @@ class AuthSessionModel extends AuthSessionEntity {
     return AuthSessionModel(accessToken: json['access_token'] as String);
   }
 }
-

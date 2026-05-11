@@ -21,6 +21,7 @@ class SettingsController extends GetxController {
     if (username == null || username.isEmpty) return '@guest';
     return '@$username';
   }
+
   String get gemsCount => '${me.value?.wallet.balance ?? 0}';
   String get streakCount => '0';
 

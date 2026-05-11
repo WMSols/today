@@ -10,4 +10,3 @@ class SkipTaskUseCase {
     return _repository.skipTask(taskId);
   }
 }
-

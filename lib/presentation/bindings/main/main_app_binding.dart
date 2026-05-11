@@ -33,7 +33,10 @@ class MainAppBinding extends Bindings {
       ),
     );
     Get.lazyPut<SettingsController>(
-      () => SettingsController(Get.find<GetMeUseCase>(), Get.find<AuthRepository>()),
+      () => SettingsController(
+        Get.find<GetMeUseCase>(),
+        Get.find<AuthRepository>(),
+      ),
     );
   }
 }

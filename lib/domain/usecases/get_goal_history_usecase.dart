@@ -10,4 +10,3 @@ class GetGoalHistoryUseCase {
     return _repository.getGoalHistory(goalId);
   }
 }
-

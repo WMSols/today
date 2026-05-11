@@ -26,6 +26,7 @@ class PlannerMessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final maxWidth = AppResponsive.screenWidth(context) * 0.78;
     final isUser = sender == PlannerMessageSender.user;
     final radius = AppResponsive.radius(context, factor: 3);
@@ -36,16 +37,18 @@ class PlannerMessageBubble extends StatelessWidget {
       bottomRight: Radius.circular(isUser ? 0 : radius),
     );
 
+    final Color bubbleBg = isUser
+        ? (isDark ? AppColors.grey : AppColors.secondary)
+        : (isDark ? AppColors.darkGrey : AppColors.grey);
+    final Color bubbleFg = isUser
+        ? (isDark ? AppColors.white : AppColors.black)
+        : (isDark ? AppColors.white.withValues(alpha: 0.85) : AppColors.black);
+
     final bubble = ConstrainedBox(
       constraints: BoxConstraints(maxWidth: maxWidth),
       child: Container(
         padding: AppSpacing.symmetric(context, h: 0.04, v: 0.015),
-        decoration: BoxDecoration(
-          color: sender == PlannerMessageSender.ai
-              ? Color(0XFF1A1A1A)
-              : Color(0XFFF8F7EF),
-          borderRadius: borderRadius,
-        ),
+        decoration: BoxDecoration(color: bubbleBg, borderRadius: borderRadius),
         child: isTyping
             ? Lottie.asset(
                 AppLotties.typing,
@@ -54,12 +57,9 @@ class PlannerMessageBubble extends StatelessWidget {
               )
             : Text(
                 message ?? '',
-                style: AppTextStyles.bodyText(context).copyWith(
-                  color: sender == PlannerMessageSender.ai
-                      ? AppColors.white.withValues(alpha: 0.7)
-                      : AppColors.black,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppTextStyles.bodyText(
+                  context,
+                ).copyWith(color: bubbleFg, fontWeight: FontWeight.w600),
               ),
       ),
     );

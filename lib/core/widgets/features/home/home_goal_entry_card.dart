@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
+import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:get/get.dart';
 
 import 'package:today/core/widgets/buttons/app_dropdown_button.dart';
-import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
@@ -15,10 +16,11 @@ class HomeGoalEntryCard extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: AppSpacing.symmetric(context, h: 0.04, v: 0.02),
       decoration: BoxDecoration(
-        color: AppColors.darkGrey,
+        color: isDark ? AppColors.darkGrey : AppColors.grey,
         borderRadius: BorderRadius.circular(
           AppResponsive.radius(context, factor: 5),
         ),

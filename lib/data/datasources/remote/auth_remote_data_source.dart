@@ -27,10 +27,7 @@ class AuthRemoteDataSource {
   }) async {
     final response = await _dio.post<Map<String, dynamic>>(
       '/auth/login',
-      data: {
-        'username': username,
-        'password': password,
-      },
+      data: {'username': username, 'password': password},
     );
     return response.data ?? <String, dynamic>{};
   }
@@ -40,4 +37,3 @@ class AuthRemoteDataSource {
     return response.data ?? <String, dynamic>{};
   }
 }
-

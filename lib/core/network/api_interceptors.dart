@@ -24,7 +24,10 @@ class ApiInterceptors extends Interceptor {
   }
 
   @override
-  void onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) {
+  void onResponse(
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) {
     ApiDebugLogger.success(response);
     super.onResponse(response, handler);
   }

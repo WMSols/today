@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+/// App palette. Use with [Theme.of(context).brightness] for light/dark UI, e.g.
+/// `final isDark = Theme.of(context).brightness == Brightness.dark;`
+/// `color: isDark ? AppColors.white : AppColors.black`.
 class AppColors {
   AppColors._();
 
-  /// Primary color is black and secondary color is white
   static const Color primary = Color(0xFF000000);
   static const Color secondary = Color(0xFFFFFFFF);
   static const Color white = Color(0xFFFFFFFF);

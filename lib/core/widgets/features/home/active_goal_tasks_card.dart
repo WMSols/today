@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:today/core/utils/app_helper/app_helper.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
+
+import 'package:today/core/utils/app_helper/app_helper.dart';
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
@@ -22,11 +23,12 @@ class ActiveGoalTasksCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       padding: AppSpacing.symmetric(context, h: 0.04, v: 0.03),
       decoration: BoxDecoration(
-        color: AppColors.darkGrey,
+        color: isDark ? AppColors.darkGrey : AppColors.grey,
         borderRadius: BorderRadius.circular(
           AppResponsive.radius(context, factor: 5),
         ),
@@ -45,7 +47,7 @@ class ActiveGoalTasksCard extends StatelessWidget {
               Text(
                 'TODAYS TASKS',
                 style: AppTextStyles.labelText(context).copyWith(
-                  color: AppColors.white,
+                  color: isDark ? AppColors.white : AppColors.black,
                   fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 10),
                 ),
@@ -85,6 +87,7 @@ class _ActiveGoalTaskRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -114,7 +117,7 @@ class _ActiveGoalTaskRow extends StatelessWidget {
               Text(
                 task.title,
                 style: AppTextStyles.heading(context).copyWith(
-                  color: AppColors.white,
+                  color: isDark ? AppColors.white : AppColors.black,
                   fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 14),
                   height: 1.15,
@@ -131,9 +134,13 @@ class _ActiveGoalTaskRow extends StatelessWidget {
             height: AppResponsive.scaleSize(context, 14),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: AppColors.white),
+              border: Border.all(
+                color: isDark ? AppColors.white : AppColors.black,
+              ),
               color: task.status == 'completed'
-                  ? AppColors.white
+                  ? isDark
+                        ? AppColors.white
+                        : AppColors.black
                   : Colors.transparent,
             ),
           ),

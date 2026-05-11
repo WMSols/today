@@ -114,4 +114,8 @@ class AppTexts {
   // Period names
   static const String periodAm = "AM";
   static const String periodPm = "PM";
+
+  // Appearance / theme (settings row)
+  static const String themeDarkMode = "DARK MODE";
+  static const String themeSystem = "System";
 }

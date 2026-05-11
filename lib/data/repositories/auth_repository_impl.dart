@@ -71,4 +71,3 @@ class AuthRepositoryImpl implements AuthRepository {
     return _sessionStorage.clearSession();
   }
 }
-

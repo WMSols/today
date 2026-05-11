@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:iconsax/iconsax.dart';
+
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
@@ -17,8 +18,9 @@ class PlannerScreen extends GetView<PlannerController> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.black,
+      backgroundColor: isDark ? AppColors.black : AppColors.white,
       body: SafeArea(
         child: Padding(
           padding: AppSpacing.symmetric(context, h: 0.04, v: 0.02),
@@ -61,8 +63,8 @@ class PlannerScreen extends GetView<PlannerController> {
                   ),
                   AppSpacing.horizontal(context, 0.02),
                   AppIconButton(
-                    color: AppColors.primary,
-                    backgroundColor: AppColors.secondary,
+                    color: isDark ? AppColors.primary : AppColors.secondary,
+                    backgroundColor: isDark ? AppColors.secondary : AppColors.primary,
                     icon: Iconsax.send_1,
                     onPressed: controller.onSendTap,
                   ),
