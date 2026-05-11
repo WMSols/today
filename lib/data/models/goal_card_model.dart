@@ -2,6 +2,7 @@ import 'package:today/domain/entities/goal_card_entity.dart';
 
 class GoalCardModel extends GoalCardEntity {
   const GoalCardModel({
+    required super.goalId,
     required super.title,
     required super.dayText,
     required super.tasksText,
@@ -14,6 +15,7 @@ class GoalCardModel extends GoalCardEntity {
 
   factory GoalCardModel.fromJson(Map<String, dynamic> json) {
     return GoalCardModel(
+      goalId: json['goalId'] as String,
       title: json['title'] as String,
       dayText: json['dayText'] as String,
       tasksText: json['tasksText'] as String,

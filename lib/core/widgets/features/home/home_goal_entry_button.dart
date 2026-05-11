@@ -5,16 +5,22 @@ import 'package:today/core/utils/app_responsive/app_responsive.dart';
 class HomeGoalEntryButton extends StatelessWidget {
   const HomeGoalEntryButton({
     super.key,
+    this.onTap,
   });
+
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: AppResponsive.scaleSize(context, 44),
-      height: AppResponsive.scaleSize(context, 44),
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppColors.white,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: AppResponsive.scaleSize(context, 44),
+        height: AppResponsive.scaleSize(context, 44),
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColors.white,
+        ),
       ),
     );
   }

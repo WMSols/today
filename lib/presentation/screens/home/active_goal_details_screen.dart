@@ -15,6 +15,13 @@ class ActiveGoalDetailsScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final goalId = (Get.arguments as String?) ?? controller.selectedGoalId.value;
+    if (goalId.isNotEmpty && controller.selectedGoalId.value != goalId) {
+      controller.loadActiveGoalTasks(goalId);
+    } else if (goalId.isNotEmpty && controller.activeGoalTasks.isEmpty) {
+      controller.loadActiveGoalTasks(goalId);
+    }
+
     return Scaffold(
       backgroundColor: AppColors.black,
       body: SafeArea(
@@ -23,12 +30,15 @@ class ActiveGoalDetailsScreen extends GetView<HomeController> {
           child: Column(
             children: [
               AppCustomAppBar.titleWithActions(
-                title: 'Get fit in 30 days',
+                title: controller.selectedGoalTitle,
                 onBack: Get.back,
-                trailing: Image.asset(
-                  AppImages.goalDetails,
-                  width: AppResponsive.iconSize(context, factor: 0.9),
-                  height: AppResponsive.iconSize(context, factor: 0.9),
+                trailing: GestureDetector(
+                  onTap: () => controller.deleteGoal(goalId),
+                  child: Image.asset(
+                    AppImages.goalDetails,
+                    width: AppResponsive.iconSize(context, factor: 0.9),
+                    height: AppResponsive.iconSize(context, factor: 0.9),
+                  ),
                 ),
               ),
               AppSpacing.vertical(context, 0.02),
@@ -37,6 +47,8 @@ class ActiveGoalDetailsScreen extends GetView<HomeController> {
               Obx(
                 () => ActiveGoalTasksCard(
                   tasks: controller.activeGoalTasks.toList(),
+                  onCompleteTap: controller.completeTask,
+                  onSkipTask: controller.skipTask,
                 ),
               ),
             ],

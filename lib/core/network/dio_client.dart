@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:today/core/config/env_config.dart';
 import 'package:today/core/constants/api_constants.dart';
 import 'package:today/core/network/api_interceptors.dart';
+import 'package:today/core/storage/session_storage.dart';
 
 /// Singleton Dio instance with base URL and interceptors.
 class DioClient {
@@ -19,7 +20,10 @@ class DioClient {
     return _dio!;
   }
 
-  static Dio instanceWith({List<Interceptor>? interceptors}) {
+  static Dio instanceWith({
+    required SessionStorage sessionStorage,
+    List<Interceptor>? interceptors,
+  }) {
     final dio = Dio(
       BaseOptions(
         baseUrl: EnvConfig.baseUrl,
@@ -31,7 +35,7 @@ class DioClient {
         ),
       ),
     );
-    dio.interceptors.add(ApiInterceptors());
+    dio.interceptors.add(ApiInterceptors(sessionStorage));
     if (interceptors != null && interceptors.isNotEmpty) {
       dio.interceptors.addAll(interceptors);
     }

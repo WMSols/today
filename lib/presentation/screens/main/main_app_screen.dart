@@ -22,7 +22,10 @@ class MainAppScreen extends GetView<MainAppController> {
         children: [
           HomeBody(
             onDateTap: () => Get.toNamed(AppRoutes.homeCalendar),
-            onGoalTap: () => Get.toNamed(AppRoutes.activeGoalDetails),
+            onGoalTap: (goalId) => Get.toNamed(
+              AppRoutes.activeGoalDetails,
+              arguments: goalId,
+            ),
           ),
           const GoalsBody(),
           const SettingsBody(),

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import 'package:today/presentation/bindings/auth/auth_binding.dart';
 import 'package:today/presentation/bindings/goals/goals_binding.dart';
 import 'package:today/presentation/bindings/home/home_binding.dart';
 import 'package:today/presentation/bindings/main/main_app_binding.dart';
@@ -12,6 +13,7 @@ import 'package:today/presentation/screens/home/home_calendar_screen.dart';
 import 'package:today/presentation/screens/home/home_screen.dart';
 import 'package:today/presentation/screens/home/active_goal_details_screen.dart';
 import 'package:today/presentation/screens/main/main_app_screen.dart';
+import 'package:today/presentation/screens/auth/auth_screen.dart';
 import 'package:today/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:today/presentation/screens/planner/planner_screen.dart';
 import 'package:today/presentation/screens/planner/creating_plan_screen.dart';
@@ -25,6 +27,11 @@ abstract class AppPages {
       name: AppRoutes.onboarding,
       page: () => const OnboardingScreen(),
       binding: OnboardingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.auth,
+      page: () => const AuthScreen(),
+      binding: AuthBinding(),
     ),
     GetPage(
       name: AppRoutes.home,

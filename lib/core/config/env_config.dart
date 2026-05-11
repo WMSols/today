@@ -1,13 +1,16 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 /// Runtime environment config loaded during app bootstrap.
 abstract class EnvConfig {
   static String baseUrl = '';
-  static String aiBaseUrl = '';
-  static String aiApiKey = '';
+  static String zenQuotesUrl = '';
 
   static Future<void> load() async {
-    // Prefer compile-time values passed with --dart-define.
-    baseUrl = const String.fromEnvironment('BASE_URL', defaultValue: '');
-    aiBaseUrl = const String.fromEnvironment('AI_BASE_URL', defaultValue: '');
-    aiApiKey = const String.fromEnvironment('AI_API_KEY', defaultValue: '');
+    if (!dotenv.isInitialized) {
+      await dotenv.load(fileName: '.env');
+    }
+
+    baseUrl = dotenv.env['BASE_URL'] ?? '';
+    zenQuotesUrl = dotenv.env['ZEN_QUOTES_URL'] ?? '';
   }
 }

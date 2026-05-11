@@ -7,7 +7,9 @@ class SettingsBinding extends Bindings {
   @override
   void dependencies() {
     if (!Get.isRegistered<SettingsController>()) {
-      Get.lazyPut<SettingsController>(SettingsController.new);
+      Get.lazyPut<SettingsController>(
+        () => SettingsController(Get.find(), Get.find()),
+      );
     }
     if (!Get.isRegistered<SubscriptionController>()) {
       Get.lazyPut<SubscriptionController>(

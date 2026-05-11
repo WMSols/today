@@ -8,9 +8,18 @@ import 'package:today/core/utils/app_styles/app_text_styles.dart';
 import 'package:today/core/widgets/common/app_count_badge.dart';
 
 class SettingsProfileHeader extends StatelessWidget {
-  const SettingsProfileHeader({super.key, required this.onTapClaimRewards});
+  const SettingsProfileHeader({
+    super.key,
+    required this.onTapClaimRewards,
+    required this.username,
+    required this.gemsCount,
+    required this.streakCount,
+  });
 
   final VoidCallback onTapClaimRewards;
+  final String username;
+  final String gemsCount;
+  final String streakCount;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +38,7 @@ class SettingsProfileHeader extends StatelessWidget {
         ),
         AppSpacing.vertical(context, 0.015),
         Text(
-          'MARISOL ORTEGA',
+          username,
           style: AppTextStyles.heading(context).copyWith(
             color: AppColors.white,
             fontWeight: FontWeight.w600,
@@ -40,9 +49,9 @@ class SettingsProfileHeader extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            AppCountBadge(iconPath: AppImages.gem, count: '8'),
+            AppCountBadge(iconPath: AppImages.gem, count: gemsCount),
             AppSpacing.horizontal(context, 0.02),
-            AppCountBadge(iconPath: AppImages.streak, count: '8'),
+            AppCountBadge(iconPath: AppImages.streak, count: streakCount),
           ],
         ),
       ],

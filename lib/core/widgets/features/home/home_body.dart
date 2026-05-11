@@ -9,7 +9,7 @@ class HomeBody extends StatelessWidget {
   const HomeBody({super.key, required this.onDateTap, required this.onGoalTap});
 
   final VoidCallback onDateTap;
-  final VoidCallback onGoalTap;
+  final ValueChanged<String> onGoalTap;
 
   @override
   Widget build(BuildContext context) {

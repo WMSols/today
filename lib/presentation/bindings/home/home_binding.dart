@@ -5,6 +5,16 @@ import 'package:today/presentation/controllers/home/home_controller.dart';
 class HomeBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HomeController>(() => HomeController(Get.find()));
+    Get.lazyPut<HomeController>(
+      () => HomeController(
+        Get.find(),
+        Get.find(),
+        Get.find(),
+        Get.find(),
+        Get.find(),
+        Get.find(),
+        Get.find(),
+      ),
+    );
   }
 }

@@ -15,7 +15,10 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: HomeBody(
           onDateTap: () => Get.toNamed(AppRoutes.homeCalendar),
-          onGoalTap: () => Get.toNamed(AppRoutes.activeGoalDetails),
+          onGoalTap: (goalId) => Get.toNamed(
+            AppRoutes.activeGoalDetails,
+            arguments: goalId,
+          ),
         ),
       ),
     );

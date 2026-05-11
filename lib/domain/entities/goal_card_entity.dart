@@ -1,5 +1,6 @@
 class GoalCardEntity {
   const GoalCardEntity({
+    required this.goalId,
     required this.title,
     required this.dayText,
     required this.tasksText,
@@ -10,6 +11,7 @@ class GoalCardEntity {
     required this.iconPath,
   });
 
+  final String goalId;
   final String title;
   final String dayText;
   final String tasksText;
