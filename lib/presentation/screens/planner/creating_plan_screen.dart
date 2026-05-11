@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:lottie/lottie.dart';
+
 import 'package:today/core/utils/app_lotties/app_lotties.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
@@ -13,8 +14,9 @@ class CreatingPlanScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.black,
+      backgroundColor: isDark ? AppColors.black : AppColors.white,
       body: SafeArea(
         child: Padding(
           padding: AppSpacing.symmetric(context, h: 0.04, v: 0.02),
@@ -25,7 +27,7 @@ class CreatingPlanScreen extends StatelessWidget {
                 AppTexts.creatingPlanTitle,
                 textAlign: TextAlign.center,
                 style: AppTextStyles.heading(context).copyWith(
-                  color: AppColors.white,
+                  color: isDark ? AppColors.white : AppColors.black,
                   fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 18),
                 ),
@@ -41,7 +43,9 @@ class CreatingPlanScreen extends StatelessWidget {
               Text(
                 AppTexts.didYouKnow,
                 style: AppTextStyles.labelText(context).copyWith(
-                  color: AppColors.white.withValues(alpha: 0.7),
+                  color: isDark
+                      ? AppColors.white.withValues(alpha: 0.7)
+                      : AppColors.black.withValues(alpha: 0.7),
                   fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 12),
                   letterSpacing: 0.8,
@@ -52,7 +56,7 @@ class CreatingPlanScreen extends StatelessWidget {
                 AppTexts.didYouKnowDescription,
                 textAlign: TextAlign.center,
                 style: AppTextStyles.labelText(context).copyWith(
-                  color: AppColors.white,
+                  color: isDark ? AppColors.white : AppColors.black,
                   fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 18),
                   height: 1.2,

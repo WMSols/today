@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
@@ -15,8 +16,10 @@ class SocialActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final tint = isDark ? AppColors.lightGrey : AppColors.darkGrey;
     return Material(
-      color: AppColors.lightGrey,
+      color: tint,
       borderRadius: BorderRadius.circular(
         AppResponsive.radius(context, factor: 5),
       ),

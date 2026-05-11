@@ -61,11 +61,14 @@ class AppTexts {
       "Please check your internet connection and try again.";
 
   // Onboarding
-  static const String onboardingTaglineBold = "Big goals, tiny tasks. ";
-  static const String onboardingTaglineRegular =
-      "Every day you get new tasks to achieve your goal.";
+  static const String onboardingTaglineBold1 = "Dream big, act small. ";
+  static const String onboardingTaglineRegular1 =
+      "Turn your long-term ambitions into manageable daily actions.";
+  static const String onboardingTaglineBold2 = "Focus on the now. ";
+  static const String onboardingTaglineRegular2 =
+      "Get a curated list of tasks every morning to keep you on track.";
   static const String onboardingTerms =
-      "By clicking 'Get Started,' you confirm that you have read and agree to RegentPT's Terms and Privacy policies.";
+      "By clicking 'Get Started,' you confirm that you have read and agree to Today's Terms and Privacy policies.";
   static const String plannerWelcomeMessage =
       "Heyy 👋 and welcome to your daily task planner - Today";
   static const String plannerNamePrompt = "What would you like to be called?";
@@ -114,4 +117,8 @@ class AppTexts {
   // Period names
   static const String periodAm = "AM";
   static const String periodPm = "PM";
+
+  // Appearance / theme (settings row)
+  static const String themeDarkMode = "DARK MODE";
+  static const String themeSystem = "System";
 }

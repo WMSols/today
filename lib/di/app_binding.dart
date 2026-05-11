@@ -49,7 +49,10 @@ class AppBinding extends Bindings {
       () => PlannerRemoteDataSource(dio),
       fenix: true,
     );
-    Get.lazyPut<AuthRemoteDataSource>(() => AuthRemoteDataSource(dio), fenix: true);
+    Get.lazyPut<AuthRemoteDataSource>(
+      () => AuthRemoteDataSource(dio),
+      fenix: true,
+    );
     Get.lazyPut<ActiveGoalRemoteDataSource>(
       () => ActiveGoalRemoteDataSource(dio),
       fenix: true,

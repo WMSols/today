@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:lottie/lottie.dart';
+
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_lotties/app_lotties.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
@@ -15,8 +16,9 @@ class ClaimRewardsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.black,
+      backgroundColor: isDark ? AppColors.black : AppColors.white,
       body: SafeArea(
         child: Padding(
           padding: AppSpacing.symmetric(context, h: 0.04, v: 0.02),
@@ -35,7 +37,7 @@ class ClaimRewardsScreen extends StatelessWidget {
               Text(
                 'Get fit in 30 days',
                 style: AppTextStyles.heading(context).copyWith(
-                  color: AppColors.white,
+                  color: isDark ? AppColors.white : AppColors.black,
                   fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 22),
                 ),

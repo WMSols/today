@@ -37,4 +37,3 @@ class MeEntity {
   final WalletEntity wallet;
   final ProfileEntity? profile;
 }
-

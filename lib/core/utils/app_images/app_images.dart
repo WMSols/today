@@ -5,7 +5,8 @@ class AppImages {
   // static const String appLogo = 'assets/images/app_logo.png';
 
   //Logos
-  static const String appLogo = 'assets/images/logos/app_logo.png';
+  static const String appLogoBlack = 'assets/images/logos/app_logo_black.png';
+  static const String appLogoWhite = 'assets/images/logos/app_logo_white.png';
   static const String appIcon = 'assets/images/logos/app_icon.png';
   static const String google = 'assets/images/logos/google.png';
   static const String apple = 'assets/images/logos/apple.png';

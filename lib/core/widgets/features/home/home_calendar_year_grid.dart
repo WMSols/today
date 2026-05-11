@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 
 class HomeCalendarYearGrid extends StatelessWidget {
@@ -15,6 +16,7 @@ class HomeCalendarYearGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       itemCount: totalDays,
@@ -28,7 +30,13 @@ class HomeCalendarYearGrid extends StatelessWidget {
         return Container(
           width: AppResponsive.scaleSize(context, 8),
           height: AppResponsive.scaleSize(context, 8),
-          color: isActive ? AppColors.lightGrey : AppColors.darkGrey,
+          color: isActive
+              ? isDark
+                    ? AppColors.lightGrey
+                    : AppColors.grey
+              : isDark
+              ? AppColors.darkGrey
+              : AppColors.grey,
         );
       },
       shrinkWrap: true,

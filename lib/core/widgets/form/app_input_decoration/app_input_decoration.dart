@@ -16,29 +16,37 @@ class AppInputDecoration {
     IconData? prefixIcon,
     Widget? suffixIcon,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final surface = isDark ? AppColors.black : AppColors.white;
+    final onSurface = isDark ? AppColors.white : AppColors.black;
+    final borderColor = isDark ? AppColors.lightGrey : AppColors.grey;
     final radius = AppResponsive.radius(context, factor: 5);
     return InputDecoration(
       hintText: hintText,
       hintStyle: AppTextStyles.hintText(
         context,
-      ).copyWith(color: AppColors.darkGrey),
+      ).copyWith(color: AppColors.grey),
       prefixIcon: prefixIcon != null
           ? Icon(
               prefixIcon,
               size: AppResponsive.iconSize(context),
-              color: AppColors.black,
+              color: AppColors.grey,
             )
           : null,
       suffixIcon: suffixIcon,
       filled: true,
-      fillColor: AppColors.white,
+      fillColor: surface,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(radius),
-        borderSide: BorderSide.none,
+        borderSide: BorderSide(color: borderColor),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(radius),
+        borderSide: BorderSide(color: borderColor),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(radius),
-        borderSide: const BorderSide(color: AppColors.primary),
+        borderSide: BorderSide(color: onSurface, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(radius),

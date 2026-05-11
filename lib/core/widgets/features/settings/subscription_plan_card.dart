@@ -20,11 +20,18 @@ class SubscriptionPlanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = isSelected ? AppColors.white : AppColors.darkGrey;
-    final titleColor = isSelected
-        ? Color(0XFF101010).withValues(alpha: 0.7)
-        : AppColors.white;
-    final subtitleColor = AppColors.grey;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primaryFill = isDark ? AppColors.secondary : AppColors.primary;
+    final onPrimary = isDark ? AppColors.primary : AppColors.secondary;
+    final cardBg = isDark ? AppColors.darkGrey : AppColors.grey;
+    final normalFg = isDark ? AppColors.white : AppColors.black;
+    final borderColor = isSelected
+        ? primaryFill
+        : (isDark ? AppColors.lightGrey : AppColors.grey);
+
+    final bgColor = isSelected ? primaryFill : cardBg;
+    final titleColor = isSelected ? onPrimary : normalFg;
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -38,9 +45,7 @@ class SubscriptionPlanCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(
             AppResponsive.radius(context, factor: 3),
           ),
-          border: Border.all(
-            color: isSelected ? AppColors.white : AppColors.lightGrey,
-          ),
+          border: Border.all(color: borderColor),
         ),
         child: Row(
           children: [
@@ -59,7 +64,7 @@ class SubscriptionPlanCard extends StatelessWidget {
                   Text(
                     plan.subtitle,
                     style: AppTextStyles.labelText(context).copyWith(
-                      color: subtitleColor,
+                      color: AppColors.grey,
                       fontWeight: FontWeight.w600,
                       fontSize: AppResponsive.scaleSize(context, 10),
                     ),

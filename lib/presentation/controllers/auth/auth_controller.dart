@@ -50,7 +50,8 @@ class AuthController extends GetxController {
   }
 
   void toggleSignupConfirmPasswordVisibility() {
-    isSignupConfirmPasswordVisible.value = !isSignupConfirmPasswordVisible.value;
+    isSignupConfirmPasswordVisible.value =
+        !isSignupConfirmPasswordVisible.value;
   }
 
   void toggleRememberMe(bool? value) {
@@ -92,10 +93,7 @@ class AuthController extends GetxController {
     }
   }
 
-  (String, String) _resolveAuthError(
-    Object error, {
-    required bool isLogin,
-  }) {
+  (String, String) _resolveAuthError(Object error, {required bool isLogin}) {
     if (error is DioException) {
       final statusCode = error.response?.statusCode;
       final raw = error.response?.data;
@@ -128,8 +126,7 @@ class AuthController extends GetxController {
       }
 
       if (normalized.contains('invalid credentials') ||
-          (normalized.contains('invalid') &&
-              normalized.contains('password')) ||
+          (normalized.contains('invalid') && normalized.contains('password')) ||
           normalized.contains('wrong password') ||
           normalized.contains('incorrect password')) {
         return ('Invalid credentials', 'Check username and password.');
@@ -149,10 +146,7 @@ class AuthController extends GetxController {
       );
     }
 
-    return (
-      isLogin ? 'Login failed' : 'Signup failed',
-      'Please try again.',
-    );
+    return (isLogin ? 'Login failed' : 'Signup failed', 'Please try again.');
   }
 
   String? validateUsername(String? value) {

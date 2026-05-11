@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
@@ -20,6 +21,7 @@ class HomeGoalItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -42,7 +44,7 @@ class HomeGoalItem extends StatelessWidget {
                   Text(
                     subtitle,
                     style: AppTextStyles.labelText(context).copyWith(
-                      color: AppColors.lightGrey,
+                      color: isDark ? AppColors.lightGrey : AppColors.grey,
                       fontWeight: FontWeight.w600,
                       fontSize: AppResponsive.scaleSize(context, 10),
                     ),

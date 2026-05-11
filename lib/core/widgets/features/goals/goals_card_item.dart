@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
@@ -32,6 +33,7 @@ class GoalsCardItem extends StatelessWidget {
   final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -39,7 +41,7 @@ class GoalsCardItem extends StatelessWidget {
         width: double.infinity,
         padding: AppSpacing.symmetric(context, h: 0.04, v: 0.04),
         decoration: BoxDecoration(
-          color: AppColors.darkGrey,
+          color: isDark ? AppColors.darkGrey : AppColors.grey,
           borderRadius: BorderRadius.circular(
             AppResponsive.radius(context, factor: 5),
           ),
@@ -56,7 +58,7 @@ class GoalsCardItem extends StatelessWidget {
                       Text(
                         title,
                         style: AppTextStyles.heading(context).copyWith(
-                          color: AppColors.white,
+                          color: isDark ? AppColors.white : AppColors.black,
                           fontWeight: FontWeight.w600,
                           fontSize: AppResponsive.scaleSize(context, 14),
                         ),

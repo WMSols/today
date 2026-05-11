@@ -9,8 +9,9 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.black,
+      backgroundColor: isDark ? AppColors.black : AppColors.white,
       body: SafeArea(
         child: Padding(
           padding: AppSpacing.symmetric(context, h: 0.04, v: 0.02),

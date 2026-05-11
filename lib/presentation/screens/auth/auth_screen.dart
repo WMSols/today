@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
+import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
@@ -19,8 +20,9 @@ class AuthScreen extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.black,
+      backgroundColor: isDark ? AppColors.black : AppColors.white,
       body: SafeArea(
         child: Padding(
           padding: AppSpacing.symmetric(context, h: 0.04, v: 0.02),
@@ -32,21 +34,23 @@ class AuthScreen extends GetView<AuthController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Image.asset(
-                        AppImages.appLogo,
+                        isDark
+                            ? AppImages.appLogoWhite
+                            : AppImages.appLogoBlack,
                         height: AppResponsive.screenHeight(context) * 0.15,
                       ),
                       Text(
                         AppTexts.authWelcomeTitle,
                         style: AppTextStyles.headline(context).copyWith(
-                          color: AppColors.white,
+                          color: isDark ? AppColors.white : AppColors.black,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
                         AppTexts.authWelcomeSubtitle,
-                        style: AppTextStyles.bodyText(
-                          context,
-                        ).copyWith(color: AppColors.lightGrey),
+                        style: AppTextStyles.bodyText(context).copyWith(
+                          color: isDark ? AppColors.lightGrey : AppColors.grey,
+                        ),
                       ),
                       AppSpacing.vertical(context, 0.04),
                       Obx(
@@ -103,8 +107,10 @@ class AuthScreen extends GetView<AuthController> {
                                             : Iconsax.eye_slash,
                                         onPressed:
                                             controller.togglePasswordVisibility,
-                                        color: AppColors.white,
-                                        backgroundColor: AppColors.black,
+                                        color: isDark
+                                            ? AppColors.white
+                                            : AppColors.black,
+                                        backgroundColor: Colors.transparent,
                                       ),
                                       obscureText:
                                           !controller.isPasswordVisible.value,
@@ -154,8 +160,10 @@ class AuthScreen extends GetView<AuthController> {
                                             : Iconsax.eye_slash,
                                         onPressed: controller
                                             .toggleSignupPasswordVisibility,
-                                        color: AppColors.white,
-                                        backgroundColor: AppColors.black,
+                                        color: isDark
+                                            ? AppColors.white
+                                            : AppColors.black,
+                                        backgroundColor: Colors.transparent,
                                       ),
                                       obscureText: !controller
                                           .isSignupPasswordVisible
@@ -179,8 +187,10 @@ class AuthScreen extends GetView<AuthController> {
                                             : Iconsax.eye_slash,
                                         onPressed: controller
                                             .toggleSignupConfirmPasswordVisibility,
-                                        color: AppColors.white,
-                                        backgroundColor: AppColors.black,
+                                        color: isDark
+                                            ? AppColors.white
+                                            : AppColors.black,
+                                        backgroundColor: Colors.transparent,
                                       ),
                                       obscureText: !controller
                                           .isSignupConfirmPasswordVisible

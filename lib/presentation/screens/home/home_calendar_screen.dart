@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+
+import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 import 'package:today/core/network/zen_quote_service.dart';
-import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_lotties/app_lotties.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
@@ -40,13 +41,14 @@ class _HomeCalendarScreenState extends State<HomeCalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final now = DateTime.now();
     final dayOfYear = _dayOfYear(now);
     final totalDays = _daysInYear(now.year);
     final daysLeft = totalDays - dayOfYear;
 
     return Scaffold(
-      backgroundColor: AppColors.black,
+      backgroundColor: isDark ? AppColors.black : AppColors.white,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(AppResponsive.scaleSize(context, 52)),
         child: SafeArea(
@@ -79,7 +81,9 @@ class _HomeCalendarScreenState extends State<HomeCalendarScreen> {
                                 '$daysLeft DAYS LEFT IN ${now.year}',
                                 style: AppTextStyles.labelText(context)
                                     .copyWith(
-                                      color: AppColors.lightGrey,
+                                      color: isDark
+                                          ? AppColors.white
+                                          : AppColors.black,
                                       fontSize: AppResponsive.scaleSize(
                                         context,
                                         6,

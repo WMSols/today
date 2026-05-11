@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/widgets/common/app_bottom_nav_bar.dart';
 import 'package:today/core/widgets/features/goals/goals_body.dart';
 import 'package:today/core/widgets/features/home/home_body.dart';
@@ -18,14 +17,11 @@ class MainAppScreen extends GetView<MainAppController> {
       () => AppBottomNavBarScaffold(
         currentIndex: controller.selectedTabIndex.value,
         onTap: controller.selectTab,
-        backgroundColor: AppColors.black,
         children: [
           HomeBody(
             onDateTap: () => Get.toNamed(AppRoutes.homeCalendar),
-            onGoalTap: (goalId) => Get.toNamed(
-              AppRoutes.activeGoalDetails,
-              arguments: goalId,
-            ),
+            onGoalTap: (goalId) =>
+                Get.toNamed(AppRoutes.activeGoalDetails, arguments: goalId),
           ),
           const GoalsBody(),
           const SettingsBody(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 
 class PlannerAvatar extends StatelessWidget {
@@ -10,13 +11,14 @@ class PlannerAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final size = AppResponsive.scaleSize(context, 28);
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: AppColors.black,
+        color: isDark ? AppColors.black : AppColors.white,
         image: DecorationImage(image: AssetImage(imagePath), fit: BoxFit.cover),
       ),
     );

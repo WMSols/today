@@ -13,4 +13,3 @@ class TaskActionResultEntity {
   final int? cost;
   final int? balance;
 }
-

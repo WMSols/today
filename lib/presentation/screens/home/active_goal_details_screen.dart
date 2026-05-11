@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:get/get.dart';
+
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
@@ -15,7 +16,9 @@ class ActiveGoalDetailsScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final goalId = (Get.arguments as String?) ?? controller.selectedGoalId.value;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final goalId =
+        (Get.arguments as String?) ?? controller.selectedGoalId.value;
     if (goalId.isNotEmpty && controller.selectedGoalId.value != goalId) {
       controller.loadActiveGoalTasks(goalId);
     } else if (goalId.isNotEmpty && controller.activeGoalTasks.isEmpty) {
@@ -23,7 +26,7 @@ class ActiveGoalDetailsScreen extends GetView<HomeController> {
     }
 
     return Scaffold(
-      backgroundColor: AppColors.black,
+      backgroundColor: isDark ? AppColors.black : AppColors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: AppSpacing.symmetric(context, h: 0.03, v: 0.02),

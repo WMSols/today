@@ -178,9 +178,12 @@ class _AppDateTimePickerSheetState extends State<_AppDateTimePickerSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final surface = isDark ? AppColors.black : AppColors.white;
+    final onSurface = isDark ? AppColors.white : AppColors.black;
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: surface,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(AppResponsive.scaleSize(context, 20)),
         ),
@@ -237,9 +240,7 @@ class _AppDateTimePickerSheetState extends State<_AppDateTimePickerSheet> {
                             child: Text(
                               AppFormatter.shortDate(d),
                               style: AppTextStyles.bodyText(context).copyWith(
-                                color: isSelected
-                                    ? AppColors.primary
-                                    : AppColors.grey,
+                                color: isSelected ? onSurface : AppColors.grey,
                                 fontWeight: isSelected
                                     ? FontWeight.w600
                                     : FontWeight.normal,
@@ -278,7 +279,7 @@ class _AppDateTimePickerSheetState extends State<_AppDateTimePickerSheet> {
                                     style: AppTextStyles.bodyText(context)
                                         .copyWith(
                                           color: isSelected
-                                              ? AppColors.primary
+                                              ? onSurface
                                               : AppColors.grey,
                                           fontWeight: isSelected
                                               ? FontWeight.w600
@@ -317,7 +318,7 @@ class _AppDateTimePickerSheetState extends State<_AppDateTimePickerSheet> {
                                     style: AppTextStyles.bodyText(context)
                                         .copyWith(
                                           color: isSelected
-                                              ? AppColors.primary
+                                              ? onSurface
                                               : AppColors.grey,
                                           fontWeight: isSelected
                                               ? FontWeight.w600
@@ -353,7 +354,7 @@ class _AppDateTimePickerSheetState extends State<_AppDateTimePickerSheet> {
                                     style: AppTextStyles.bodyText(context)
                                         .copyWith(
                                           color: isSelected
-                                              ? AppColors.primary
+                                              ? onSurface
                                               : AppColors.grey,
                                           fontWeight: isSelected
                                               ? FontWeight.w600

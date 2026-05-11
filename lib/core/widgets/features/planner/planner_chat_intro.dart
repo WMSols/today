@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
@@ -13,6 +14,7 @@ class PlannerChatIntro extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -54,7 +56,11 @@ class PlannerChatIntro extends StatelessWidget {
               ),
         const Spacer(),
         IgnorePointer(
-          child: Container(color: AppColors.black.withValues(alpha: 0)),
+          child: Container(
+            color: isDark
+                ? AppColors.black
+                : AppColors.white.withValues(alpha: 0),
+          ),
         ),
       ],
     );

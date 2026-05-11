@@ -25,9 +25,10 @@ class AppTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final linkColor = isDark ? AppColors.secondary : AppColors.primary;
     final textStyle =
-        style ??
-        AppTextStyles.bodyText(context).copyWith(color: AppColors.primary);
+        style ?? AppTextStyles.bodyText(context).copyWith(color: linkColor);
     final content = Row(
       mainAxisSize: MainAxisSize.min,
       children: [

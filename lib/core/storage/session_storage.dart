@@ -4,10 +4,7 @@ class SessionStorage {
   static const String _accessTokenKey = 'access_token';
   String? _runtimeAccessToken;
 
-  Future<void> saveAccessToken(
-    String token, {
-    bool persist = true,
-  }) async {
+  Future<void> saveAccessToken(String token, {bool persist = true}) async {
     _runtimeAccessToken = token;
     final prefs = await SharedPreferences.getInstance();
     if (persist) {
@@ -33,4 +30,3 @@ class SessionStorage {
     await prefs.remove(_accessTokenKey);
   }
 }
-

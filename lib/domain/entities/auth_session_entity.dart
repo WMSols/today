@@ -3,4 +3,3 @@ class AuthSessionEntity {
 
   final String accessToken;
 }
-

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -112,19 +112,19 @@ class AppToast extends StatelessWidget {
         effectiveTitle,
         style: AppTextStyles.bodyText(
           context,
-        ).copyWith(fontWeight: FontWeight.w600, color: AppColors.white),
+        ).copyWith(fontWeight: FontWeight.w600, color: Colors.white),
       ),
       messageText: subtitle != null && subtitle.isNotEmpty
           ? Text(
               subtitle,
               style: AppTextStyles.labelText(
                 context,
-              ).copyWith(color: AppColors.white),
+              ).copyWith(color: Colors.white),
             )
           : const SizedBox.shrink(),
       icon: Icon(
         effectiveIcon,
-        color: AppColors.white,
+        color: Colors.white,
         size: AppResponsive.scaleSize(context, 28),
       ),
       backgroundColor: bgColor,
@@ -154,7 +154,7 @@ class AppToast extends StatelessWidget {
         children: [
           Icon(
             effectiveIcon,
-            color: AppColors.white,
+            color: Colors.white,
             size: AppResponsive.scaleSize(context, 28),
           ),
           AppSpacing.horizontal(context, 0.02),
@@ -165,17 +165,16 @@ class AppToast extends StatelessWidget {
               children: [
                 Text(
                   effectiveTitle,
-                  style: AppTextStyles.bodyText(context).copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.white,
-                  ),
+                  style: AppTextStyles.bodyText(
+                    context,
+                  ).copyWith(fontWeight: FontWeight.w600, color: Colors.white),
                 ),
                 if (subtitle != null && subtitle!.isNotEmpty) ...[
                   Text(
                     subtitle!,
                     style: AppTextStyles.labelText(
                       context,
-                    ).copyWith(color: AppColors.white),
+                    ).copyWith(color: Colors.white),
                   ),
                 ],
               ],

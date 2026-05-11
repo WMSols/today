@@ -1,7 +1,8 @@
-﻿import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:flutter/material.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:iconsax/iconsax.dart';
+
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
 import 'package:today/core/widgets/form/app_form_field_label/app_form_field_label.dart';
@@ -35,6 +36,7 @@ class AppDropdownField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -68,7 +70,7 @@ class AppDropdownField<T> extends StatelessWidget {
           icon: Icon(
             Iconsax.arrow_down_1,
             size: AppResponsive.iconSize(context),
-            color: AppColors.black,
+            color: isDark ? AppColors.white : AppColors.black,
           ),
         ),
       ],

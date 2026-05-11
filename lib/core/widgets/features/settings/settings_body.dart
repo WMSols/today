@@ -16,6 +16,9 @@ class SettingsBody extends GetView<SettingsController> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final progressColor = isDark ? AppColors.white : AppColors.black;
+
     return SingleChildScrollView(
       padding: AppSpacing.symmetric(context, h: 0.04, v: 0.02),
       child: Column(
@@ -24,7 +27,7 @@ class SettingsBody extends GetView<SettingsController> {
           Obx(
             () => Center(
               child: controller.isProfileLoading.value
-                  ? const CircularProgressIndicator(color: AppColors.white)
+                  ? CircularProgressIndicator(color: progressColor)
                   : SettingsProfileHeader(
                       onTapClaimRewards: controller.openClaimRewards,
                       username: controller.profileName,

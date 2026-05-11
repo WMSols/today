@@ -108,6 +108,12 @@ class AppCustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final outline = isDark ? AppColors.lightGrey : AppColors.grey;
+    final card = isDark ? AppColors.darkGrey : AppColors.grey;
+    final onSurface = isDark ? AppColors.white : AppColors.black;
+    final muted = AppColors.grey;
+
     switch (variant) {
       case AppCustomAppBarVariant.homeStatus:
         final current = now ?? DateTime.now();
@@ -126,7 +132,7 @@ class AppCustomAppBar extends StatelessWidget {
                     Text(
                       '$dayLabel, ${current.day} $monthLabel',
                       style: AppTextStyles.bodyText(context).copyWith(
-                        color: AppColors.lightGrey,
+                        color: outline,
                         fontWeight: FontWeight.w600,
                         fontSize: AppResponsive.scaleSize(context, 10),
                       ),
@@ -141,9 +147,7 @@ class AppCustomAppBar extends StatelessWidget {
                           margin: EdgeInsets.only(
                             right: AppResponsive.scaleSize(context, 6),
                           ),
-                          color: isActive
-                              ? AppColors.lightGrey
-                              : AppColors.darkGrey,
+                          color: isActive ? outline : card,
                         );
                       }),
                     ),
@@ -166,7 +170,7 @@ class AppCustomAppBar extends StatelessWidget {
               onPressed: onBack,
               icon: Icon(
                 Icons.arrow_back,
-                color: AppColors.white,
+                color: onSurface,
                 size: AppResponsive.iconSize(context),
               ),
             ),
@@ -176,7 +180,7 @@ class AppCustomAppBar extends StatelessWidget {
         return Text(
           title ?? '',
           style: AppTextStyles.headline(context).copyWith(
-            color: AppColors.grey,
+            color: muted,
             fontWeight: FontWeight.w600,
             fontSize: AppResponsive.scaleSize(context, 28),
           ),
@@ -189,7 +193,7 @@ class AppCustomAppBar extends StatelessWidget {
                 onPressed: onBack,
                 icon: Icon(
                   Icons.arrow_back,
-                  color: AppColors.white,
+                  color: onSurface,
                   size: AppResponsive.iconSize(context),
                 ),
               ),
@@ -198,7 +202,7 @@ class AppCustomAppBar extends StatelessWidget {
                 title ?? '',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.heading(context).copyWith(
-                  color: AppColors.grey,
+                  color: muted,
                   fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 19),
                 ),
@@ -211,7 +215,7 @@ class AppCustomAppBar extends StatelessWidget {
         return Align(
           alignment: Alignment.center,
           child: Material(
-            color: AppColors.darkGrey,
+            color: card,
             borderRadius: BorderRadius.circular(
               AppResponsive.radius(context, factor: 5),
             ),
@@ -237,7 +241,7 @@ class AppCustomAppBar extends StatelessWidget {
                     Text(
                       AppTexts.unlockPro,
                       style: AppTextStyles.labelText(context).copyWith(
-                        color: AppColors.white,
+                        color: onSurface,
                         fontWeight: FontWeight.w600,
                         fontSize: AppResponsive.scaleSize(context, 10),
                       ),

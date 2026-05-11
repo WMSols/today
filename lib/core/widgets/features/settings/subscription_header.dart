@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
@@ -12,6 +13,7 @@ class SubscriptionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -21,7 +23,7 @@ class SubscriptionHeader extends StatelessWidget {
           AppTexts.subscriptionTitle,
           textAlign: TextAlign.center,
           style: AppTextStyles.heading(context).copyWith(
-            color: AppColors.white,
+            color: isDark ? AppColors.white : AppColors.black,
             fontWeight: FontWeight.w600,
             fontSize: AppResponsive.scaleSize(context, 28),
           ),

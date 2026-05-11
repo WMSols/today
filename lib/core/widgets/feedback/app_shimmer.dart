@@ -40,6 +40,8 @@ class _AppShimmerState extends State<AppShimmer>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final onSurface = isDark ? AppColors.white : AppColors.black;
     final borderRadius =
         widget.borderRadius ??
         BorderRadius.circular(AppResponsive.radius(context));
@@ -56,7 +58,7 @@ class _AppShimmerState extends State<AppShimmer>
           children: [
             Container(
               decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.3),
+                color: onSurface.withValues(alpha: 0.12),
                 borderRadius: borderRadius,
               ),
             ),
@@ -81,11 +83,11 @@ class _AppShimmerState extends State<AppShimmer>
                               end: Alignment.centerRight,
                               colors: [
                                 Colors.transparent,
-                                AppColors.white.withValues(alpha: 0.06),
-                                AppColors.white.withValues(alpha: 0.28),
-                                AppColors.white.withValues(alpha: 0.45),
-                                AppColors.white.withValues(alpha: 0.28),
-                                AppColors.white.withValues(alpha: 0.06),
+                                onSurface.withValues(alpha: 0.06),
+                                onSurface.withValues(alpha: 0.22),
+                                onSurface.withValues(alpha: 0.38),
+                                onSurface.withValues(alpha: 0.22),
+                                onSurface.withValues(alpha: 0.06),
                                 Colors.transparent,
                               ],
                               stops: const [

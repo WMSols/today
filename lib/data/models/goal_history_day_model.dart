@@ -46,4 +46,3 @@ class GoalHistoryDayModel extends GoalHistoryDayEntity {
     }
   }
 }
-

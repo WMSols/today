@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
@@ -24,7 +24,9 @@ class AppIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final iconSize = size ?? AppResponsive.iconSize(context, factor: 1.3);
+    final defaultIcon = isDark ? AppColors.white : AppColors.black;
     return Material(
       color: backgroundColor ?? Colors.transparent,
       borderRadius: BorderRadius.circular(
@@ -37,7 +39,7 @@ class AppIconButton extends StatelessWidget {
         ),
         child: Padding(
           padding: AppSpacing.all(context, factor: paddingFactor ?? 1),
-          child: Icon(icon, size: iconSize, color: color ?? AppColors.primary),
+          child: Icon(icon, size: iconSize, color: color ?? defaultIcon),
         ),
       ),
     );
