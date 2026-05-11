@@ -4,9 +4,13 @@ class AppImages {
   // App Logo
   // static const String appLogo = 'assets/images/app_logo.png';
 
+  //Logos
+  static const String appLogo = 'assets/images/logos/app_logo.png';
+  static const String appIcon = 'assets/images/logos/app_icon.png';
+  static const String google = 'assets/images/logos/google.png';
+  static const String apple = 'assets/images/logos/apple.png';
+
   //Icons
-  static const String google = 'assets/images/icons/google.png';
-  static const String apple = 'assets/images/icons/apple.png';
   static const String bestStreak = 'assets/images/icons/best_streak.png';
   static const String easyTasks = 'assets/images/icons/easy_task.png';
   static const String hardTasks = 'assets/images/icons/hard_task.png';
