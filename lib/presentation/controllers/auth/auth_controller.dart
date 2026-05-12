@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:today/presentation/controllers/feedback/haptics_controller.dart';
 import 'package:today/core/network/api_exceptions.dart';
 import 'package:today/core/widgets/feedback/app_toast.dart';
 import 'package:today/domain/usecases/login_usecase.dart';
@@ -72,6 +73,9 @@ class AuthController extends GetxController {
           rememberMe: rememberMe.value,
         );
         AppToast.showSuccess('Login successful');
+        if (Get.isRegistered<HapticsController>()) {
+          Get.find<HapticsController>().impact();
+        }
         Get.offAllNamed(AppRoutes.mainApp);
       } else {
         await _signupUseCase(
@@ -81,11 +85,17 @@ class AuthController extends GetxController {
           autoLogin: false,
         );
         AppToast.showSuccess('Account created successfully');
+        if (Get.isRegistered<HapticsController>()) {
+          Get.find<HapticsController>().impact();
+        }
         loginUsernameController.text = signupUsernameController.text.trim();
         loginPasswordController.clear();
         switchMode(true);
       }
     } catch (e) {
+      if (Get.isRegistered<HapticsController>()) {
+        Get.find<HapticsController>().impact();
+      }
       final resolved = _resolveAuthError(e, isLogin: isLoginMode.value);
       AppToast.showError(resolved.$1, resolved.$2);
     } finally {

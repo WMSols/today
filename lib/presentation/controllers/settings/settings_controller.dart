@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:today/presentation/controllers/feedback/haptics_controller.dart';
 import 'package:today/core/widgets/feedback/app_toast.dart';
 import 'package:today/domain/entities/me_entity.dart';
 import 'package:today/domain/repositories/auth_repository.dart';
@@ -11,7 +12,6 @@ class SettingsController extends GetxController {
   final GetMeUseCase _getMeUseCase;
   final AuthRepository _authRepository;
 
-  final RxBool hapticsEnabled = true.obs;
   final RxBool notificationsEnabled = false.obs;
   final RxBool isProfileLoading = false.obs;
   final Rxn<MeEntity> me = Rxn<MeEntity>();
@@ -45,12 +45,13 @@ class SettingsController extends GetxController {
     }
   }
 
-  void setHaptics(bool value) {
-    hapticsEnabled.value = value;
-  }
+  HapticsController get haptics => Get.find<HapticsController>();
 
   void setNotifications(bool value) {
     notificationsEnabled.value = value;
+    if (Get.isRegistered<HapticsController>()) {
+      Get.find<HapticsController>().impact();
+    }
   }
 
   void openClaimRewards() {

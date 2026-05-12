@@ -41,9 +41,9 @@ class SettingsBody extends GetView<SettingsController> {
           AppSpacing.vertical(context, 0.02),
           Obx(
             () => SettingsControlsCard(
-              hapticsEnabled: controller.hapticsEnabled.value,
+              hapticsEnabled: controller.haptics.enabled.value,
               notificationsEnabled: controller.notificationsEnabled.value,
-              onHapticsChanged: controller.setHaptics,
+              onHapticsChanged: controller.haptics.setEnabled,
               onNotificationsChanged: controller.setNotifications,
             ),
           ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
+import 'package:today/presentation/controllers/feedback/haptics_controller.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_lotties/app_lotties.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
@@ -18,6 +20,7 @@ class AppButton extends StatelessWidget {
     this.icon,
     this.iconPosition = IconPosition.left,
     this.loadingLabel,
+    this.useHapticFeedback = true,
   });
 
   final String label;
@@ -29,6 +32,9 @@ class AppButton extends StatelessWidget {
 
   /// Shown next to the loading Lottie when [isLoading] is true. If null, derived from [label] (e.g. "Login" → "Logging In").
   final String? loadingLabel;
+
+  /// Light impact on tap when [HapticsController] is registered and enabled.
+  final bool useHapticFeedback;
   static const _animationDuration = Duration(milliseconds: 220);
 
   static String _defaultLoadingLabel(String label) {
@@ -128,7 +134,18 @@ class AppButton extends StatelessWidget {
         AppResponsive.radius(context, factor: 5),
       ),
       child: InkWell(
-        onTap: isLoading ? null : onPressed,
+        onTap: isLoading
+            ? null
+            : onPressed == null
+                ? null
+                : () {
+                    if (useHapticFeedback) {
+                      if (Get.isRegistered<HapticsController>()) {
+                        Get.find<HapticsController>().impact();
+                      }
+                    }
+                    onPressed!();
+                  },
         borderRadius: BorderRadius.circular(
           AppResponsive.radius(context, factor: 5),
         ),

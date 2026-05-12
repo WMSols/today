@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:today/presentation/controllers/feedback/haptics_controller.dart';
+
 /// User-selectable theme; maps to Flutter [ThemeMode].
 enum AppThemePreference {
   system,
@@ -47,5 +49,8 @@ class ThemeController extends GetxController {
     _preference = value;
     update();
     await Get.find<SharedPreferences>().setString(_storageKey, value.name);
+    if (Get.isRegistered<HapticsController>()) {
+      Get.find<HapticsController>().impact();
+    }
   }
 }
