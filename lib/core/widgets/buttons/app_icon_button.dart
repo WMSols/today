@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import 'package:today/presentation/controllers/feedback/haptics_controller.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
@@ -13,6 +15,7 @@ class AppIconButton extends StatelessWidget {
     this.paddingFactor,
     this.color,
     this.backgroundColor,
+    this.useHapticFeedback = true,
   });
 
   final IconData icon;
@@ -21,6 +24,7 @@ class AppIconButton extends StatelessWidget {
   final double? paddingFactor;
   final Color? color;
   final Color? backgroundColor;
+  final bool useHapticFeedback;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,16 @@ class AppIconButton extends StatelessWidget {
         AppResponsive.radius(context, factor: 5),
       ),
       child: InkWell(
-        onTap: onPressed,
+        onTap: onPressed == null
+            ? null
+            : () {
+                if (useHapticFeedback) {
+                  if (Get.isRegistered<HapticsController>()) {
+                    Get.find<HapticsController>().impact();
+                  }
+                }
+                onPressed!();
+              },
         borderRadius: BorderRadius.circular(
           AppResponsive.radius(context, factor: 5),
         ),
