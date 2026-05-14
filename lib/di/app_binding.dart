@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import 'package:today/core/auth/firebase_auth_gateway.dart';
 import 'package:today/core/network/connectivity_service.dart';
 import 'package:today/core/network/dio_client.dart';
 import 'package:today/core/storage/session_storage.dart';
@@ -37,6 +38,7 @@ class AppBinding extends Bindings {
   void dependencies() {
     final sessionStorage = SessionStorage();
     Get.put<SessionStorage>(sessionStorage, permanent: true);
+    Get.lazyPut<FirebaseAuthGateway>(() => FirebaseAuthGateway(), fenix: true);
     final dio = DioClient.instanceWith(sessionStorage: sessionStorage);
     Get.put<ConnectivityService>(ConnectivityService(), permanent: true);
     // Data sources

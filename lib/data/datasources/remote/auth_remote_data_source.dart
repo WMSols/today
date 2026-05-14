@@ -32,6 +32,20 @@ class AuthRemoteDataSource {
     return response.data ?? <String, dynamic>{};
   }
 
+  Future<Map<String, dynamic>> exchangeFirebaseSession({
+    required String idToken,
+    String? timezone,
+  }) async {
+    final response = await _dio.post<Map<String, dynamic>>(
+      '/auth/firebase',
+      data: {
+        'id_token': idToken,
+        if (timezone != null && timezone.isNotEmpty) 'timezone': timezone,
+      },
+    );
+    return response.data ?? <String, dynamic>{};
+  }
+
   Future<Map<String, dynamic>> getMe() async {
     final response = await _dio.get<Map<String, dynamic>>('/me');
     return response.data ?? <String, dynamic>{};

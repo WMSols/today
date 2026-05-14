@@ -64,7 +64,9 @@ class PlannerScreen extends GetView<PlannerController> {
                   AppSpacing.horizontal(context, 0.02),
                   AppIconButton(
                     color: isDark ? AppColors.primary : AppColors.secondary,
-                    backgroundColor: isDark ? AppColors.secondary : AppColors.primary,
+                    backgroundColor: isDark
+                        ? AppColors.secondary
+                        : AppColors.primary,
                     icon: Iconsax.send_1,
                     onPressed: controller.onSendTap,
                   ),

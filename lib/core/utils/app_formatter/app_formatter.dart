@@ -4,7 +4,7 @@ import 'package:today/core/utils/app_helper/app_helper.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 
 /// Formatters: display formatting only .
-/// For null/empty/parsing helpers use [AppHelper]; for validation use [AppValidators].
+/// For null/empty/parsing helpers use [AppHelper]; for validation use [AppValidator].
 class AppFormatter {
   AppFormatter._();
 
@@ -18,18 +18,18 @@ class AppFormatter {
   /// Short date string for pickers: "Jan 15, 2025".
   static String shortDate(DateTime d) {
     const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
+      AppTexts.monJan,
+      AppTexts.monFeb,
+      AppTexts.monMar,
+      AppTexts.monApr,
+      AppTexts.monMay,
+      AppTexts.monJun,
+      AppTexts.monJul,
+      AppTexts.monAug,
+      AppTexts.monSep,
+      AppTexts.monOct,
+      AppTexts.monNov,
+      AppTexts.monDec,
     ];
     return '${months[d.month - 1]} ${d.day}, ${d.year}';
   }

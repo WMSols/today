@@ -56,6 +56,27 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<AuthResultEntity> exchangeFirebaseSession({
+    required String idToken,
+    bool rememberMe = true,
+    String? timezone,
+  }) async {
+    final raw = await _remoteDataSource.exchangeFirebaseSession(
+      idToken: idToken,
+      timezone: timezone,
+    );
+    final user = AuthUserModel.fromJson(raw['user'] as Map<String, dynamic>);
+    final session = AuthSessionModel.fromJson(
+      raw['session'] as Map<String, dynamic>,
+    );
+    await _sessionStorage.saveAccessToken(
+      session.accessToken,
+      persist: rememberMe,
+    );
+    return AuthResultEntity(user: user, session: session);
+  }
+
+  @override
   Future<MeEntity> getMe() async {
     final raw = await _remoteDataSource.getMe();
     return MeModel.fromJson(raw);

@@ -56,9 +56,9 @@ class HapticsController extends GetxController {
   }
 
   void impact() => _invoke(
-        'impact',
-        HapticFeedback.mediumImpact,
-        androidMotorMs: 65,
-        androidAmplitude: 210,
-      );
+    'impact',
+    HapticFeedback.mediumImpact,
+    androidMotorMs: 65,
+    androidAmplitude: 210,
+  );
 }

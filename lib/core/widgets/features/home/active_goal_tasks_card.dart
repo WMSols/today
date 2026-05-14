@@ -106,7 +106,7 @@ class _ActiveGoalTaskRow extends StatelessWidget {
                   Text(
                     task.level,
                     style: AppTextStyles.labelText(context).copyWith(
-                      color: AppHelpers.taskLevelColor(task.level),
+                      color: AppHelper.taskLevelColor(task.level),
                       fontWeight: FontWeight.w600,
                       fontSize: AppResponsive.scaleSize(context, 6),
                     ),

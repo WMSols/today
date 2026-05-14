@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "299243495312",
+    "project_id": "todai-c076f",
+    "storage_bucket": "todai-c076f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299243495312:android:a8f07df49f516cdee35d15",
+        "android_client_info": {
+          "package_name": "com.todayapp.today"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "299243495312-hm7fpugq207ono5m3ack4pv9djar8e5s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZcrDLCPFu3tOs5tLAa6j-FeGll_MCa9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "299243495312-hm7fpugq207ono5m3ack4pv9djar8e5s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

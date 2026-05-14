@@ -23,6 +23,13 @@ abstract class AuthRepository {
     bool rememberMe = true,
   });
 
+  /// Exchanges a Firebase ID token for an API session (`POST /auth/firebase`).
+  Future<AuthResultEntity> exchangeFirebaseSession({
+    required String idToken,
+    bool rememberMe = true,
+    String? timezone,
+  });
+
   Future<MeEntity> getMe();
   Future<String?> getAccessToken();
   Future<void> clearSession();
