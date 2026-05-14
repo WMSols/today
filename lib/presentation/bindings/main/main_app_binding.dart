@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import 'package:today/core/auth/firebase_auth_gateway.dart';
 import 'package:today/domain/usecases/create_goal_usecase.dart';
 import 'package:today/domain/usecases/complete_task_usecase.dart';
 import 'package:today/domain/usecases/delete_goal_usecase.dart';
@@ -36,6 +37,7 @@ class MainAppBinding extends Bindings {
       () => SettingsController(
         Get.find<GetMeUseCase>(),
         Get.find<AuthRepository>(),
+        Get.find<FirebaseAuthGateway>(),
       ),
     );
   }

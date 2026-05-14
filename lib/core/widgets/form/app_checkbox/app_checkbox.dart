@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
@@ -20,11 +21,15 @@ class AppCheckbox extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final borderAndLabel = isDark ? AppColors.white : AppColors.black;
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Checkbox(
           value: value,
           onChanged: onChanged,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          visualDensity: VisualDensity.compact,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
               AppResponsive.radius(context, factor: 5),
@@ -32,7 +37,7 @@ class AppCheckbox extends StatelessWidget {
           ),
           side: BorderSide(color: borderAndLabel),
         ),
-        Flexible(
+        Expanded(
           child: Text(
             label,
             overflow: TextOverflow.ellipsis,

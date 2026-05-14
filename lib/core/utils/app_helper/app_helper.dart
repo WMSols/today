@@ -47,11 +47,8 @@ class AppHelper {
         .where((e) => e.isNotEmpty)
         .toList();
   }
-}
 
-class AppHelpers {
-  AppHelpers._();
-
+  /// Accent color for active goal task difficulty labels.
   static Color taskLevelColor(String level) {
     switch (level.toUpperCase()) {
       case 'HARD':

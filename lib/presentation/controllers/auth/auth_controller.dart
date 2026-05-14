@@ -1,24 +1,27 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:today/core/auth/firebase_auth_gateway.dart';
 import 'package:today/presentation/controllers/feedback/haptics_controller.dart';
 import 'package:today/core/network/api_exceptions.dart';
 import 'package:today/core/widgets/feedback/app_toast.dart';
-import 'package:today/domain/usecases/login_usecase.dart';
-import 'package:today/domain/usecases/signup_usecase.dart';
+import 'package:today/domain/repositories/auth_repository.dart';
 import 'package:today/presentation/routes/app_routes.dart';
 
 class AuthController extends GetxController {
-  AuthController(this._loginUseCase, this._signupUseCase);
+  AuthController(this._authRepository, this._firebaseAuth);
 
-  final LoginUseCase _loginUseCase;
-  final SignupUseCase _signupUseCase;
+  final AuthRepository _authRepository;
+  final FirebaseAuthGateway _firebaseAuth;
 
   final loginFormKey = GlobalKey<FormState>();
   final signupFormKey = GlobalKey<FormState>();
-  final loginUsernameController = TextEditingController();
+  final loginEmailController = TextEditingController();
   final loginPasswordController = TextEditingController();
-  final signupUsernameController = TextEditingController();
+  final signupEmailController = TextEditingController();
   final signupPasswordController = TextEditingController();
   final signupConfirmPasswordController = TextEditingController();
 
@@ -59,6 +62,67 @@ class AuthController extends GetxController {
     rememberMe.value = value ?? false;
   }
 
+  Future<void> signInWithGoogle() async {
+    if (isLoading.value) return;
+    isLoading.value = true;
+    try {
+      final cred = await _firebaseAuth.signInWithGoogle();
+      await _persistApiSessionAfterFirebase(cred);
+      _toastSuccessAndGoHome('Signed in with Google');
+    } on GoogleSignInException catch (e) {
+      if (e.code == GoogleSignInExceptionCode.canceled ||
+          e.code == GoogleSignInExceptionCode.interrupted ||
+          e.code == GoogleSignInExceptionCode.uiUnavailable) {
+        return;
+      }
+      AppToast.showError(
+        'Google sign-in failed',
+        e.description ?? e.toString(),
+      );
+    } on FirebaseAuthException catch (e) {
+      AppToast.showError('Google sign-in failed', _messageForFirebaseAuth(e));
+    } catch (e) {
+      if (e is DioException) {
+        final r = _resolveAuthError(e, isLogin: true);
+        AppToast.showError(r.$1, r.$2);
+      } else {
+        AppToast.showError('Google sign-in failed', 'Please try again.');
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> signInWithApple() async {
+    if (isLoading.value) return;
+    if (kIsWeb ||
+        (defaultTargetPlatform != TargetPlatform.iOS &&
+            defaultTargetPlatform != TargetPlatform.macOS)) {
+      AppToast.showInformation(
+        'Apple sign-in',
+        'Apple sign-in will be enabled on iOS when you are ready. Use email or Google here.',
+      );
+      return;
+    }
+    isLoading.value = true;
+    try {
+      final cred = await _firebaseAuth.signInWithApple();
+      await _persistApiSessionAfterFirebase(cred);
+      _toastSuccessAndGoHome('Signed in with Apple');
+    } on FirebaseAuthException catch (e) {
+      AppToast.showError('Apple sign-in failed', _messageForFirebaseAuth(e));
+    } catch (e) {
+      if (e is DioException) {
+        final r = _resolveAuthError(e, isLogin: true);
+        AppToast.showError(r.$1, r.$2);
+      } else {
+        AppToast.showError('Apple sign-in failed', 'Please try again.');
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> submit() async {
     final activeFormKey = isLoginMode.value ? loginFormKey : signupFormKey;
     final valid = activeFormKey.currentState?.validate() ?? false;
@@ -67,39 +131,107 @@ class AuthController extends GetxController {
     isLoading.value = true;
     try {
       if (isLoginMode.value) {
-        await _loginUseCase(
-          username: loginUsernameController.text.trim(),
+        final cred = await _firebaseAuth.signInWithEmailAndPassword(
+          email: loginEmailController.text.trim(),
           password: loginPasswordController.text,
-          rememberMe: rememberMe.value,
         );
-        AppToast.showSuccess('Login successful');
-        if (Get.isRegistered<HapticsController>()) {
-          Get.find<HapticsController>().impact();
-        }
-        Get.offAllNamed(AppRoutes.mainApp);
+        await _persistApiSessionAfterFirebase(cred);
+        _toastSuccessAndGoHome('Login successful');
       } else {
-        await _signupUseCase(
-          username: signupUsernameController.text.trim(),
+        final cred = await _firebaseAuth.createUserWithEmailAndPassword(
+          email: signupEmailController.text.trim(),
           password: signupPasswordController.text,
-          timezone: DateTime.now().timeZoneName,
-          autoLogin: false,
         );
-        AppToast.showSuccess('Account created successfully');
-        if (Get.isRegistered<HapticsController>()) {
-          Get.find<HapticsController>().impact();
-        }
-        loginUsernameController.text = signupUsernameController.text.trim();
-        loginPasswordController.clear();
-        switchMode(true);
+        await _persistApiSessionAfterFirebase(
+          cred,
+          timezone: DateTime.now().timeZoneName,
+        );
+        _toastSuccessAndGoHome('Account created successfully');
       }
+    } on FirebaseAuthException catch (e) {
+      if (Get.isRegistered<HapticsController>()) {
+        Get.find<HapticsController>().impact();
+      }
+      AppToast.showError(
+        isLoginMode.value ? 'Login failed' : 'Sign up failed',
+        _messageForFirebaseAuth(e),
+      );
     } catch (e) {
       if (Get.isRegistered<HapticsController>()) {
         Get.find<HapticsController>().impact();
       }
-      final resolved = _resolveAuthError(e, isLogin: isLoginMode.value);
-      AppToast.showError(resolved.$1, resolved.$2);
+      if (e is DioException) {
+        final resolved = _resolveAuthError(e, isLogin: isLoginMode.value);
+        AppToast.showError(resolved.$1, resolved.$2);
+      } else {
+        AppToast.showError(
+          isLoginMode.value ? 'Login failed' : 'Sign up failed',
+          'Please try again.',
+        );
+      }
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> _persistApiSessionAfterFirebase(
+    UserCredential cred, {
+    String? timezone,
+  }) async {
+    final user = cred.user;
+    if (user == null) {
+      throw FirebaseAuthException(
+        code: 'missing-user',
+        message: 'No Firebase user returned.',
+      );
+    }
+    final idToken = await user.getIdToken();
+    if (idToken == null || idToken.isEmpty) {
+      throw FirebaseAuthException(
+        code: 'missing-id-token',
+        message: 'Could not read Firebase ID token.',
+      );
+    }
+    await _authRepository.exchangeFirebaseSession(
+      idToken: idToken,
+      rememberMe: rememberMe.value,
+      timezone: timezone,
+    );
+  }
+
+  void _toastSuccessAndGoHome(String title) {
+    AppToast.showSuccess(title);
+    if (Get.isRegistered<HapticsController>()) {
+      Get.find<HapticsController>().impact();
+    }
+    Get.offAllNamed(AppRoutes.mainApp);
+  }
+
+  String _messageForFirebaseAuth(FirebaseAuthException e) {
+    switch (e.code) {
+      case 'invalid-email':
+        return 'That email address is not valid.';
+      case 'user-disabled':
+        return 'This account has been disabled.';
+      case 'user-not-found':
+      case 'wrong-password':
+      case 'invalid-credential':
+        return 'Incorrect email or password.';
+      case 'email-already-in-use':
+        return 'An account already exists for this email.';
+      case 'weak-password':
+        return 'Password is too weak. Use a stronger password.';
+      case 'network-request-failed':
+        return 'Network error. Check your connection.';
+      case 'too-many-requests':
+        return 'Too many attempts. Try again later.';
+      case 'apple-sign-in-unavailable':
+      case 'google-sign-in-unavailable':
+        return e.message ?? e.code;
+      default:
+        return e.message?.trim().isNotEmpty == true
+            ? e.message!.trim()
+            : 'Authentication error (${e.code}).';
     }
   }
 
@@ -128,22 +260,29 @@ class AuthController extends GetxController {
 
       final normalized = backendMessage.toLowerCase();
 
-      if (normalized.contains('username') &&
+      if (normalized.contains('email') &&
           (normalized.contains('exists') ||
               normalized.contains('taken') ||
               normalized.contains('already'))) {
-        return ('Username already exists', 'Choose a different username.');
+        return ('Email already in use', 'Sign in or use a different email.');
       }
 
       if (normalized.contains('invalid credentials') ||
           (normalized.contains('invalid') && normalized.contains('password')) ||
           normalized.contains('wrong password') ||
           normalized.contains('incorrect password')) {
-        return ('Invalid credentials', 'Check username and password.');
+        return ('Invalid credentials', 'Check email and password.');
       }
 
       if (statusCode == 401) {
-        return ('Unauthorized', 'Invalid username or password.');
+        return ('Unauthorized', 'Invalid email or session.');
+      }
+
+      if (statusCode == 404) {
+        return (
+          'Server not configured',
+          'Add POST /auth/firebase on your API to exchange Firebase ID tokens.',
+        );
       }
 
       if (backendMessage.isNotEmpty) {
@@ -159,67 +298,11 @@ class AuthController extends GetxController {
     return (isLogin ? 'Login failed' : 'Signup failed', 'Please try again.');
   }
 
-  String? validateUsername(String? value) {
-    final username = value?.trim() ?? '';
-    if (username.isEmpty) {
-      return 'Username is required';
-    }
-    if (username.length < 3 || username.length > 24) {
-      return 'Username must be 3-24 characters';
-    }
-    final usernamePattern = RegExp(r'^[a-zA-Z0-9._]+$');
-    if (!usernamePattern.hasMatch(username)) {
-      return 'Use only letters, numbers, dot or underscore';
-    }
-    if (username.startsWith('.') ||
-        username.endsWith('.') ||
-        username.contains('..')) {
-      return 'Username format is invalid';
-    }
-    return null;
-  }
-
-  String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Password is required';
-    }
-    if (value.length < 8) {
-      return 'Password must be at least 8 characters';
-    }
-    if (value.contains(' ')) {
-      return 'Password must not contain spaces';
-    }
-    if (!RegExp(r'[A-Z]').hasMatch(value)) {
-      return 'Include at least 1 uppercase letter';
-    }
-    if (!RegExp(r'[a-z]').hasMatch(value)) {
-      return 'Include at least 1 lowercase letter';
-    }
-    if (!RegExp(r'[0-9]').hasMatch(value)) {
-      return 'Include at least 1 number';
-    }
-    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>_\-+=/\\\[\]~`]').hasMatch(value)) {
-      return 'Include at least 1 special character';
-    }
-    return null;
-  }
-
-  String? validateConfirmPassword(String? value) {
-    final passwordError = validatePassword(value);
-    if (passwordError != null) {
-      return passwordError;
-    }
-    if ((value ?? '') != signupPasswordController.text) {
-      return 'Passwords do not match';
-    }
-    return null;
-  }
-
   @override
   void onClose() {
-    loginUsernameController.dispose();
+    loginEmailController.dispose();
     loginPasswordController.dispose();
-    signupUsernameController.dispose();
+    signupEmailController.dispose();
     signupPasswordController.dispose();
     signupConfirmPasswordController.dispose();
     super.onClose();

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:today/core/auth/firebase_auth_gateway.dart';
 import 'package:today/presentation/controllers/feedback/haptics_controller.dart';
 import 'package:today/core/widgets/feedback/app_toast.dart';
 import 'package:today/domain/entities/me_entity.dart';
@@ -7,10 +8,15 @@ import 'package:today/domain/usecases/get_me_usecase.dart';
 import 'package:today/presentation/routes/app_routes.dart';
 
 class SettingsController extends GetxController {
-  SettingsController(this._getMeUseCase, this._authRepository);
+  SettingsController(
+    this._getMeUseCase,
+    this._authRepository,
+    this._firebaseAuthGateway,
+  );
 
   final GetMeUseCase _getMeUseCase;
   final AuthRepository _authRepository;
+  final FirebaseAuthGateway _firebaseAuthGateway;
 
   final RxBool notificationsEnabled = false.obs;
   final RxBool isProfileLoading = false.obs;
@@ -63,6 +69,7 @@ class SettingsController extends GetxController {
   }
 
   Future<void> logout() async {
+    await _firebaseAuthGateway.signOut();
     await _authRepository.clearSession();
     AppToast.showSuccess('Logged out successfully');
     Get.offAllNamed(AppRoutes.onboarding);

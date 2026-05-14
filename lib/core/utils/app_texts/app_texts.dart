@@ -23,6 +23,9 @@ class AppTexts {
   static const String createAccount = "Create account";
   static const String username = "Username";
   static const String usernameHint = "Enter your username";
+  static const String email = "Email";
+  static const String emailHint = "Enter your email";
+  static const String authOrContinueWith = "Or continue with";
   static const String password = "Password";
   static const String passwordHint = "Enter your password";
   static const String confirmPassword = "Confirm password";
@@ -95,6 +98,34 @@ class AppTexts {
   static const String subscriptionCtaPro = "Start Pro - \$4.99 / month";
   static const String subscriptionCtaLifetime = "Get Lifetime - \$59.99";
   static const String unlockPro = "UNLOCK PRO";
+
+  // Month names
+  static const String monthJanuary = "January";
+  static const String monthFebruary = "February";
+  static const String monthMarch = "March";
+  static const String monthApril = "April";
+  static const String monthMay = "May";
+  static const String monthJune = "June";
+  static const String monthJuly = "July";
+  static const String monthAugust = "August";
+  static const String monthSeptember = "September";
+  static const String monthOctober = "October";
+  static const String monthNovember = "November";
+  static const String monthDecember = "December";
+
+  // Short month names
+  static const String monJan = "Jan";
+  static const String monFeb = "Feb";
+  static const String monMar = "Mar";
+  static const String monApr = "Apr";
+  static const String monMay = "May";
+  static const String monJun = "Jun";
+  static const String monJul = "Jul";
+  static const String monAug = "Aug";
+  static const String monSep = "Sep";
+  static const String monOct = "Oct";
+  static const String monNov = "Nov";
+  static const String monDec = "Dec";
 
   // Day names
   static const String dayMonday = "Monday";

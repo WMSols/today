@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:today/presentation/routes/app_routes.dart';
+import 'package:today/core/auth/firebase_auth_gateway.dart';
 import 'package:today/core/config/env_config.dart';
 import 'package:today/core/init/app_system_ui.dart';
 import 'package:today/di/app_binding.dart';
@@ -9,6 +12,7 @@ import 'package:today/domain/usecases/get_me_usecase.dart';
 import 'package:today/domain/repositories/auth_repository.dart';
 import 'package:today/presentation/controllers/feedback/haptics_controller.dart';
 import 'package:today/presentation/controllers/theme/theme_controller.dart';
+import 'package:today/firebase_options.dart';
 
 /// Handles async app bootstrap: env, DI, and initial route resolution.
 abstract class AppInitializer {
@@ -16,6 +20,9 @@ abstract class AppInitializer {
 
   static Future<void> init() async {
     await EnvConfig.load();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     AppSystemUi.setOverlayForPlatformBrightness();
     AppBinding().dependencies();
     await Get.putAsync<SharedPreferences>(
@@ -33,13 +40,37 @@ abstract class AppInitializer {
     try {
       final authRepository = Get.find<AuthRepository>();
       final token = await authRepository.getAccessToken();
-      if (token == null || token.isEmpty) return AppRoutes.onboarding;
+      if (token == null || token.isEmpty) {
+        return await _tryRestoreFromFirebase(authRepository);
+      }
       final getMe = Get.find<GetMeUseCase>();
       await getMe();
       return AppRoutes.mainApp;
     } catch (_) {
       try {
         await Get.find<AuthRepository>().clearSession();
+      } catch (_) {}
+      return await _tryRestoreFromFirebase(Get.find<AuthRepository>());
+    }
+  }
+
+  static Future<String> _tryRestoreFromFirebase(
+    AuthRepository authRepository,
+  ) async {
+    try {
+      final firebaseUser = FirebaseAuth.instance.currentUser;
+      if (firebaseUser == null) return AppRoutes.onboarding;
+      final idToken = await firebaseUser.getIdToken();
+      if (idToken == null || idToken.isEmpty) return AppRoutes.onboarding;
+      await authRepository.exchangeFirebaseSession(
+        idToken: idToken,
+        rememberMe: true,
+      );
+      await Get.find<GetMeUseCase>()();
+      return AppRoutes.mainApp;
+    } catch (_) {
+      try {
+        await Get.find<FirebaseAuthGateway>().signOut();
       } catch (_) {}
       return AppRoutes.onboarding;
     }

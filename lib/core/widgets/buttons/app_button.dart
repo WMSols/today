@@ -10,6 +10,36 @@ import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 
+/// Optional per-screen palette for [AppButton] filled vs outlined states.
+///
+/// [filled*] when [AppButton.primary] is true; [outlined*] when false.
+class AppButtonColors {
+  const AppButtonColors({
+    required this.filledBackground,
+    required this.filledForeground,
+    required this.outlinedBackground,
+    required this.outlinedForeground,
+    required this.outlinedBorder,
+  });
+
+  final Color filledBackground;
+  final Color filledForeground;
+  final Color outlinedBackground;
+  final Color outlinedForeground;
+  final Color outlinedBorder;
+
+  factory AppButtonColors.defaults(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return AppButtonColors(
+      filledBackground: isDark ? AppColors.secondary : AppColors.primary,
+      filledForeground: isDark ? AppColors.primary : AppColors.secondary,
+      outlinedBackground: Colors.transparent,
+      outlinedForeground: isDark ? AppColors.secondary : AppColors.primary,
+      outlinedBorder: isDark ? AppColors.secondary : AppColors.primary,
+    );
+  }
+}
+
 class AppButton extends StatelessWidget {
   const AppButton({
     super.key,
@@ -21,6 +51,7 @@ class AppButton extends StatelessWidget {
     this.iconPosition = IconPosition.left,
     this.loadingLabel,
     this.useHapticFeedback = true,
+    this.colors,
   });
 
   final String label;
@@ -35,6 +66,10 @@ class AppButton extends StatelessWidget {
 
   /// Light impact on tap when [HapticsController] is registered and enabled.
   final bool useHapticFeedback;
+
+  /// When null, [AppButtonColors.defaults] is used.
+  final AppButtonColors? colors;
+
   static const _animationDuration = Duration(milliseconds: 220);
 
   static String _defaultLoadingLabel(String label) {
@@ -48,28 +83,44 @@ class AppButton extends StatelessWidget {
     }
   }
 
+  static String _lottieForContrast(Color reference) {
+    final brightness = ThemeData.estimateBrightnessForColor(reference);
+    return brightness == Brightness.dark
+        ? AppLotties.loadingWhite
+        : AppLotties.loadingBlack;
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isDisabled = !isLoading && onPressed == null;
     final effectivePrimary = primary && !isDisabled;
 
-    final Color primaryBg = isDark ? AppColors.secondary : AppColors.primary;
-    final Color primaryFg = isDark ? AppColors.primary : AppColors.secondary;
-    final Color secondaryBg = isDark ? AppColors.secondary : Colors.transparent;
-    final Color secondaryFg = isDark ? AppColors.primary : AppColors.primary;
-    final Color secondaryBorder = isDark
-        ? Colors.transparent
-        : AppColors.primary;
+    final scheme = colors ?? AppButtonColors.defaults(context);
 
-    final textColor = isDisabled
-        ? AppColors.grey
-        : (effectivePrimary ? primaryFg : secondaryFg);
-    final iconColor = textColor;
+    final Color backgroundColor;
+    final Color foregroundColor;
+    final BoxBorder? border;
+
+    if (isDisabled) {
+      backgroundColor = isDark ? AppColors.darkGrey : AppColors.grey;
+      foregroundColor = AppColors.grey;
+      border = null;
+    } else if (effectivePrimary) {
+      backgroundColor = scheme.filledBackground;
+      foregroundColor = scheme.filledForeground;
+      border = null;
+    } else {
+      backgroundColor = scheme.outlinedBackground;
+      foregroundColor = scheme.outlinedForeground;
+      border = Border.all(color: scheme.outlinedBorder);
+    }
+
+    final iconColor = foregroundColor;
 
     final String loadingLottie = effectivePrimary
-        ? (isDark ? AppLotties.loadingBlack : AppLotties.loadingWhite)
-        : (isDark ? AppLotties.loadingWhite : AppLotties.loadingBlack);
+        ? _lottieForContrast(scheme.filledBackground)
+        : _lottieForContrast(scheme.outlinedForeground);
 
     final child = isLoading
         ? Row(
@@ -80,7 +131,7 @@ class AppButton extends StatelessWidget {
                 loadingLabel ?? _defaultLoadingLabel(label),
                 style: AppTextStyles.buttonText(
                   context,
-                ).copyWith(color: effectivePrimary ? primaryFg : secondaryFg),
+                ).copyWith(color: foregroundColor),
               ),
               AppSpacing.horizontal(context, 0.01),
               Lottie.asset(
@@ -106,7 +157,7 @@ class AppButton extends StatelessWidget {
                 label,
                 style: AppTextStyles.buttonText(
                   context,
-                ).copyWith(color: textColor),
+                ).copyWith(color: foregroundColor),
               ),
               if (icon != null && iconPosition == IconPosition.right) ...[
                 AppSpacing.horizontal(context, 0.01),
@@ -119,15 +170,6 @@ class AppButton extends StatelessWidget {
             ],
           );
 
-    final backgroundColor = isDisabled
-        ? (isDark ? AppColors.darkGrey : AppColors.grey)
-        : (effectivePrimary ? primaryBg : secondaryBg);
-    final border = isDisabled
-        ? null
-        : (effectivePrimary
-              ? null
-              : Border.all(color: secondaryBorder.withValues(alpha: 0.85)));
-
     return Material(
       color: Colors.transparent,
       borderRadius: BorderRadius.circular(
@@ -137,15 +179,15 @@ class AppButton extends StatelessWidget {
         onTap: isLoading
             ? null
             : onPressed == null
-                ? null
-                : () {
-                    if (useHapticFeedback) {
-                      if (Get.isRegistered<HapticsController>()) {
-                        Get.find<HapticsController>().impact();
-                      }
-                    }
-                    onPressed!();
-                  },
+            ? null
+            : () {
+                if (useHapticFeedback) {
+                  if (Get.isRegistered<HapticsController>()) {
+                    Get.find<HapticsController>().impact();
+                  }
+                }
+                onPressed!();
+              },
         borderRadius: BorderRadius.circular(
           AppResponsive.radius(context, factor: 5),
         ),
