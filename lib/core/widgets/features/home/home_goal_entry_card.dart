@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-
-import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:get/get.dart';
 
 import 'package:today/core/widgets/buttons/app_dropdown_button.dart';
-import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
+import 'package:today/core/widgets/common/app_section_card.dart';
 import 'package:today/core/widgets/features/home/home_goal_entry_button.dart';
 import 'package:today/core/widgets/features/home/home_goal_entry_text_field.dart';
 import 'package:today/presentation/controllers/home/home_controller.dart';
@@ -16,15 +14,8 @@ class HomeGoalEntryCard extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
-      padding: AppSpacing.symmetric(context, h: 0.04, v: 0.02),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkGrey : AppColors.grey,
-        borderRadius: BorderRadius.circular(
-          AppResponsive.radius(context, factor: 5),
-        ),
-      ),
+    return AppSectionCard(
+      paddingVertical: 0.02,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -37,13 +28,13 @@ class HomeGoalEntryCard extends GetView<HomeController> {
           Row(
             children: [
               AppDropDownButton(
-                label: 'GOAL DURATION',
-                items: const ['7 Days', '14 Days', '30 Days', '60 Days'],
+                label: AppTexts.goalDurationLabel,
+                items: AppTexts.goalDurationDropdownOptions,
                 onChanged: (_) {},
               ),
               AppDropDownButton(
-                label: 'RESET TIME',
-                items: const ['Daily', 'Weekly', 'Monthly'],
+                label: AppTexts.resetTimeLabel,
+                items: AppTexts.goalResetFrequencyDropdownOptions,
                 onChanged: (_) {},
               ),
               const Spacer(),

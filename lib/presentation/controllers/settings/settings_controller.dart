@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:today/core/auth/firebase_auth_gateway.dart';
-import 'package:today/presentation/controllers/feedback/haptics_controller.dart';
+import 'package:today/presentation/controllers/settings/haptics_controller.dart';
+import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/feedback/app_toast.dart';
 import 'package:today/domain/entities/me_entity.dart';
 import 'package:today/domain/repositories/auth_repository.dart';
@@ -28,9 +29,6 @@ class SettingsController extends GetxController {
     return '@$username';
   }
 
-  String get gemsCount => '${me.value?.wallet.balance ?? 0}';
-  String get streakCount => '0';
-
   @override
   void onInit() {
     super.onInit();
@@ -43,8 +41,8 @@ class SettingsController extends GetxController {
       me.value = await _getMeUseCase();
     } catch (_) {
       AppToast.showWarning(
-        'Profile unavailable',
-        'Unable to load profile details right now.',
+        AppTexts.profileUnavailableTitle,
+        AppTexts.profileUnavailableBody,
       );
     } finally {
       isProfileLoading.value = false;
@@ -60,8 +58,8 @@ class SettingsController extends GetxController {
     }
   }
 
-  void openClaimRewards() {
-    Get.toNamed(AppRoutes.claimRewards);
+  void openNotifications() {
+    Get.toNamed(AppRoutes.notifications);
   }
 
   void openSubscription() {
@@ -71,7 +69,7 @@ class SettingsController extends GetxController {
   Future<void> logout() async {
     await _firebaseAuthGateway.signOut();
     await _authRepository.clearSession();
-    AppToast.showSuccess('Logged out successfully');
+    AppToast.showSuccess(AppTexts.loggedOutSuccess);
     Get.offAllNamed(AppRoutes.onboarding);
   }
 }

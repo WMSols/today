@@ -50,6 +50,7 @@ dependencies:
   google_sign_in: ^7.2.0
   sign_in_with_apple: ^7.0.1
   crypto: ^3.0.7
+  flutter_native_splash: ^2.4.7
 
 dev_dependencies:
   flutter_test:
@@ -128,6 +129,15 @@ flutter_launcher_icons:
   remove_alpha_ios: true
   adaptive_icon_background: "#FFFFFF"
   adaptive_icon_foreground: "assets/images/logos/app_icon.png"
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  color_dark: "#000000"
+  android: true
+  ios: true
+  android_12:
+    color: "#FFFFFF"
+    color_dark: "#000000"
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

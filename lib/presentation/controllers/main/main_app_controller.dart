@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import 'package:today/presentation/controllers/feedback/haptics_controller.dart';
+import 'package:today/presentation/controllers/settings/haptics_controller.dart';
 
 class MainAppController extends GetxController {
   final RxInt selectedTabIndex = 0.obs;

@@ -52,15 +52,12 @@ class ActiveGoalRepositoryImpl implements ActiveGoalRepository {
         final progress = target == 0
             ? 0.0
             : (completed / target).clamp(0, 1).toDouble();
-        final walletBalance =
-            (today['wallet']?['balance'] as num?)?.toInt() ?? 0;
         return GoalCardModel(
           goalId: goalId,
           title: item['goal_text'] as String? ?? 'Goal',
           dayText: 'DAY 01 OF $duration',
           tasksText: '$completed/$target TASKS',
           percentText: '${(progress * 100).round()}%',
-          gemsText: '$walletBalance GEMS',
           totalTasksText: '$completed TASKS DONE IN TOTAL',
           progress: progress,
           iconPath: switch (index % 3) {

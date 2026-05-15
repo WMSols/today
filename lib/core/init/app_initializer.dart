@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,30 +12,48 @@ import 'package:today/core/init/app_system_ui.dart';
 import 'package:today/di/app_binding.dart';
 import 'package:today/domain/usecases/get_me_usecase.dart';
 import 'package:today/domain/repositories/auth_repository.dart';
-import 'package:today/presentation/controllers/feedback/haptics_controller.dart';
-import 'package:today/presentation/controllers/theme/theme_controller.dart';
+import 'package:today/presentation/controllers/settings/haptics_controller.dart';
+import 'package:today/presentation/controllers/settings/theme_controller.dart';
 import 'package:today/firebase_options.dart';
 
 /// Handles async app bootstrap: env, DI, and initial route resolution.
 abstract class AppInitializer {
   static String initialRoute = AppRoutes.onboarding;
 
+  static Brightness overlayForStoredTheme() {
+    final preference = Get.find<ThemeController>().preference;
+    return switch (preference) {
+      AppThemePreference.dark => Brightness.dark,
+      AppThemePreference.light => Brightness.light,
+      AppThemePreference.system =>
+        WidgetsBinding.instance.platformDispatcher.platformBrightness,
+    };
+  }
+
+  /// Full bootstrap while the splash screen is visible.
   static Future<void> init() async {
+    await _ensureCoreServices();
     await EnvConfig.load();
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    AppSystemUi.setOverlayForPlatformBrightness();
     AppBinding().dependencies();
-    await Get.putAsync<SharedPreferences>(
-      SharedPreferences.getInstance,
-      permanent: true,
-    );
-    Get.put<ThemeController>(ThemeController(), permanent: true);
-    await Get.find<ThemeController>().loadFromStorage();
     Get.put<HapticsController>(HapticsController(), permanent: true);
     await Get.find<HapticsController>().loadFromStorage();
     initialRoute = await _resolveInitialRoute();
+  }
+
+  static Future<void> _ensureCoreServices() async {
+    if (!Get.isRegistered<SharedPreferences>()) {
+      await Get.putAsync<SharedPreferences>(
+        SharedPreferences.getInstance,
+        permanent: true,
+      );
+    }
+    await Get.find<ThemeController>().loadFromStorage();
+    SystemChrome.setSystemUIOverlayStyle(
+      AppSystemUi.overlayFor(overlayForStoredTheme()),
+    );
   }
 
   static Future<String> _resolveInitialRoute() async {

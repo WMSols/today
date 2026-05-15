@@ -5,9 +5,9 @@ import 'package:get/get.dart';
 import 'package:today/core/init/app_system_ui.dart';
 import 'package:today/core/theme/app_theme.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
-import 'package:today/presentation/controllers/theme/theme_controller.dart';
+import 'package:today/presentation/controllers/settings/theme_controller.dart';
 import 'package:today/presentation/routes/app_pages.dart';
-import 'package:today/core/init/app_initializer.dart';
+import 'package:today/presentation/routes/app_routes.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 
 class TodayApp extends StatelessWidget {
@@ -20,7 +20,7 @@ class TodayApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: AppTexts.appName,
-          initialRoute: AppInitializer.initialRoute,
+          initialRoute: AppRoutes.splash,
           getPages: AppPages.pages,
           theme: AppTheme.light(),
           darkTheme: AppTheme.dark(),

@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-import 'package:today/presentation/controllers/feedback/haptics_controller.dart';
+import 'package:today/presentation/controllers/settings/haptics_controller.dart';
 import 'package:today/presentation/routes/app_routes.dart';
 
 class PlannerController extends GetxController {

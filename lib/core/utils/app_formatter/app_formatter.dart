@@ -48,6 +48,25 @@ class AppFormatter {
     return names[weekday - 1];
   }
 
+  /// Full month name by month index (1–12).
+  static String monthNameFull(int month) {
+    const names = [
+      AppTexts.monthJanuary,
+      AppTexts.monthFebruary,
+      AppTexts.monthMarch,
+      AppTexts.monthApril,
+      AppTexts.monthMay,
+      AppTexts.monthJune,
+      AppTexts.monthJuly,
+      AppTexts.monthAugust,
+      AppTexts.monthSeptember,
+      AppTexts.monthOctober,
+      AppTexts.monthNovember,
+      AppTexts.monthDecember,
+    ];
+    return names[month - 1];
+  }
+
   /// Short day name by weekday (1=Mon..7=Sun): Mon, Tue, ...
   static String dayNameShort(int weekday) {
     const names = [

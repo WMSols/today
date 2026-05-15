@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:today/core/widgets/common/app_page_scaffold.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/buttons/app_button.dart';
@@ -20,7 +21,7 @@ class SettingsBody extends GetView<SettingsController> {
     final progressColor = isDark ? AppColors.white : AppColors.black;
 
     return SingleChildScrollView(
-      padding: AppSpacing.symmetric(context, h: 0.04, v: 0.02),
+      padding: AppPageScaffold.defaultBodyPadding(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -28,12 +29,7 @@ class SettingsBody extends GetView<SettingsController> {
             () => Center(
               child: controller.isProfileLoading.value
                   ? CircularProgressIndicator(color: progressColor)
-                  : SettingsProfileHeader(
-                      onTapClaimRewards: controller.openClaimRewards,
-                      username: controller.profileName,
-                      gemsCount: controller.gemsCount,
-                      streakCount: controller.streakCount,
-                    ),
+                  : SettingsProfileHeader(username: controller.profileName),
             ),
           ),
           AppSpacing.vertical(context, 0.03),
@@ -45,6 +41,7 @@ class SettingsBody extends GetView<SettingsController> {
               notificationsEnabled: controller.notificationsEnabled.value,
               onHapticsChanged: controller.haptics.setEnabled,
               onNotificationsChanged: controller.setNotifications,
+              onNotificationPreferencesTap: controller.openNotifications,
             ),
           ),
           AppSpacing.vertical(context, 0.02),

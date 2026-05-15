@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:today/presentation/controllers/feedback/haptics_controller.dart';
+import 'package:today/presentation/controllers/settings/haptics_controller.dart';
 
 /// User-selectable theme; maps to Flutter [ThemeMode].
 enum AppThemePreference {

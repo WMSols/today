@@ -5,7 +5,6 @@ class GoalCardEntity {
     required this.dayText,
     required this.tasksText,
     required this.percentText,
-    required this.gemsText,
     required this.totalTasksText,
     required this.progress,
     required this.iconPath,
@@ -16,7 +15,6 @@ class GoalCardEntity {
   final String dayText;
   final String tasksText;
   final String percentText;
-  final String gemsText;
   final String totalTasksText;
   final double progress;
   final String iconPath;

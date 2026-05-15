@@ -1,40 +1,27 @@
+import 'package:today/core/utils/app_texts/app_texts.dart';
+
 class SubscriptionLocalDataSource {
   const SubscriptionLocalDataSource();
 
   Future<List<Map<String, dynamic>>> getPlans() async {
-    return const [
+    return [
       {
-        'name': 'Free',
-        'subtitle': '3 GOALS • BASIC AI',
-        'price': '\$0',
-        'perks': [
-          'Up to 3 goals active at once',
-          '1x gems on every task completed',
-          'Basic AI planning assistance',
-        ],
+        'name': AppTexts.subscriptionPlanFreeName,
+        'subtitle': AppTexts.subscriptionPlanFreeSubtitle,
+        'price': AppTexts.subscriptionPriceFree,
+        'perks': List<String>.from(AppTexts.subscriptionFreePerks),
       },
       {
-        'name': 'Pro',
-        'subtitle': '\$34.99 / YEAR - SAVE 40%',
-        'price': '\$4.99 / mo',
-        'perks': [
-          'Up to 8 goals active at once',
-          '2x gems on every task completed',
-          'Streak freeze and task regeneration',
-          'Advanced AI that adapts to your performance',
-          'Full progress history and detailed stats',
-        ],
+        'name': AppTexts.subscriptionPlanProName,
+        'subtitle': AppTexts.subscriptionPlanProSubtitle,
+        'price': AppTexts.subscriptionPriceProMonthly,
+        'perks': List<String>.from(AppTexts.subscriptionProPerks),
       },
       {
-        'name': 'Lifetime',
-        'subtitle': 'PAY ONCE. OWN FOREVER',
-        'price': '\$59.99',
-        'perks': [
-          'Unlimited active goals',
-          'Permanent Pro features with no renewal',
-          'Highest AI priority and faster generations',
-          'All future premium updates included',
-        ],
+        'name': AppTexts.subscriptionPlanLifetimeName,
+        'subtitle': AppTexts.subscriptionPlanLifetimeSubtitle,
+        'price': AppTexts.subscriptionPriceLifetime,
+        'perks': List<String>.from(AppTexts.subscriptionLifetimePerks),
       },
     ];
   }

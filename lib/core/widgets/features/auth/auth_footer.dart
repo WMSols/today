@@ -5,6 +5,7 @@ import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
+import 'package:today/core/utils/app_texts/app_texts.dart';
 
 class AuthFooter extends StatelessWidget {
   const AuthFooter({super.key});
@@ -29,16 +30,16 @@ class AuthFooter extends StatelessWidget {
         text: TextSpan(
           style: baseStyle,
           children: [
-            const TextSpan(text: 'Powered by '),
+            const TextSpan(text: AppTexts.authFooterPoweredBy),
             TextSpan(
-              text: 'WMSols',
+              text: AppTexts.authFooterBrand,
               style: baseStyle.copyWith(
                 color: isDark ? AppColors.white : AppColors.black,
                 fontWeight: FontWeight.w700,
               ),
               recognizer: TapGestureRecognizer()..onTap = _openWebsite,
             ),
-            const TextSpan(text: ' for your daily growth'),
+            const TextSpan(text: AppTexts.authFooterTagline),
           ],
         ),
       ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
-import 'package:today/presentation/controllers/feedback/haptics_controller.dart';
+import 'package:today/presentation/controllers/settings/haptics_controller.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_lotties/app_lotties.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
