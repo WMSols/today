@@ -1,40 +1,37 @@
 import 'package:flutter/material.dart';
-
-import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 
+import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_images/app_images.dart';
-import 'package:today/core/utils/app_lotties/app_lotties.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
+import 'package:today/core/utils/app_texts/app_texts.dart';
+import 'package:today/core/widgets/common/app_section_card.dart';
+import 'package:today/core/widgets/feedback/app_loading_indicator.dart';
 import 'package:today/core/widgets/features/home/home_goal_item.dart';
 import 'package:today/presentation/controllers/home/home_controller.dart';
 
 class HomeActiveGoalsSection extends GetView<HomeController> {
-  const HomeActiveGoalsSection({super.key, this.onGoalTap});
-
-  final ValueChanged<String>? onGoalTap;
+  const HomeActiveGoalsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
             Image.asset(
-              AppImages.streak,
+              AppImages.goals,
               width: AppResponsive.iconSize(context, factor: 0.8),
               height: AppResponsive.iconSize(context, factor: 0.8),
             ),
             AppSpacing.horizontal(context, 0.01),
             Text(
-              'ACTIVE GOALS',
+              AppTexts.activeGoalsHeading,
               style: AppTextStyles.bodyText(context).copyWith(
-                color: isDark ? AppColors.white : AppColors.black,
+                color: context.onSurfaceColor,
                 fontWeight: FontWeight.w600,
                 fontSize: AppResponsive.scaleSize(context, 10),
               ),
@@ -42,31 +39,18 @@ class HomeActiveGoalsSection extends GetView<HomeController> {
           ],
         ),
         AppSpacing.vertical(context, 0.01),
-        Container(
-          width: double.infinity,
-          padding: AppSpacing.symmetric(context, h: 0.04, v: 0.02),
-          decoration: BoxDecoration(
-            color: isDark ? AppColors.darkGrey : AppColors.grey,
-            borderRadius: BorderRadius.circular(
-              AppResponsive.radius(context, factor: 5),
-            ),
-          ),
+        AppSectionCard(
+          paddingVertical: 0.02,
           child: Obx(() {
-            if (controller.isLoading.value && controller.goalCards.isEmpty) {
-              return Center(
-                child: Lottie.asset(
-                  AppLotties.loadingWhite,
-                  width: AppResponsive.scaleSize(context, 52),
-                  height: AppResponsive.scaleSize(context, 52),
-                  fit: BoxFit.contain,
-                ),
-              );
+            if (controller.isGoalCardsLoading.value &&
+                controller.goalCards.isEmpty) {
+              return const Center(child: AppLoadingIndicator());
             }
             if (controller.goalCards.isEmpty) {
               return Text(
-                'No active goals yet',
+                AppTexts.noActiveGoalsYet,
                 style: AppTextStyles.labelText(context).copyWith(
-                  color: isDark ? AppColors.lightGrey : AppColors.grey,
+                  color: context.mutedOnSurfaceColor,
                   fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 11),
                 ),
@@ -78,9 +62,7 @@ class HomeActiveGoalsSection extends GetView<HomeController> {
                 return HomeGoalItem(
                   title: card.title,
                   subtitle: card.dayText,
-                  onTap: onGoalTap == null
-                      ? null
-                      : () => onGoalTap!(card.goalId),
+                  onTap: () => controller.openActiveGoalDetails(card.goalId),
                 );
               }),
             );

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
-import 'package:today/core/widgets/buttons/app_button.dart';
 import 'package:today/core/widgets/features/auth/auth_footer.dart';
 import 'package:today/core/widgets/features/auth/auth_login_form.dart';
 import 'package:today/core/widgets/features/auth/auth_mode_tabs.dart';
@@ -18,16 +17,8 @@ class AuthScreen extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final authTabColors = AppButtonColors(
-      filledBackground: isDark ? AppColors.secondary : AppColors.primary,
-      filledForeground: isDark ? AppColors.primary : AppColors.secondary,
-      outlinedBackground: Colors.transparent,
-      outlinedForeground: isDark ? AppColors.secondary : AppColors.primary,
-      outlinedBorder: isDark ? AppColors.secondary : AppColors.primary,
-    );
     return Scaffold(
-      backgroundColor: isDark ? AppColors.black : AppColors.white,
+      backgroundColor: context.surfaceColor,
       body: SafeArea(
         child: Padding(
           padding: AppSpacing.symmetric(context, h: 0.04, v: 0.02),
@@ -40,7 +31,11 @@ class AuthScreen extends GetView<AuthController> {
                     children: [
                       const AuthWelcomeSection(),
                       AppSpacing.vertical(context, 0.04),
-                      AuthModeTabs(colors: authTabColors),
+                      AuthModeTabs(
+                        colors: controller.authTabColors(
+                          Theme.of(context).brightness == Brightness.dark,
+                        ),
+                      ),
                       AppSpacing.vertical(context, 0.025),
                       Obx(
                         () => controller.isLoginMode.value

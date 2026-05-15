@@ -1,41 +1,26 @@
 import 'package:flutter/material.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
-
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
-import 'package:today/core/widgets/common/app_count_badge.dart';
 
 class SettingsProfileHeader extends StatelessWidget {
-  const SettingsProfileHeader({
-    super.key,
-    required this.onTapClaimRewards,
-    required this.username,
-    required this.gemsCount,
-    required this.streakCount,
-  });
+  const SettingsProfileHeader({super.key, required this.username});
 
-  final VoidCallback onTapClaimRewards;
   final String username;
-  final String gemsCount;
-  final String streakCount;
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       children: [
-        GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: onTapClaimRewards,
-          child: Center(
-            child: Image.asset(
-              AppImages.userAvatar,
-              width: AppResponsive.scaleSize(context, 100),
-              height: AppResponsive.scaleSize(context, 100),
-            ),
+        Center(
+          child: Image.asset(
+            AppImages.userAvatar,
+            width: AppResponsive.scaleSize(context, 100),
+            height: AppResponsive.scaleSize(context, 100),
           ),
         ),
         AppSpacing.vertical(context, 0.015),
@@ -46,15 +31,6 @@ class SettingsProfileHeader extends StatelessWidget {
             fontWeight: FontWeight.w600,
             fontSize: AppResponsive.scaleSize(context, 16),
           ),
-        ),
-        AppSpacing.vertical(context, 0.012),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AppCountBadge(iconPath: AppImages.gem, count: gemsCount),
-            AppSpacing.horizontal(context, 0.02),
-            AppCountBadge(iconPath: AppImages.streak, count: streakCount),
-          ],
         ),
       ],
     );

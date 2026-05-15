@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 
-import 'package:today/core/utils/app_lotties/app_lotties.dart';
+import 'package:today/core/widgets/common/app_page_scaffold.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/common/app_custom_app_bar.dart';
+import 'package:today/core/widgets/feedback/app_loading_indicator.dart';
 import 'package:today/core/widgets/features/goals/empty_goal.dart';
 import 'package:today/core/widgets/features/goals/goals_card_item.dart';
 import 'package:today/presentation/controllers/goals/goals_controller.dart';
@@ -17,21 +17,14 @@ class GoalsBody extends GetView<GoalsController> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: AppSpacing.symmetric(context, h: 0.04, v: 0.02),
+      padding: AppPageScaffold.defaultBodyPadding(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const AppCustomAppBar.titleOnly(title: AppTexts.goals),
           Obx(
             () => controller.isLoading.value
-                ? Center(
-                    child: Lottie.asset(
-                      AppLotties.loadingWhite,
-                      width: AppResponsive.scaleSize(context, 52),
-                      height: AppResponsive.scaleSize(context, 52),
-                      fit: BoxFit.contain,
-                    ),
-                  )
+                ? const Center(child: AppLoadingIndicator())
                 : controller.showEmptyGoal.value
                 ? const EmptyGoal()
                 : Column(
@@ -50,7 +43,6 @@ class GoalsBody extends GetView<GoalsController> {
                             dayText: card.dayText,
                             tasksText: card.tasksText,
                             percentText: card.percentText,
-                            gemsText: card.gemsText,
                             totalTasksText: card.totalTasksText,
                             progress: card.progress,
                             iconPath: card.iconPath,

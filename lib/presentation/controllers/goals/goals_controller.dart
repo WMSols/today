@@ -1,31 +1,27 @@
 import 'package:get/get.dart';
 import 'package:today/domain/entities/goal_card_entity.dart';
-import 'package:today/domain/usecases/get_goal_cards_usecase.dart';
+import 'package:today/presentation/controllers/goals/goal_cards_controller.dart';
 
 class GoalsController extends GetxController {
-  GoalsController(this._getGoalCardsUseCase);
+  GoalsController(this._goalCardsController);
 
-  final GetGoalCardsUseCase _getGoalCardsUseCase;
+  final GoalCardsController _goalCardsController;
 
   final RxBool showEmptyGoal = false.obs;
-  final RxBool isLoading = false.obs;
-  final RxList<GoalCardEntity> goalCards = <GoalCardEntity>[].obs;
 
   @override
-  Future<void> onInit() async {
+  void onInit() {
     super.onInit();
-    await loadGoalCards();
-  }
-
-  Future<void> loadGoalCards() async {
-    isLoading.value = true;
-    try {
-      final items = await _getGoalCardsUseCase();
-      goalCards.assignAll(items);
-    } finally {
-      isLoading.value = false;
+    if (goalCards.isEmpty && !isLoading.value) {
+      loadGoalCards();
     }
   }
+
+  RxBool get isLoading => _goalCardsController.isLoading;
+
+  RxList<GoalCardEntity> get goalCards => _goalCardsController.goalCards;
+
+  Future<bool> loadGoalCards() => _goalCardsController.loadGoalCards();
 
   void openEmptyGoal() {
     showEmptyGoal.value = true;

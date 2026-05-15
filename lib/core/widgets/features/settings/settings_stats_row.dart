@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:today/core/utils/app_colors/app_colors.dart';
-
-import 'package:today/core/utils/app_responsive/app_responsive.dart';
-import 'package:today/core/utils/app_spacing/app_spacing.dart';
-import 'package:today/core/utils/app_styles/app_text_styles.dart';
+import 'package:today/core/widgets/common/app_labeled_value_row.dart';
 
 class SettingsStatsRow extends StatelessWidget {
   const SettingsStatsRow({
@@ -20,32 +16,6 @@ class SettingsStatsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Image.asset(
-          iconPath,
-          width: AppResponsive.iconSize(context, factor: 0.8),
-          height: AppResponsive.iconSize(context, factor: 0.8),
-        ),
-        AppSpacing.horizontal(context, 0.02),
-        Text(
-          label,
-          style: AppTextStyles.bodyText(context).copyWith(
-            color: AppColors.grey,
-            fontWeight: FontWeight.w600,
-            fontSize: AppResponsive.scaleSize(context, 14),
-          ),
-        ),
-        const Spacer(),
-        Text(
-          value,
-          style: AppTextStyles.bodyText(context).copyWith(
-            color: AppColors.grey,
-            fontWeight: FontWeight.w600,
-            fontSize: AppResponsive.scaleSize(context, 14),
-          ),
-        ),
-      ],
-    );
+    return AppLabeledValueRow(iconPath: iconPath, label: label, value: value);
   }
 }

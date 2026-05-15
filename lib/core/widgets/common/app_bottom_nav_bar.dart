@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_images/app_images.dart';
+import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/widgets/common/app_bottom_nav_item.dart';
 
@@ -94,7 +95,7 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final barHeight = AppResponsive.screenHeight(context) * 0.07;
     final radius = AppResponsive.radius(context, factor: 5);
-    const itemsCount = 3;
+    const itemsCount = 4;
     final barTint = isDark
         ? AppColors.secondary.withValues(alpha: 0.14)
         : AppColors.secondary.withValues(alpha: 0.85);
@@ -108,7 +109,7 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
           child: Container(
-            width: AppResponsive.screenWidth(context) * 0.7,
+            width: AppResponsive.screenWidth(context) * 0.88,
             height: barHeight,
             decoration: BoxDecoration(
               color: barTint,
@@ -165,21 +166,28 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
                             AppBottomNavItem(
                               index: 0,
                               currentIndex: widget.currentIndex,
-                              label: 'HOME',
+                              label: AppTexts.navHome,
                               iconPath: AppImages.home,
                               onTap: widget.onTap,
                             ),
                             AppBottomNavItem(
                               index: 1,
                               currentIndex: widget.currentIndex,
-                              label: 'GOALS',
+                              label: AppTexts.navGoals,
                               iconPath: AppImages.goals,
                               onTap: widget.onTap,
                             ),
                             AppBottomNavItem(
                               index: 2,
                               currentIndex: widget.currentIndex,
-                              label: 'SETTINGS',
+                              label: AppTexts.navStats,
+                              iconPath: AppImages.analyticsNav,
+                              onTap: widget.onTap,
+                            ),
+                            AppBottomNavItem(
+                              index: 3,
+                              currentIndex: widget.currentIndex,
+                              label: AppTexts.navSettings,
                               iconPath: AppImages.settings,
                               onTap: widget.onTap,
                             ),

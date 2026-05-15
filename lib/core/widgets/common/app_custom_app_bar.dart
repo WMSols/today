@@ -5,8 +5,8 @@ import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
+import 'package:today/core/utils/app_formatter/app_formatter.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
-import 'package:today/core/widgets/common/app_count_badge.dart';
 
 enum AppCustomAppBarVariant {
   homeStatus,
@@ -21,8 +21,6 @@ class AppCustomAppBar extends StatelessWidget {
     super.key,
     required this.now,
     required this.onTapDate,
-    this.gemsCount = '8',
-    this.streakCount = '8',
   }) : variant = AppCustomAppBarVariant.homeStatus,
        title = null,
        onBack = null,
@@ -33,8 +31,6 @@ class AppCustomAppBar extends StatelessWidget {
     : variant = AppCustomAppBarVariant.backOnly,
       now = null,
       onTapDate = null,
-      gemsCount = null,
-      streakCount = null,
       title = null,
       trailing = null,
       onTapUnlockPro = null;
@@ -43,8 +39,6 @@ class AppCustomAppBar extends StatelessWidget {
     : variant = AppCustomAppBarVariant.titleOnly,
       now = null,
       onTapDate = null,
-      gemsCount = null,
-      streakCount = null,
       onBack = null,
       trailing = null,
       onTapUnlockPro = null;
@@ -57,16 +51,12 @@ class AppCustomAppBar extends StatelessWidget {
   }) : variant = AppCustomAppBarVariant.titleWithActions,
        now = null,
        onTapDate = null,
-       gemsCount = null,
-       streakCount = null,
        onTapUnlockPro = null;
 
   const AppCustomAppBar.unlockProChip({super.key, this.onTapUnlockPro})
     : variant = AppCustomAppBarVariant.unlockProChip,
       now = null,
       onTapDate = null,
-      gemsCount = null,
-      streakCount = null,
       title = null,
       onBack = null,
       trailing = null;
@@ -74,37 +64,10 @@ class AppCustomAppBar extends StatelessWidget {
   final AppCustomAppBarVariant variant;
   final DateTime? now;
   final VoidCallback? onTapDate;
-  final String? gemsCount;
-  final String? streakCount;
   final String? title;
   final VoidCallback? onBack;
   final Widget? trailing;
   final VoidCallback? onTapUnlockPro;
-
-  static const List<String> _days = [
-    'MONDAY',
-    'TUESDAY',
-    'WEDNESDAY',
-    'THURSDAY',
-    'FRIDAY',
-    'SATURDAY',
-    'SUNDAY',
-  ];
-
-  static const List<String> _months = [
-    'JANUARY',
-    'FEBRUARY',
-    'MARCH',
-    'APRIL',
-    'MAY',
-    'JUNE',
-    'JULY',
-    'AUGUST',
-    'SEPTEMBER',
-    'OCTOBER',
-    'NOVEMBER',
-    'DECEMBER',
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -117,8 +80,8 @@ class AppCustomAppBar extends StatelessWidget {
     switch (variant) {
       case AppCustomAppBarVariant.homeStatus:
         final current = now ?? DateTime.now();
-        final dayLabel = _days[current.weekday - 1];
-        final monthLabel = _months[current.month - 1];
+        final dayLabel = AppFormatter.dayNameFull(current.weekday);
+        final monthLabel = AppFormatter.monthNameFull(current.month);
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -154,12 +117,6 @@ class AppCustomAppBar extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-            AppCountBadge(iconPath: AppImages.gem, count: gemsCount ?? '8'),
-            AppSpacing.horizontal(context, 0.02),
-            AppCountBadge(
-              iconPath: AppImages.streak,
-              count: streakCount ?? '8',
             ),
           ],
         );

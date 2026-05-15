@@ -1,6 +1,9 @@
 class AppLotties {
   AppLotties._();
 
+  // Splash
+  static const String splash = 'assets/lotties/splash.json';
+
   // Loading
   static const String loadingBlack = 'assets/lotties/loading_black.json';
   static const String loadingWhite = 'assets/lotties/loading_white.json';

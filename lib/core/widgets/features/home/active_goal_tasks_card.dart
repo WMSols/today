@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:today/core/utils/app_colors/app_colors.dart';
-
+import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_helper/app_helper.dart';
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
+import 'package:today/core/utils/app_texts/app_texts.dart';
+import 'package:today/core/widgets/common/app_section_card.dart';
 import 'package:today/domain/entities/active_goal_task_entity.dart';
 
 class ActiveGoalTasksCard extends StatelessWidget {
@@ -23,31 +24,23 @@ class ActiveGoalTasksCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
-      width: double.infinity,
-      padding: AppSpacing.symmetric(context, h: 0.04, v: 0.03),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkGrey : AppColors.grey,
-        borderRadius: BorderRadius.circular(
-          AppResponsive.radius(context, factor: 5),
-        ),
-      ),
+    return AppSectionCard(
+      paddingVertical: 0.03,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Image.asset(
-                AppImages.streak,
+                AppImages.tasksCompleted,
                 width: AppResponsive.scaleSize(context, 10),
                 height: AppResponsive.scaleSize(context, 10),
               ),
               AppSpacing.horizontal(context, 0.01),
               Text(
-                'TODAYS TASKS',
+                AppTexts.todaysTasksHeading,
                 style: AppTextStyles.labelText(context).copyWith(
-                  color: isDark ? AppColors.white : AppColors.black,
+                  color: context.onSurfaceColor,
                   fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 10),
                 ),
@@ -87,7 +80,6 @@ class _ActiveGoalTaskRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -117,7 +109,7 @@ class _ActiveGoalTaskRow extends StatelessWidget {
               Text(
                 task.title,
                 style: AppTextStyles.heading(context).copyWith(
-                  color: isDark ? AppColors.white : AppColors.black,
+                  color: context.onSurfaceColor,
                   fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 14),
                   height: 1.15,
@@ -134,13 +126,9 @@ class _ActiveGoalTaskRow extends StatelessWidget {
             height: AppResponsive.scaleSize(context, 14),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: isDark ? AppColors.white : AppColors.black,
-              ),
+              border: Border.all(color: context.onSurfaceColor),
               color: task.status == 'completed'
-                  ? isDark
-                        ? AppColors.white
-                        : AppColors.black
+                  ? context.onSurfaceColor
                   : Colors.transparent,
             ),
           ),

@@ -1,93 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import 'package:today/core/utils/app_colors/app_colors.dart';
-
-import 'package:today/core/utils/app_images/app_images.dart';
+import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
-import 'package:today/core/widgets/features/goals/goal_progress_bar.dart';
+import 'package:today/core/widgets/common/app_section_card.dart';
+import 'package:today/core/widgets/features/goals/goal_progress_metrics.dart';
+import 'package:today/presentation/controllers/home/home_controller.dart';
 
-class ActiveGoalOverviewCard extends StatelessWidget {
+class ActiveGoalOverviewCard extends GetView<HomeController> {
   const ActiveGoalOverviewCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
-      width: double.infinity,
-      padding: AppSpacing.symmetric(context, h: 0.04, v: 0.04),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkGrey : AppColors.grey,
-        borderRadius: BorderRadius.circular(
-          AppResponsive.radius(context, factor: 5),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                'DAY 01',
-                style: AppTextStyles.labelText(context).copyWith(
-                  color: isDark ? AppColors.lightGrey : AppColors.grey,
-                  fontWeight: FontWeight.w600,
-                  fontSize: AppResponsive.scaleSize(context, 10),
+    return Obx(() {
+      final display = controller.activeGoalOverviewDisplay;
+
+      return AppSectionCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  display.dayLeftDisplay,
+                  style: AppTextStyles.labelText(context).copyWith(
+                    color: context.mutedOnSurfaceColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: AppResponsive.scaleSize(context, 10),
+                  ),
                 ),
-              ),
-              const Spacer(),
-              Text(
-                'OUT OF 10',
-                style: AppTextStyles.labelText(context).copyWith(
-                  color: isDark ? AppColors.lightGrey : AppColors.grey,
-                  fontWeight: FontWeight.w600,
-                  fontSize: AppResponsive.scaleSize(context, 10),
+                const Spacer(),
+                Text(
+                  display.dayRightDisplay,
+                  style: AppTextStyles.labelText(context).copyWith(
+                    color: context.mutedOnSurfaceColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: AppResponsive.scaleSize(context, 10),
+                  ),
                 ),
-              ),
-              AppSpacing.horizontal(context, 0.01),
-              Image.asset(
-                AppImages.medal1,
-                width: AppResponsive.scaleSize(context, 10),
-                height: AppResponsive.scaleSize(context, 10),
-              ),
-            ],
-          ),
-          AppSpacing.vertical(context, 0.02),
-          const GoalProgressBar(progress: 0.28),
-          AppSpacing.vertical(context, 0.01),
-          Row(
-            children: [
-              Text(
-                '0/6 TASKS',
-                style: AppTextStyles.labelText(context).copyWith(
-                  color: isDark ? AppColors.lightGrey : AppColors.grey,
-                  fontWeight: FontWeight.w600,
-                  fontSize: AppResponsive.scaleSize(context, 10),
+                AppSpacing.horizontal(context, 0.01),
+                Image.asset(
+                  display.medalIconPath,
+                  width: AppResponsive.scaleSize(context, 10),
+                  height: AppResponsive.scaleSize(context, 10),
                 ),
-              ),
-              const Spacer(),
-              Text(
-                '0%',
-                style: AppTextStyles.labelText(context).copyWith(
-                  color: isDark ? AppColors.lightGrey : AppColors.grey,
-                  fontWeight: FontWeight.w600,
-                  fontSize: AppResponsive.scaleSize(context, 10),
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.vertical(context, 0.03),
-          Text(
-            "DAY 1 IS ABOUT SHOWING UP - LET'S KEEP IT SIMPLE AND\nBUILD MOMENTUM BACK, YOU'VE GOT THIS!",
-            style: AppTextStyles.labelText(context).copyWith(
-              color: isDark ? AppColors.white : AppColors.black,
-              fontWeight: FontWeight.w600,
-              fontSize: AppResponsive.scaleSize(context, 10),
+              ],
             ),
-          ),
-        ],
-      ),
-    );
+            AppSpacing.vertical(context, 0.02),
+            GoalProgressMetrics(
+              progress: display.progress,
+              tasksText: display.tasksText,
+              percentText: display.percentText,
+              footerText: display.footerText,
+              style: GoalProgressMetricsStyle.overview,
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

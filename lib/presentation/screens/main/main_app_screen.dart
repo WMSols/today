@@ -5,8 +5,8 @@ import 'package:today/core/widgets/common/app_bottom_nav_bar.dart';
 import 'package:today/core/widgets/features/goals/goals_body.dart';
 import 'package:today/core/widgets/features/home/home_body.dart';
 import 'package:today/core/widgets/features/settings/settings_body.dart';
+import 'package:today/presentation/screens/analytics/analytics_screen.dart';
 import 'package:today/presentation/controllers/main/main_app_controller.dart';
-import 'package:today/presentation/routes/app_routes.dart';
 
 class MainAppScreen extends GetView<MainAppController> {
   const MainAppScreen({super.key});
@@ -17,14 +17,11 @@ class MainAppScreen extends GetView<MainAppController> {
       () => AppBottomNavBarScaffold(
         currentIndex: controller.selectedTabIndex.value,
         onTap: controller.selectTab,
-        children: [
-          HomeBody(
-            onDateTap: () => Get.toNamed(AppRoutes.homeCalendar),
-            onGoalTap: (goalId) =>
-                Get.toNamed(AppRoutes.activeGoalDetails, arguments: goalId),
-          ),
-          const GoalsBody(),
-          const SettingsBody(),
+        children: const [
+          HomeBody(),
+          GoalsBody(),
+          AnalyticsScreen(),
+          SettingsBody(),
         ],
       ),
     );

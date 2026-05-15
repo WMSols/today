@@ -3,6 +3,7 @@ class AppTexts {
 
   // App name and version
   static const String appName = "Today";
+  static const String appNewName = "todAI";
   static const String appVersion = "Version 1.0.0";
 
   // Button texts
@@ -91,13 +92,42 @@ class AppTexts {
   // Subscription
   static const String subscriptionTitle = "You've hit your goal limit.";
   static const String subscriptionSubtitle =
-      "Upgrade to keep the momentum going.\nUnlock more goals, smarter AI, and 2x gems.";
+      "Upgrade to keep momentum.\nUnlock more goals, smarter scheduling, and full analytics.";
   static const String subscriptionRestore =
       "Restore purchase • Terms • Privacy";
   static const String subscriptionCtaFree = "Current Free Plan";
   static const String subscriptionCtaPro = "Start Pro - \$4.99 / month";
   static const String subscriptionCtaLifetime = "Get Lifetime - \$59.99";
   static const String unlockPro = "UNLOCK PRO";
+
+  static const String subscriptionPlanFreeName = "Free";
+  static const String subscriptionPlanFreeSubtitle = "SINGLE GOAL • BASIC AI";
+  static const String subscriptionPlanProName = "Pro";
+  static const String subscriptionPlanProSubtitle = "\$34.99 / YEAR - SAVE 40%";
+  static const String subscriptionPlanLifetimeName = "Lifetime";
+  static const String subscriptionPlanLifetimeSubtitle =
+      "PAY ONCE. OWN FOREVER";
+
+  static const String subscriptionPriceFree = "\$0";
+  static const String subscriptionPriceProMonthly = "\$4.99 / mo";
+  static const String subscriptionPriceLifetime = "\$59.99";
+
+  static const List<String> subscriptionFreePerks = [
+    "Single active goal with daily tasks",
+    "Manual schedule adjustments",
+    "Limited AI planning tokens",
+  ];
+  static const List<String> subscriptionProPerks = [
+    "5–10 active goals",
+    "Higher AI token limits and plan restructuring",
+    "Full calendar integration",
+    "Productivity analytics and insights",
+  ];
+  static const List<String> subscriptionLifetimePerks = [
+    "Unlimited goals and AI usage",
+    "All Pro features permanently",
+    "Priority AI and future premium updates",
+  ];
 
   // Month names
   static const String monthJanuary = "January";
@@ -152,4 +182,159 @@ class AppTexts {
   // Appearance / theme (settings row)
   static const String themeDarkMode = "DARK MODE";
   static const String themeSystem = "System";
+
+  // Bottom navigation
+  static const String navHome = "HOME";
+  static const String navGoals = "GOALS";
+  static const String navStats = "STATS";
+  static const String navSettings = "SETTINGS";
+
+  // Analytics tab
+  static const String analyticsTitle = "Analytics";
+  static const String analyticsTabPlaceholder =
+      "Productivity scores, weekly consistency, and AI insights will appear here.";
+
+  // Notifications screen
+  static const String notificationsTitle = "Notifications";
+  static const String notificationsDescription =
+      "Reminder timing and AI nudges will be configured here.";
+
+  // Auth footer
+  static const String authFooterPoweredBy = "Powered by ";
+  static const String authFooterBrand = "WMSols";
+  static const String authFooterTagline = " for your daily growth";
+
+  // Home — active goals
+  static const String activeGoalsHeading = "ACTIVE GOALS";
+  static const String noActiveGoalsYet = "No active goals yet";
+
+  // Home — goal entry card
+  static const String goalDurationLabel = "GOAL DURATION";
+  static const String resetTimeLabel = "RESET TIME";
+  static const List<String> goalDurationDropdownOptions = [
+    "7 Days",
+    "14 Days",
+    "30 Days",
+    "60 Days",
+  ];
+  static const List<String> goalResetFrequencyDropdownOptions = [
+    "Daily",
+    "Weekly",
+    "Monthly",
+  ];
+
+  // Home — active goal overview (stub / layout)
+  static const String activeGoalOverviewDaySample = "DAY 01";
+  static const String activeGoalOverviewOutOfSample = "OUT OF 10";
+  static const String activeGoalOverviewTasksSample = "0/6 TASKS";
+  static const String activeGoalOverviewPercentSample = "0%";
+  static const String activeGoalOverviewMotivation =
+      "DAY 1 IS ABOUT SHOWING UP - LET'S KEEP IT SIMPLE AND\nBUILD MOMENTUM BACK, YOU'VE GOT THIS!";
+
+  // Home — tasks section
+  static const String todaysTasksHeading = "TODAY'S TASKS";
+
+  // Home — default goal title
+  static const String goalDefaultTitle = "Goal";
+
+  // Home — calendar
+  static const String calendarDaysLeftInYearMiddle = "DAYS LEFT IN";
+  static String calendarDaysLeftInYear(int daysLeft, int year) =>
+      "$daysLeft $calendarDaysLeftInYearMiddle $year";
+
+  // Settings — stats card
+  static const String lifetimeStatsHeading = "LIFETIME STATS";
+  static const String statsGoalsCreatedLabel = "GOALS CREATED";
+  static const String statsTasksCompletedLabel = "TASKS COMPLETED";
+  static const String statsProductivityScoreLabel = "PRODUCTIVITY SCORE";
+  static const String statsPlaceholderZero = "0";
+  static const String statsPlaceholderZeroSlashZero = "0/0";
+  static const String statsPlaceholderDash = "—";
+
+  // Settings — controls
+  static const String settingsSectionHeading = "SETTINGS";
+  static const String settingsHapticsLabel = "HAPTICS";
+  static const String settingsNotificationsLabel = "NOTIFICATIONS";
+  static const String notificationPreferencesLink = "Notification preferences";
+
+  // Settings — profile / session
+  static const String profileUnavailableTitle = "Profile unavailable";
+  static const String profileUnavailableBody =
+      "Unable to load profile details right now.";
+  static const String loggedOutSuccess = "Logged out successfully";
+
+  // Home controller — errors & toasts
+  static const String homeUnableLoadGoals = "Unable to load goals";
+  static const String homeUnableLoadTodayTasks = "Unable to load today tasks";
+  static const String homeUnableLoadGoalHistory = "Unable to load goal history";
+  static const String homeUnableCompleteTask = "Unable to complete task";
+  static const String homeUnableSkipTask = "Unable to skip task";
+  static const String homeUnableDeleteGoal = "Unable to delete goal";
+  static const String homeUnableCreateGoal = "Unable to create goal";
+  static const String toastTaskCompleted = "Task completed";
+  static const String toastTaskAlreadyCompleted = "Task already completed";
+  static const String toastTaskSkippedTitle = "Task skipped";
+  static const String toastTaskAlreadySkipped = "Task already skipped";
+  static const String toastGoalDeleted = "Goal deleted";
+  static const String toastGoalCreated = "Goal created";
+  static const String balanceLabel = "Balance";
+  static String taskSkippedBalanceSubtitle(int balance) =>
+      "$balanceLabel: $balance";
+
+  // Auth — success toasts
+  static const String signedInWithGoogle = "Signed in with Google";
+  static const String signedInWithApple = "Signed in with Apple";
+  static const String loginSuccessful = "Login successful";
+  static const String accountCreatedSuccess = "Account created successfully";
+
+  // Auth — titles
+  static const String googleSignInFailedTitle = "Google sign-in failed";
+  static const String appleSignInFailedTitle = "Apple sign-in failed";
+  static const String appleSignInInfoTitle = "Apple sign-in";
+  static const String appleSignInInfoBody =
+      "Apple sign-in will be enabled on iOS when you are ready. Use email or Google here.";
+  static const String loginFailedTitle = "Login failed";
+  static const String signUpFailedTitle = "Sign up failed";
+  static const String pleaseTryAgainShort = "Please try again.";
+
+  // Auth — Firebase messages (user-facing)
+  static const String firebaseInvalidEmail = "That email address is not valid.";
+  static const String firebaseUserDisabled = "This account has been disabled.";
+  static const String firebaseIncorrectEmailOrPassword =
+      "Incorrect email or password.";
+  static const String firebaseEmailAlreadyInUse =
+      "An account already exists for this email.";
+  static const String firebaseWeakPassword =
+      "Password is too weak. Use a stronger password.";
+  static const String firebaseNetworkError =
+      "Network error. Check your connection.";
+  static const String firebaseTooManyRequests =
+      "Too many attempts. Try again later.";
+  static String firebaseAuthErrorWithCode(String code) =>
+      "Authentication error ($code).";
+
+  static const String firebaseMissingUserMessage = "No Firebase user returned.";
+  static const String firebaseMissingIdTokenMessage =
+      "Could not read Firebase ID token.";
+
+  // Auth — API / Dio resolution
+  static const String emailAlreadyInUseTitle = "Email already in use";
+  static const String emailAlreadyInUseBody =
+      "Sign in or use a different email.";
+  static const String invalidCredentialsTitle = "Invalid credentials";
+  static const String invalidCredentialsBody = "Check email and password.";
+  static const String unauthorizedTitle = "Unauthorized";
+  static const String unauthorizedBody = "Invalid email or session.";
+  static const String serverNotConfiguredTitle = "Server not configured";
+  static const String serverNotConfiguredBody =
+      "Add POST /auth/firebase on your API to exchange Firebase ID tokens.";
+  static const String authenticationFailedTitle = "Authentication failed";
+
+  // HTTP status messages (API layer)
+  static const String httpBadRequest = "Bad request";
+  static const String httpUnauthorizedRequest = "Unauthorized request";
+  static const String httpForbiddenRequest = "Forbidden request";
+  static const String httpResourceNotFound = "Resource not found";
+  static const String httpInternalServerError = "Internal server error";
+  static const String httpSomethingWentWrong = "Something went wrong";
 }

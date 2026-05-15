@@ -1,21 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:today/core/network/zen_quote_service.dart';
+import 'package:today/core/utils/app_images/app_images.dart';
+import 'package:today/core/utils/app_texts/app_texts.dart';
+import 'package:today/core/widgets/feedback/app_toast.dart';
 import 'package:today/domain/entities/goal_card_entity.dart';
 import 'package:today/domain/entities/active_goal_task_entity.dart';
 import 'package:today/domain/entities/goal_history_day_entity.dart';
-import 'package:today/core/widgets/feedback/app_toast.dart';
 import 'package:today/domain/usecases/create_goal_usecase.dart';
 import 'package:today/domain/usecases/complete_task_usecase.dart';
 import 'package:today/domain/usecases/delete_goal_usecase.dart';
 import 'package:today/domain/usecases/get_active_goal_tasks_usecase.dart';
-import 'package:today/domain/usecases/get_goal_cards_usecase.dart';
 import 'package:today/domain/usecases/get_goal_history_usecase.dart';
 import 'package:today/domain/usecases/skip_task_usecase.dart';
+import 'package:today/presentation/controllers/goals/goal_cards_controller.dart';
+import 'package:today/presentation/routes/app_routes.dart';
+
+class ActiveGoalOverviewDisplay {
+  const ActiveGoalOverviewDisplay({
+    required this.dayLeftDisplay,
+    required this.dayRightDisplay,
+    required this.tasksText,
+    required this.percentText,
+    required this.progress,
+    required this.footerText,
+    required this.medalIconPath,
+  });
+
+  final String dayLeftDisplay;
+  final String dayRightDisplay;
+  final String tasksText;
+  final String percentText;
+  final double progress;
+  final String footerText;
+  final String medalIconPath;
+}
+
+class HomeCalendarDisplay {
+  const HomeCalendarDisplay({
+    required this.dayOfYear,
+    required this.totalDays,
+    required this.daysLeft,
+    required this.year,
+  });
+
+  final int dayOfYear;
+  final int totalDays;
+  final int daysLeft;
+  final int year;
+}
 
 class HomeController extends GetxController {
   HomeController(
+    this._goalCardsController,
     this._getActiveGoalTasksUseCase,
-    this._getGoalCardsUseCase,
     this._createGoalUseCase,
     this._completeTaskUseCase,
     this._skipTaskUseCase,
@@ -23,38 +61,127 @@ class HomeController extends GetxController {
     this._deleteGoalUseCase,
   );
 
+  final GoalCardsController _goalCardsController;
   final GetActiveGoalTasksUseCase _getActiveGoalTasksUseCase;
-  final GetGoalCardsUseCase _getGoalCardsUseCase;
   final CreateGoalUseCase _createGoalUseCase;
   final CompleteTaskUseCase _completeTaskUseCase;
   final SkipTaskUseCase _skipTaskUseCase;
   final GetGoalHistoryUseCase _getGoalHistoryUseCase;
   final DeleteGoalUseCase _deleteGoalUseCase;
+
   final RxBool isLoading = false.obs;
   final RxBool isCreatingGoal = false.obs;
   final RxList<ActiveGoalTaskEntity> activeGoalTasks =
       <ActiveGoalTaskEntity>[].obs;
-  final RxList<GoalCardEntity> goalCards = <GoalCardEntity>[].obs;
   final RxList<GoalHistoryDayEntity> goalHistoryDays =
       <GoalHistoryDayEntity>[].obs;
+
+  final Rxn<({String quote, String author})> calendarQuote = Rxn();
+  final RxBool isCalendarQuoteLoading = false.obs;
 
   final TextEditingController goalInputController = TextEditingController();
   final RxString goalDraft = ''.obs;
   final RxString selectedGoalId = ''.obs;
 
-  String get selectedGoalTitle {
+  bool _calendarQuoteRequested = false;
+
+  RxList<GoalCardEntity> get goalCards => _goalCardsController.goalCards;
+
+  RxBool get isGoalCardsLoading => _goalCardsController.isLoading;
+
+  GoalCardEntity? get selectedGoalCard {
     final id = selectedGoalId.value;
-    if (id.isEmpty) return 'Goal';
+    if (id.isEmpty) return null;
     for (final goal in goalCards) {
-      if (goal.goalId == id) return goal.title;
+      if (goal.goalId == id) return goal;
     }
-    return 'Goal';
+    return null;
+  }
+
+  String get selectedGoalTitle {
+    return selectedGoalCard?.title ?? AppTexts.goalDefaultTitle;
+  }
+
+  ActiveGoalOverviewDisplay get activeGoalOverviewDisplay {
+    final card = selectedGoalCard;
+    final fallbackRight = AppTexts.activeGoalOverviewOutOfSample;
+    final dayLeft = card?.dayText ?? AppTexts.activeGoalOverviewDaySample;
+    final (dayLeftDisplay, dayRight) = card == null
+        ? (dayLeft, fallbackRight)
+        : _splitGoalDayHeaderText(card.dayText, fallbackRight);
+
+    return ActiveGoalOverviewDisplay(
+      dayLeftDisplay: dayLeftDisplay,
+      dayRightDisplay: dayRight,
+      tasksText: card?.tasksText ?? AppTexts.activeGoalOverviewTasksSample,
+      percentText:
+          card?.percentText ?? AppTexts.activeGoalOverviewPercentSample,
+      progress: card?.progress ?? 0.28,
+      footerText: card?.totalTasksText ?? AppTexts.activeGoalOverviewMotivation,
+      medalIconPath: card?.iconPath ?? AppImages.medal1,
+    );
+  }
+
+  HomeCalendarDisplay get calendarDisplay {
+    final now = DateTime.now();
+    final dayOfYear = _dayOfYear(now);
+    final totalDays = _daysInYear(now.year);
+    return HomeCalendarDisplay(
+      dayOfYear: dayOfYear,
+      totalDays: totalDays,
+      daysLeft: totalDays - dayOfYear,
+      year: now.year,
+    );
   }
 
   @override
-  Future<void> onInit() async {
+  void onInit() {
     super.onInit();
-    await loadGoalCards();
+    ever(goalCards, (_) => _syncSelectedGoalId());
+    loadGoalCards();
+  }
+
+  void openHomeCalendar() {
+    ensureCalendarQuoteLoaded();
+    Get.toNamed<void>(AppRoutes.homeCalendar);
+  }
+
+  void openActiveGoalDetails(String goalId) {
+    Get.toNamed<void>(AppRoutes.activeGoalDetails, arguments: goalId);
+    final resolvedId = goalId.isNotEmpty ? goalId : selectedGoalId.value;
+    if (resolvedId.isEmpty) return;
+    if (selectedGoalId.value != resolvedId || activeGoalTasks.isEmpty) {
+      loadActiveGoalTasks(resolvedId);
+    }
+  }
+
+  void ensureCalendarQuoteLoaded() {
+    if (_calendarQuoteRequested) return;
+    _calendarQuoteRequested = true;
+    isCalendarQuoteLoading.value = true;
+    const ZenQuoteService()
+        .fetchTodayQuote()
+        .then((quote) {
+          calendarQuote.value = quote;
+        })
+        .whenComplete(() {
+          isCalendarQuoteLoading.value = false;
+        });
+  }
+
+  Future<void> deleteActiveGoal() async {
+    final goalId = selectedGoalId.value;
+    if (goalId.isEmpty) return;
+    await deleteGoal(goalId);
+    if (Get.currentRoute == AppRoutes.activeGoalDetails) {
+      Get.back<void>();
+    }
+  }
+
+  void _syncSelectedGoalId() {
+    if (selectedGoalId.value.isEmpty && goalCards.isNotEmpty) {
+      selectedGoalId.value = goalCards.first.goalId;
+    }
   }
 
   void setGoalDraft(String value) {
@@ -62,18 +189,12 @@ class HomeController extends GetxController {
   }
 
   Future<void> loadGoalCards() async {
-    isLoading.value = true;
-    try {
-      final items = await _getGoalCardsUseCase();
-      goalCards.assignAll(items);
-      if (goalCards.isNotEmpty) {
-        selectedGoalId.value = goalCards.first.goalId;
-      }
-    } catch (_) {
-      _showError('Unable to load goals');
-    } finally {
-      isLoading.value = false;
+    final ok = await _goalCardsController.loadGoalCards();
+    if (!ok) {
+      _showError(AppTexts.homeUnableLoadGoals);
+      return;
     }
+    _syncSelectedGoalId();
   }
 
   Future<void> loadActiveGoalTasks(String goalId) async {
@@ -84,7 +205,7 @@ class HomeController extends GetxController {
       activeGoalTasks.assignAll(items);
       await loadGoalHistory(goalId, silent: true);
     } catch (_) {
-      _showError('Unable to load today tasks');
+      _showError(AppTexts.homeUnableLoadTodayTasks);
     } finally {
       isLoading.value = false;
     }
@@ -98,7 +219,7 @@ class HomeController extends GetxController {
       final days = await _getGoalHistoryUseCase(goalId);
       goalHistoryDays.assignAll(days);
     } catch (_) {
-      _showError('Unable to load goal history');
+      _showError(AppTexts.homeUnableLoadGoalHistory);
     } finally {
       if (!silent) {
         isLoading.value = false;
@@ -111,15 +232,15 @@ class HomeController extends GetxController {
     try {
       final result = await _completeTaskUseCase(taskId);
       if (!result.already) {
-        AppToast.showSuccess('Task completed');
+        AppToast.showSuccess(AppTexts.toastTaskCompleted);
       } else {
-        AppToast.showInformation('Task already completed');
+        AppToast.showInformation(AppTexts.toastTaskAlreadyCompleted);
       }
       if (selectedGoalId.value.isNotEmpty) {
         await loadActiveGoalTasks(selectedGoalId.value);
       }
     } catch (_) {
-      _showError('Unable to complete task');
+      _showError(AppTexts.homeUnableCompleteTask);
     }
   }
 
@@ -129,17 +250,19 @@ class HomeController extends GetxController {
       final result = await _skipTaskUseCase(taskId);
       if (!result.already) {
         AppToast.showWarning(
-          'Task skipped',
-          result.balance == null ? null : 'Balance: ${result.balance}',
+          AppTexts.toastTaskSkippedTitle,
+          result.balance == null
+              ? null
+              : AppTexts.taskSkippedBalanceSubtitle(result.balance!),
         );
       } else {
-        AppToast.showInformation('Task already skipped');
+        AppToast.showInformation(AppTexts.toastTaskAlreadySkipped);
       }
       if (selectedGoalId.value.isNotEmpty) {
         await loadActiveGoalTasks(selectedGoalId.value);
       }
     } catch (_) {
-      _showError('Unable to skip task');
+      _showError(AppTexts.homeUnableSkipTask);
     }
   }
 
@@ -147,7 +270,7 @@ class HomeController extends GetxController {
     if (goalId.isEmpty) return;
     try {
       await _deleteGoalUseCase(goalId);
-      AppToast.showSuccess('Goal deleted');
+      AppToast.showSuccess(AppTexts.toastGoalDeleted);
       await loadGoalCards();
       if (selectedGoalId.value.isNotEmpty) {
         await loadActiveGoalTasks(selectedGoalId.value);
@@ -155,7 +278,7 @@ class HomeController extends GetxController {
         activeGoalTasks.clear();
       }
     } catch (_) {
-      _showError('Unable to delete goal');
+      _showError(AppTexts.homeUnableDeleteGoal);
     }
   }
 
@@ -172,18 +295,42 @@ class HomeController extends GetxController {
       );
       goalInputController.clear();
       goalDraft.value = '';
-      AppToast.showSuccess('Goal created');
+      AppToast.showSuccess(AppTexts.toastGoalCreated);
       await loadGoalCards();
     } catch (_) {
-      _showError('Unable to create goal');
+      _showError(AppTexts.homeUnableCreateGoal);
     } finally {
       isCreatingGoal.value = false;
     }
   }
 
+  (String, String) _splitGoalDayHeaderText(
+    String dayText,
+    String fallbackRight,
+  ) {
+    final match = RegExp(
+      r'^(DAY\s+\d+)\s+OF\s+(\d+)$',
+      caseSensitive: false,
+    ).firstMatch(dayText.trim());
+    if (match != null) {
+      return (match.group(1)!, 'OUT OF ${match.group(2)}');
+    }
+    return (dayText, fallbackRight);
+  }
+
+  int _dayOfYear(DateTime now) {
+    return now.difference(DateTime(now.year, 1, 1)).inDays + 1;
+  }
+
+  int _daysInYear(int year) {
+    final start = DateTime(year, 1, 1);
+    final end = DateTime(year + 1, 1, 1);
+    return end.difference(start).inDays;
+  }
+
   void _showError(String message) {
     if (Get.context != null) {
-      AppToast.showError('Error', message);
+      AppToast.showError(AppTexts.error, message);
     }
   }
 

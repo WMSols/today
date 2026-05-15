@@ -1,3 +1,5 @@
+import 'package:today/core/utils/app_texts/app_texts.dart';
+
 /// Maps DioException and response to [ApiFailure] / [Failure].
 class ApiExceptions {
   ApiExceptions._();
@@ -5,17 +7,17 @@ class ApiExceptions {
   static String messageFromStatus(int? statusCode) {
     switch (statusCode) {
       case 400:
-        return 'Bad request';
+        return AppTexts.httpBadRequest;
       case 401:
-        return 'Unauthorized request';
+        return AppTexts.httpUnauthorizedRequest;
       case 403:
-        return 'Forbidden request';
+        return AppTexts.httpForbiddenRequest;
       case 404:
-        return 'Resource not found';
+        return AppTexts.httpResourceNotFound;
       case 500:
-        return 'Internal server error';
+        return AppTexts.httpInternalServerError;
       default:
-        return 'Something went wrong';
+        return AppTexts.httpSomethingWentWrong;
     }
   }
 }
