@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:today/presentation/routes/app_routes.dart';
 import 'package:today/core/auth/firebase_auth_gateway.dart';
 import 'package:today/core/config/env_config.dart';
+import 'package:today/core/constants/api_constants.dart';
 import 'package:today/core/init/app_system_ui.dart';
 import 'package:today/di/app_binding.dart';
 import 'package:today/domain/usecases/get_me_usecase.dart';
@@ -57,6 +58,10 @@ abstract class AppInitializer {
   }
 
   static Future<String> _resolveInitialRoute() async {
+    if (!ApiConstants.backendApiEnabled) {
+      return _resolveInitialRouteOffline();
+    }
+
     try {
       final authRepository = Get.find<AuthRepository>();
       final token = await authRepository.getAccessToken();
@@ -71,6 +76,37 @@ abstract class AppInitializer {
         await Get.find<AuthRepository>().clearSession();
       } catch (_) {}
       return await _tryRestoreFromFirebase(Get.find<AuthRepository>());
+    }
+  }
+
+  /// Firebase + local session only (no Dio / getMe / exchangeFirebaseSession).
+  static Future<String> _resolveInitialRouteOffline() async {
+    final authRepository = Get.find<AuthRepository>();
+    final token = await authRepository.getAccessToken();
+    if (token != null && token.isNotEmpty) {
+      return AppRoutes.mainApp;
+    }
+    return _tryRestoreFromFirebaseOffline(authRepository);
+  }
+
+  static Future<String> _tryRestoreFromFirebaseOffline(
+    AuthRepository authRepository,
+  ) async {
+    try {
+      final firebaseUser = FirebaseAuth.instance.currentUser;
+      if (firebaseUser == null) return AppRoutes.onboarding;
+      final idToken = await firebaseUser.getIdToken();
+      if (idToken == null || idToken.isEmpty) return AppRoutes.onboarding;
+      await authRepository.saveFirebaseIdTokenSession(
+        idToken: idToken,
+        rememberMe: true,
+      );
+      return AppRoutes.mainApp;
+    } catch (_) {
+      try {
+        await Get.find<FirebaseAuthGateway>().signOut();
+      } catch (_) {}
+      return AppRoutes.onboarding;
     }
   }
 

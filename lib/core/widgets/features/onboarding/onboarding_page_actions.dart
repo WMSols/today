@@ -15,14 +15,16 @@ class OnboardingPageActions extends StatelessWidget {
     super.key,
     required this.primaryLabel,
     required this.onPrimaryTap,
-    required this.onSocialTap,
+    required this.onGoogleTap,
+    required this.onAppleTap,
     this.showSocialButtons = false,
     this.legalText,
   });
 
   final String primaryLabel;
   final VoidCallback onPrimaryTap;
-  final VoidCallback onSocialTap;
+  final VoidCallback onGoogleTap;
+  final VoidCallback onAppleTap;
   final bool showSocialButtons;
   final String? legalText;
 
@@ -48,14 +50,14 @@ class OnboardingPageActions extends StatelessWidget {
                 Expanded(
                   child: SocialActionButton(
                     image: AppImages.google,
-                    onTap: onSocialTap,
+                    onTap: onGoogleTap,
                   ),
                 ),
                 AppSpacing.horizontal(context, 0.03),
                 Expanded(
                   child: SocialActionButton(
                     image: AppImages.apple,
-                    onTap: onSocialTap,
+                    onTap: onAppleTap,
                   ),
                 ),
               ],

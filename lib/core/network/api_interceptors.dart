@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:today/core/constants/api_constants.dart';
 import 'package:today/core/network/api_debug_logger.dart';
 import 'package:today/core/storage/session_storage.dart';
 
@@ -13,6 +14,10 @@ class ApiInterceptors extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    if (!ApiConstants.backendApiEnabled) {
+      super.onRequest(options, handler);
+      return;
+    }
     ApiDebugLogger.request(options);
     options.headers['Accept'] = 'application/json';
     options.headers['Content-Type'] = 'application/json';
@@ -28,13 +33,17 @@ class ApiInterceptors extends Interceptor {
     Response<dynamic> response,
     ResponseInterceptorHandler handler,
   ) {
-    ApiDebugLogger.success(response);
+    if (ApiConstants.backendApiEnabled) {
+      ApiDebugLogger.success(response);
+    }
     super.onResponse(response, handler);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    ApiDebugLogger.error(err);
+    if (ApiConstants.backendApiEnabled) {
+      ApiDebugLogger.error(err);
+    }
     super.onError(err, handler);
   }
 }

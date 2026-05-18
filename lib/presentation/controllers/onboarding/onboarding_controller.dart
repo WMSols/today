@@ -1,7 +1,8 @@
-import 'package:get/get.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 import 'package:today/core/utils/app_texts/app_texts.dart';
+import 'package:today/presentation/controllers/auth/auth_controller.dart';
 import 'package:today/presentation/routes/app_routes.dart';
 
 class OnboardingController extends GetxController {
@@ -48,6 +49,16 @@ class OnboardingController extends GetxController {
 
   void goToPlanner() {
     Get.offAllNamed<void>(AppRoutes.planner);
+  }
+
+  void onGoogleSocialTap() {
+    if (!Get.isRegistered<AuthController>()) return;
+    Get.find<AuthController>().signInWithGoogle();
+  }
+
+  void onAppleSocialTap() {
+    if (!Get.isRegistered<AuthController>()) return;
+    Get.find<AuthController>().signInWithApple();
   }
 
   @override

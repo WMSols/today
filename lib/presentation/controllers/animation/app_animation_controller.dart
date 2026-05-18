@@ -2,6 +2,7 @@ import 'package:flutter/animation.dart';
 import 'package:get/get.dart';
 
 import 'package:today/presentation/routes/app_pages.dart';
+import 'package:today/presentation/routes/app_routes.dart';
 
 /// App-level route transitions and navigation helpers.
 class AppAnimationController extends GetxController {
@@ -15,6 +16,9 @@ class AppAnimationController extends GetxController {
     }
     return null;
   }
+
+  /// Clears the stack and opens [MainAppScreen] with [MainAppBinding].
+  Future<T?>? offAllToMainApp<T>() => offAllFromSplash<T>(AppRoutes.mainApp);
 
   /// Replaces the stack after splash with a horizontal slide transition.
   Future<T?>? offAllFromSplash<T>(String routeName) {

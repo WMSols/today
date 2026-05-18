@@ -30,6 +30,12 @@ abstract class AuthRepository {
     String? timezone,
   });
 
+  /// Stores a Firebase ID token locally when the API exchange endpoint is unavailable.
+  Future<void> saveFirebaseIdTokenSession({
+    required String idToken,
+    bool rememberMe = true,
+  });
+
   Future<MeEntity> getMe();
   Future<String?> getAccessToken();
   Future<void> clearSession();

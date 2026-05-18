@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:today/core/constants/api_constants.dart';
 import 'package:today/core/auth/firebase_auth_gateway.dart';
 import 'package:today/presentation/controllers/settings/haptics_controller.dart';
 import 'package:today/core/auth/auth_error_messages.dart';
@@ -12,6 +13,8 @@ import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/widgets/buttons/app_button.dart';
 import 'package:today/core/widgets/feedback/app_toast.dart';
 import 'package:today/domain/repositories/auth_repository.dart';
+import 'package:today/domain/usecases/get_me_usecase.dart';
+import 'package:today/presentation/controllers/animation/app_animation_controller.dart';
 import 'package:today/presentation/routes/app_routes.dart';
 
 class AuthController extends GetxController {
@@ -74,8 +77,12 @@ class AuthController extends GetxController {
     isLoading.value = true;
     try {
       final cred = await _firebaseAuth.signInWithGoogle();
-      await _persistApiSessionAfterFirebase(cred);
-      _toastSuccessAndGoHome(AppTexts.signedInWithGoogle);
+      await _linkEmailPasswordFromActiveForm(cred.user);
+      await _persistApiSessionAfterFirebase(
+        cred,
+        timezone: DateTime.now().timeZoneName,
+      );
+      await _completeAuthAndGoHome(AppTexts.signedInWithGoogle);
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled ||
           e.code == GoogleSignInExceptionCode.interrupted ||
@@ -120,8 +127,9 @@ class AuthController extends GetxController {
     isLoading.value = true;
     try {
       final cred = await _firebaseAuth.signInWithApple();
+      await _linkEmailPasswordFromActiveForm(cred.user);
       await _persistApiSessionAfterFirebase(cred);
-      _toastSuccessAndGoHome(AppTexts.signedInWithApple);
+      await _completeAuthAndGoHome(AppTexts.signedInWithApple);
     } on FirebaseAuthException catch (e) {
       AppToast.showError(
         AppTexts.appleSignInFailedTitle,
@@ -155,7 +163,7 @@ class AuthController extends GetxController {
           password: loginPasswordController.text,
         );
         await _persistApiSessionAfterFirebase(cred);
-        _toastSuccessAndGoHome(AppTexts.loginSuccessful);
+        await _completeAuthAndGoHome(AppTexts.loginSuccessful);
       } else {
         final cred = await _firebaseAuth.createUserWithEmailAndPassword(
           email: signupEmailController.text.trim(),
@@ -165,7 +173,7 @@ class AuthController extends GetxController {
           cred,
           timezone: DateTime.now().timeZoneName,
         );
-        _toastSuccessAndGoHome(AppTexts.accountCreatedSuccess);
+        await _completeAuthAndGoHome(AppTexts.accountCreatedSuccess);
       }
     } on FirebaseAuthException catch (e) {
       if (Get.isRegistered<HapticsController>()) {
@@ -200,6 +208,36 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> _linkEmailPasswordFromActiveForm(User? user) async {
+    final accountEmail = user?.email?.trim();
+    if (accountEmail == null || accountEmail.isEmpty) return;
+
+    final String password;
+    if (isLoginMode.value) {
+      final formEmail = loginEmailController.text.trim();
+      if (formEmail.isEmpty ||
+          formEmail.toLowerCase() != accountEmail.toLowerCase()) {
+        return;
+      }
+      password = loginPasswordController.text;
+    } else {
+      final formEmail = signupEmailController.text.trim();
+      if (formEmail.isEmpty ||
+          formEmail.toLowerCase() != accountEmail.toLowerCase()) {
+        return;
+      }
+      password = signupPasswordController.text;
+      if (password != signupConfirmPasswordController.text) return;
+    }
+
+    if (password.isEmpty) return;
+
+    await _firebaseAuth.linkEmailPasswordIfAbsent(
+      email: accountEmail,
+      password: password,
+    );
+  }
+
   Future<void> _persistApiSessionAfterFirebase(
     UserCredential cred, {
     String? timezone,
@@ -218,19 +256,35 @@ class AuthController extends GetxController {
         message: AppTexts.firebaseMissingIdTokenMessage,
       );
     }
+    if (!ApiConstants.backendApiEnabled) {
+      await _authRepository.saveFirebaseIdTokenSession(
+        idToken: idToken,
+        rememberMe: rememberMe.value,
+      );
+      return;
+    }
+
     await _authRepository.exchangeFirebaseSession(
       idToken: idToken,
       rememberMe: rememberMe.value,
       timezone: timezone,
     );
+    if (Get.isRegistered<GetMeUseCase>()) {
+      await Get.find<GetMeUseCase>()();
+    }
   }
 
-  void _toastSuccessAndGoHome(String title) {
+  Future<void> _completeAuthAndGoHome(String title) async {
     AppToast.showSuccess(title);
     if (Get.isRegistered<HapticsController>()) {
       Get.find<HapticsController>().impact();
     }
-    Get.offAllNamed(AppRoutes.mainApp);
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    if (Get.isRegistered<AppAnimationController>()) {
+      await Get.find<AppAnimationController>().offAllToMainApp<void>();
+    } else {
+      await Get.offAllNamed<void>(AppRoutes.mainApp);
+    }
   }
 
   @override
