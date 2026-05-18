@@ -101,9 +101,11 @@ class AppTexts {
   static const String unlockPro = "UNLOCK PRO";
 
   static const String subscriptionPlanFreeName = "Free";
-  static const String subscriptionPlanFreeSubtitle = "SINGLE GOAL • BASIC AI";
+  static const String subscriptionPlanFreeSubtitle =
+      "SINGLE GOAL • BASIC AI";
   static const String subscriptionPlanProName = "Pro";
-  static const String subscriptionPlanProSubtitle = "\$34.99 / YEAR - SAVE 40%";
+  static const String subscriptionPlanProSubtitle =
+      "\$34.99 / YEAR - SAVE 40%";
   static const String subscriptionPlanLifetimeName = "Lifetime";
   static const String subscriptionPlanLifetimeSubtitle =
       "PAY ONCE. OWN FOREVER";
@@ -255,7 +257,8 @@ class AppTexts {
   static const String settingsSectionHeading = "SETTINGS";
   static const String settingsHapticsLabel = "HAPTICS";
   static const String settingsNotificationsLabel = "NOTIFICATIONS";
-  static const String notificationPreferencesLink = "Notification preferences";
+  static const String notificationPreferencesLink =
+      "Notification preferences";
 
   // Settings — profile / session
   static const String profileUnavailableTitle = "Profile unavailable";
