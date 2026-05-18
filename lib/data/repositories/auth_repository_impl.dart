@@ -77,6 +77,14 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<void> saveFirebaseIdTokenSession({
+    required String idToken,
+    bool rememberMe = true,
+  }) {
+    return _sessionStorage.saveAccessToken(idToken, persist: rememberMe);
+  }
+
+  @override
   Future<MeEntity> getMe() async {
     final raw = await _remoteDataSource.getMe();
     return MeModel.fromJson(raw);

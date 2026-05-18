@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "299243495312-13jq0uj4shugg6d4viuo46kf267ev7mk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.todayapp.today",
+            "certificate_hash": "e57b6a9b5b2a78e6a598435d85eae4fd3732a535"
+          }
+        },
+        {
           "client_id": "299243495312-hm7fpugq207ono5m3ack4pv9djar8e5s.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "299243495312-hm7fpugq207ono5m3ack4pv9djar8e5s.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "299243495312-9k28khsh1t57tq1hf43cstf387vd344i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.todayapp.today"
+              }
             }
           ]
         }

@@ -15,6 +15,11 @@ import 'package:flutter/foundation.dart'
 /// );
 /// ```
 class DefaultFirebaseOptions {
+  /// Web OAuth client (type 3 in `google-services.json`).
+  /// Required as [GoogleSignIn] `serverClientId` on Android so Firebase receives an ID token.
+  static const String googleWebClientId =
+      '299243495312-hm7fpugq207ono5m3ack4pv9djar8e5s.apps.googleusercontent.com';
+
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
       throw UnsupportedError(

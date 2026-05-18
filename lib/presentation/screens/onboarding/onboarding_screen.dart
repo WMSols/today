@@ -44,7 +44,8 @@ class OnboardingScreen extends GetView<OnboardingController> {
                 () => OnboardingPageActions(
                   primaryLabel: controller.primaryActionLabel,
                   onPrimaryTap: controller.onPrimaryAction,
-                  onSocialTap: controller.goToPlanner,
+                  onGoogleTap: controller.onGoogleSocialTap,
+                  onAppleTap: controller.onAppleSocialTap,
                   showSocialButtons: controller.showSocialButtons,
                   legalText: controller.legalText,
                 ),

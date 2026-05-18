@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:today/core/auth/firebase_auth_gateway.dart';
+import 'package:today/core/constants/api_constants.dart';
 import 'package:today/presentation/controllers/settings/haptics_controller.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/feedback/app_toast.dart';
@@ -40,10 +41,12 @@ class SettingsController extends GetxController {
     try {
       me.value = await _getMeUseCase();
     } catch (_) {
-      AppToast.showWarning(
-        AppTexts.profileUnavailableTitle,
-        AppTexts.profileUnavailableBody,
-      );
+      if (ApiConstants.backendApiEnabled) {
+        AppToast.showWarning(
+          AppTexts.profileUnavailableTitle,
+          AppTexts.profileUnavailableBody,
+        );
+      }
     } finally {
       isProfileLoading.value = false;
     }

@@ -17,28 +17,34 @@ class AuthSocialSection extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final dividerColor = isDark ? AppColors.lightGrey : AppColors.grey;
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Divider(
-              color: isDark ? AppColors.lightGrey : AppColors.grey,
-              thickness: 1,
-            ),
-            Text(
-              AppTexts.authOrContinueWith,
-              textAlign: TextAlign.center,
-              style: AppTextStyles.bodyText(context).copyWith(
-                color: isDark ? AppColors.lightGrey : AppColors.grey,
-                fontWeight: FontWeight.w500,
+        SizedBox(
+          width: double.infinity,
+          child: Row(
+            children: [
+              Expanded(
+                child: Divider(color: dividerColor, thickness: 1),
               ),
-            ),
-            Divider(
-              color: isDark ? AppColors.lightGrey : AppColors.grey,
-              thickness: 1,
-            ),
-          ],
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacing.horizontalValue(context, 0.02),
+                ),
+                child: Text(
+                  AppTexts.authOrContinueWith,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.bodyText(context).copyWith(
+                    color: dividerColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Divider(color: dividerColor, thickness: 1),
+              ),
+            ],
+          ),
         ),
         AppSpacing.vertical(context, 0.015),
         SizedBox(

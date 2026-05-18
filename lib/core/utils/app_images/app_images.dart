@@ -26,6 +26,7 @@ class AppImages {
   static const String medal1 = 'assets/images/icons/medal_1.png';
   static const String medal2 = 'assets/images/icons/medal_2.png';
   static const String medal3 = 'assets/images/icons/medal_3.png';
+  static const String streak = 'assets/images/icons/streak.png';
 
   // Bottom Navigation Icons
   static const String home = 'assets/images/icons/home.png';

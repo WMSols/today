@@ -23,7 +23,7 @@ class HomeActiveGoalsSection extends GetView<HomeController> {
         Row(
           children: [
             Image.asset(
-              AppImages.goals,
+              AppImages.streak,
               width: AppResponsive.iconSize(context, factor: 0.8),
               height: AppResponsive.iconSize(context, factor: 0.8),
             ),
