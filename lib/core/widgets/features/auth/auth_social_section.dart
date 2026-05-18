@@ -19,13 +19,26 @@ class AuthSocialSection extends GetView<AuthController> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       children: [
-        Text(
-          AppTexts.authOrContinueWith,
-          textAlign: TextAlign.center,
-          style: AppTextStyles.bodyText(context).copyWith(
-            color: isDark ? AppColors.lightGrey : AppColors.grey,
-            fontWeight: FontWeight.w500,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Divider(
+              color: isDark ? AppColors.lightGrey : AppColors.grey,
+              thickness: 1,
+            ),
+            Text(
+              AppTexts.authOrContinueWith,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.bodyText(context).copyWith(
+                color: isDark ? AppColors.lightGrey : AppColors.grey,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Divider(
+              color: isDark ? AppColors.lightGrey : AppColors.grey,
+              thickness: 1,
+            ),
+          ],
         ),
         AppSpacing.vertical(context, 0.015),
         SizedBox(

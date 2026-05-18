@@ -8,7 +8,8 @@ import 'package:today/presentation/controllers/settings/theme_controller.dart';
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  // ThemeController registered here so [TodayApp] can build; prefs load on splash.
+  // Required before [TodayApp] builds: GetBuilder<ThemeController> mounts above
+  // GetMaterialApp, so it runs before InitialBinding runs.
   Get.put<ThemeController>(ThemeController(), permanent: true);
   runApp(const TodayApp());
 }
