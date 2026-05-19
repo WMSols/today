@@ -9,12 +9,15 @@ import 'package:today/data/datasources/local/subscription_local_data_source.dart
 import 'package:today/data/datasources/remote/planner_remote_data_source.dart';
 import 'package:today/data/datasources/remote/auth_remote_data_source.dart';
 import 'package:today/data/datasources/remote/active_goal_remote_data_source.dart';
+import 'package:today/data/datasources/remote/home_daily_calendar_remote_data_source.dart';
 import 'package:today/data/repositories/active_goal_repository_impl.dart';
+import 'package:today/data/repositories/home_daily_calendar_repository_impl.dart';
 import 'package:today/data/repositories/auth_repository_impl.dart';
 import 'package:today/data/repositories/goal_repository_impl.dart';
 import 'package:today/data/repositories/planner_repository_impl.dart';
 import 'package:today/data/repositories/subscription_repository_impl.dart';
 import 'package:today/domain/repositories/active_goal_repository.dart';
+import 'package:today/domain/repositories/home_daily_calendar_repository.dart';
 import 'package:today/domain/repositories/auth_repository.dart';
 import 'package:today/domain/repositories/goal_repository.dart';
 import 'package:today/domain/repositories/planner_repository.dart';
@@ -31,6 +34,7 @@ import 'package:today/domain/usecases/create_goal_usecase.dart';
 import 'package:today/domain/usecases/complete_task_usecase.dart';
 import 'package:today/domain/usecases/skip_task_usecase.dart';
 import 'package:today/domain/usecases/delete_goal_usecase.dart';
+import 'package:today/domain/usecases/get_weekly_calendar_usecase.dart';
 import 'package:today/domain/usecases/save_goal_usecase.dart';
 
 class AppBinding extends Bindings {
@@ -59,6 +63,10 @@ class AppBinding extends Bindings {
       () => ActiveGoalRemoteDataSource(dio),
       fenix: true,
     );
+    Get.lazyPut<HomeDailyCalendarRemoteDataSource>(
+      HomeDailyCalendarRemoteDataSource.new,
+      fenix: true,
+    );
 
     // Repositories
     Get.lazyPut<GoalRepository>(
@@ -82,6 +90,12 @@ class AppBinding extends Bindings {
     );
     Get.lazyPut<ActiveGoalRepository>(
       () => ActiveGoalRepositoryImpl(Get.find<ActiveGoalRemoteDataSource>()),
+      fenix: true,
+    );
+    Get.lazyPut<HomeDailyCalendarRepository>(
+      () => HomeDailyCalendarRepositoryImpl(
+        Get.find<HomeDailyCalendarRemoteDataSource>(),
+      ),
       fenix: true,
     );
 
@@ -136,6 +150,10 @@ class AppBinding extends Bindings {
     );
     Get.lazyPut<DeleteGoalUseCase>(
       () => DeleteGoalUseCase(Get.find<ActiveGoalRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetWeeklyCalendarUseCase>(
+      () => GetWeeklyCalendarUseCase(Get.find<HomeDailyCalendarRepository>()),
       fenix: true,
     );
   }

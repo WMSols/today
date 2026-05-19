@@ -67,6 +67,15 @@ class AppFormatter {
     return names[month - 1];
   }
 
+  /// Time-of-day greeting for the home screen (morning, afternoon, evening, night).
+  static String timeOfDayGreeting([DateTime? when]) {
+    final hour = (when ?? DateTime.now()).hour;
+    if (hour >= 5 && hour < 12) return AppTexts.greetingMorning;
+    if (hour >= 12 && hour < 17) return AppTexts.greetingAfternoon;
+    if (hour >= 17 && hour < 21) return AppTexts.greetingEvening;
+    return AppTexts.greetingNight;
+  }
+
   /// Short day name by weekday (1=Mon..7=Sun): Mon, Tue, ...
   static String dayNameShort(int weekday) {
     const names = [

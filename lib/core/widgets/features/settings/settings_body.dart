@@ -29,7 +29,10 @@ class SettingsBody extends GetView<SettingsController> {
             () => Center(
               child: controller.isProfileLoading.value
                   ? CircularProgressIndicator(color: progressColor)
-                  : SettingsProfileHeader(username: controller.profileName),
+                  : SettingsProfileHeader(
+                      username: controller.profileName,
+                      photoUrl: controller.profilePhotoUrl,
+                    ),
             ),
           ),
           AppSpacing.vertical(context, 0.03),

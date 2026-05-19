@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:today/core/utils/app_formatter/app_formatter.dart';
+
+enum HomeDailyCalendarActivityLevel { none, success, warning, error }
 
 class AppHelper {
   AppHelper._();
+
+  static const double successThreshold = 0.8;
+  static const double warningThreshold = 0.4;
 
   /// Start of tomorrow (midnight). Use for date picker min/default.
   static DateTime get tomorrow {
@@ -60,6 +67,58 @@ class AppHelper {
       default:
         return const Color(0xFFA5A5A5);
     }
+  }
+
+  static DateTime weekSundayStart(DateTime day) {
+    return day.subtract(Duration(days: day.weekday % 7));
+  }
+
+  static bool isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+
+  static String dayLabelFor(DateTime date) {
+    return AppFormatter.dayNameShort(date.weekday)[0];
+  }
+
+  static HomeDailyCalendarActivityLevel activityFromProgress(double progress) {
+    final value = progress.clamp(0.0, 1.0);
+    if (value >= successThreshold) {
+      return HomeDailyCalendarActivityLevel.success;
+    }
+    if (value >= warningThreshold) {
+      return HomeDailyCalendarActivityLevel.warning;
+    }
+    if (value > 0) return HomeDailyCalendarActivityLevel.error;
+    return HomeDailyCalendarActivityLevel.none;
+  }
+
+  static Color activityColor(HomeDailyCalendarActivityLevel level) {
+    final Color base;
+    switch (level) {
+      case HomeDailyCalendarActivityLevel.success:
+        base = AppColors.success;
+      case HomeDailyCalendarActivityLevel.warning:
+        base = AppColors.warning;
+      case HomeDailyCalendarActivityLevel.error:
+        base = AppColors.error;
+      case HomeDailyCalendarActivityLevel.none:
+        return AppColors.grey;
+    }
+    return Color.lerp(base, AppColors.white, 0.18)!;
+  }
+
+  static Color activityColorForProgress(double progress) {
+    return activityColor(activityFromProgress(progress));
+  }
+
+  /// Top: progress tint; bottom: theme surface (white / black).
+  static List<Color> capsuleGradient({
+    required bool isDark,
+    required Color progressColor,
+  }) {
+    final bottom = AppColors.black;
+    return [progressColor, bottom];
   }
 }
 

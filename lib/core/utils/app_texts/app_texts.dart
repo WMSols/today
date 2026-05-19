@@ -39,6 +39,14 @@ class AppTexts {
   // Home
   static const String homeGoalEntryHint =
       'Enter a goal you want to achieve ...';
+  static String homeGreetingHey(String name) => 'Hey $name,';
+  static const String homeGreetingHeyPrefix = 'Hey! ';
+  static const String homeGreetingHeySuffix = ',';
+  static const String homeGreetingGuestName = 'there';
+  static const String greetingMorning = 'Good Morning 🌅';
+  static const String greetingAfternoon = 'Good Afternoon ☀️';
+  static const String greetingEvening = 'Good Evening 🌇';
+  static const String greetingNight = 'Good Night 🌙';
 
   // Planner
   static const String plannerMessageInputHint = 'Type your message...';
@@ -101,11 +109,9 @@ class AppTexts {
   static const String unlockPro = "UNLOCK PRO";
 
   static const String subscriptionPlanFreeName = "Free";
-  static const String subscriptionPlanFreeSubtitle =
-      "SINGLE GOAL • BASIC AI";
+  static const String subscriptionPlanFreeSubtitle = "SINGLE GOAL • BASIC AI";
   static const String subscriptionPlanProName = "Pro";
-  static const String subscriptionPlanProSubtitle =
-      "\$34.99 / YEAR - SAVE 40%";
+  static const String subscriptionPlanProSubtitle = "\$34.99 / YEAR - SAVE 40%";
   static const String subscriptionPlanLifetimeName = "Lifetime";
   static const String subscriptionPlanLifetimeSubtitle =
       "PAY ONCE. OWN FOREVER";
@@ -188,7 +194,7 @@ class AppTexts {
   // Bottom navigation
   static const String navHome = "HOME";
   static const String navGoals = "GOALS";
-  static const String navStats = "STATS";
+  static const String navAnalytics = "ANALYTICS";
   static const String navSettings = "SETTINGS";
 
   // Analytics tab
@@ -257,8 +263,7 @@ class AppTexts {
   static const String settingsSectionHeading = "SETTINGS";
   static const String settingsHapticsLabel = "HAPTICS";
   static const String settingsNotificationsLabel = "NOTIFICATIONS";
-  static const String notificationPreferencesLink =
-      "Notification preferences";
+  static const String notificationPreferencesLink = "Notification preferences";
 
   // Settings — profile / session
   static const String profileUnavailableTitle = "Profile unavailable";

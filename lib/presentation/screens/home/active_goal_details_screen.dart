@@ -6,8 +6,8 @@ import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/widgets/common/app_custom_app_bar.dart';
-import 'package:today/core/widgets/features/home/active_goal_overview_card.dart';
-import 'package:today/core/widgets/features/home/active_goal_tasks_card.dart';
+import 'package:today/core/widgets/features/home/active_goals/active_goal_overview_card.dart';
+import 'package:today/core/widgets/features/home/active_goals/active_goal_tasks_card.dart';
 import 'package:today/presentation/controllers/home/home_controller.dart';
 
 class ActiveGoalDetailsScreen extends GetView<HomeController> {

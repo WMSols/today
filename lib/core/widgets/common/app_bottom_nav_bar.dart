@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
-import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/widgets/common/app_bottom_nav_item.dart';
@@ -96,12 +96,8 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
     final barHeight = AppResponsive.screenHeight(context) * 0.07;
     final radius = AppResponsive.radius(context, factor: 5);
     const itemsCount = 4;
-    final barTint = isDark
-        ? AppColors.secondary.withValues(alpha: 0.14)
-        : AppColors.secondary.withValues(alpha: 0.85);
-    final bubbleTint = isDark
-        ? AppColors.secondary.withValues(alpha: 0.24)
-        : AppColors.primary.withValues(alpha: 0.12);
+    final barTint = isDark ? AppColors.lightGrey : AppColors.black;
+    final bubbleTint = isDark ? AppColors.black : AppColors.lightGrey;
 
     return Center(
       child: ClipRRect(
@@ -167,28 +163,28 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
                               index: 0,
                               currentIndex: widget.currentIndex,
                               label: AppTexts.navHome,
-                              iconPath: AppImages.home,
+                              icon: Iconsax.home_trend_up,
                               onTap: widget.onTap,
                             ),
                             AppBottomNavItem(
                               index: 1,
                               currentIndex: widget.currentIndex,
                               label: AppTexts.navGoals,
-                              iconPath: AppImages.goals,
+                              icon: Iconsax.flag,
                               onTap: widget.onTap,
                             ),
                             AppBottomNavItem(
                               index: 2,
                               currentIndex: widget.currentIndex,
-                              label: AppTexts.navStats,
-                              iconPath: AppImages.analyticsNav,
+                              label: AppTexts.navAnalytics,
+                              icon: Iconsax.diagram,
                               onTap: widget.onTap,
                             ),
                             AppBottomNavItem(
                               index: 3,
                               currentIndex: widget.currentIndex,
                               label: AppTexts.navSettings,
-                              iconPath: AppImages.settings,
+                              icon: Iconsax.setting_4,
                               onTap: widget.onTap,
                             ),
                           ],

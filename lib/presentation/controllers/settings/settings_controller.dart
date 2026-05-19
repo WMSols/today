@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:today/core/auth/firebase_auth_gateway.dart';
 import 'package:today/core/constants/api_constants.dart';
@@ -7,6 +8,7 @@ import 'package:today/core/widgets/feedback/app_toast.dart';
 import 'package:today/domain/entities/me_entity.dart';
 import 'package:today/domain/repositories/auth_repository.dart';
 import 'package:today/domain/usecases/get_me_usecase.dart';
+import 'package:today/presentation/controllers/main/main_app_controller.dart';
 import 'package:today/presentation/routes/app_routes.dart';
 
 class SettingsController extends GetxController {
@@ -21,6 +23,7 @@ class SettingsController extends GetxController {
   final FirebaseAuthGateway _firebaseAuthGateway;
 
   final RxBool notificationsEnabled = false.obs;
+  final RxBool hasUnreadNotifications = true.obs;
   final RxBool isProfileLoading = false.obs;
   final Rxn<MeEntity> me = Rxn<MeEntity>();
 
@@ -29,6 +32,23 @@ class SettingsController extends GetxController {
     if (username == null || username.isEmpty) return '@guest';
     return '@$username';
   }
+
+  /// First-name style label for home greeting (e.g. "Alina").
+  String get greetingDisplayName {
+    final username = me.value?.user.username.trim();
+    if (username != null && username.isNotEmpty) {
+      if (username.length == 1) return username.toUpperCase();
+      return '${username[0].toUpperCase()}${username.substring(1).toLowerCase()}';
+    }
+    final displayName = FirebaseAuth.instance.currentUser?.displayName?.trim();
+    if (displayName != null && displayName.isNotEmpty) {
+      return displayName.split(RegExp(r'\s+')).first;
+    }
+    return AppTexts.homeGreetingGuestName;
+  }
+
+  String? get profilePhotoUrl =>
+      FirebaseAuth.instance.currentUser?.photoURL?.trim();
 
   @override
   void onInit() {
@@ -62,7 +82,14 @@ class SettingsController extends GetxController {
   }
 
   void openNotifications() {
+    hasUnreadNotifications.value = false;
     Get.toNamed(AppRoutes.notifications);
+  }
+
+  void openSettingsTab() {
+    if (Get.isRegistered<MainAppController>()) {
+      Get.find<MainAppController>().selectTab(MainAppController.settingsTabIndex);
+    }
   }
 
   void openSubscription() {

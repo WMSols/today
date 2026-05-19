@@ -4,6 +4,7 @@ import 'package:today/core/network/zen_quote_service.dart';
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/feedback/app_toast.dart';
+import 'package:today/domain/entities/home_daily_calendar_day_entity.dart';
 import 'package:today/domain/entities/goal_card_entity.dart';
 import 'package:today/domain/entities/active_goal_task_entity.dart';
 import 'package:today/domain/entities/goal_history_day_entity.dart';
@@ -13,7 +14,10 @@ import 'package:today/domain/usecases/delete_goal_usecase.dart';
 import 'package:today/domain/usecases/get_active_goal_tasks_usecase.dart';
 import 'package:today/domain/usecases/get_goal_history_usecase.dart';
 import 'package:today/domain/usecases/skip_task_usecase.dart';
+import 'package:today/domain/usecases/get_weekly_calendar_usecase.dart';
+import 'package:today/domain/repositories/home_daily_calendar_repository.dart';
 import 'package:today/presentation/controllers/goals/goal_cards_controller.dart';
+import 'package:today/presentation/controllers/main/main_app_controller.dart';
 import 'package:today/presentation/routes/app_routes.dart';
 
 class ActiveGoalOverviewDisplay {
@@ -50,7 +54,9 @@ class HomeCalendarDisplay {
   final int year;
 }
 
-class HomeController extends GetxController {
+class HomeController extends GetxController with GetTickerProviderStateMixin {
+  static const Duration _calendarRingAnimationDuration = Duration(seconds: 2);
+
   HomeController(
     this._goalCardsController,
     this._getActiveGoalTasksUseCase,
@@ -59,6 +65,7 @@ class HomeController extends GetxController {
     this._skipTaskUseCase,
     this._getGoalHistoryUseCase,
     this._deleteGoalUseCase,
+    this._getWeeklyCalendarUseCase,
   );
 
   final GoalCardsController _goalCardsController;
@@ -68,6 +75,7 @@ class HomeController extends GetxController {
   final SkipTaskUseCase _skipTaskUseCase;
   final GetGoalHistoryUseCase _getGoalHistoryUseCase;
   final DeleteGoalUseCase _deleteGoalUseCase;
+  final GetWeeklyCalendarUseCase _getWeeklyCalendarUseCase;
 
   final RxBool isLoading = false.obs;
   final RxBool isCreatingGoal = false.obs;
@@ -75,6 +83,11 @@ class HomeController extends GetxController {
       <ActiveGoalTaskEntity>[].obs;
   final RxList<GoalHistoryDayEntity> goalHistoryDays =
       <GoalHistoryDayEntity>[].obs;
+  final RxList<HomeDailyCalendarDayEntity> calendarDays =
+      <HomeDailyCalendarDayEntity>[].obs;
+
+  late final AnimationController calendarRingAnimationController;
+  final RxDouble calendarRingAnimationFactor = 0.0.obs;
 
   final Rxn<({String quote, String author})> calendarQuote = Rxn();
   final RxBool isCalendarQuoteLoading = false.obs;
@@ -137,13 +150,46 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    calendarRingAnimationController = AnimationController(
+      vsync: this,
+      duration: _calendarRingAnimationDuration,
+    )..addListener(_syncCalendarRingAnimationFactor);
     ever(goalCards, (_) => _syncSelectedGoalId());
     loadGoalCards();
+    loadWeeklyCalendar();
+  }
+
+  void _syncCalendarRingAnimationFactor() {
+    calendarRingAnimationFactor.value = Curves.easeOutCubic.transform(
+      calendarRingAnimationController.value,
+    );
+  }
+
+  void _playCalendarRingAnimation() {
+    calendarRingAnimationController.forward(from: 0);
+  }
+
+  Future<void> loadWeeklyCalendar() async {
+    final days = await _getWeeklyCalendarUseCase(
+      variant: HomeWeeklyCalendarVariant.home,
+    );
+    calendarDays.assignAll(days);
+    _playCalendarRingAnimation();
+  }
+
+  void onCalendarDayTap(HomeDailyCalendarDayEntity day) {
+    openStatsTab();
   }
 
   void openHomeCalendar() {
     ensureCalendarQuoteLoaded();
     Get.toNamed<void>(AppRoutes.homeCalendar);
+  }
+
+  void openStatsTab() {
+    if (Get.isRegistered<MainAppController>()) {
+      Get.find<MainAppController>().openStatsTab();
+    }
   }
 
   void openActiveGoalDetails(String goalId) {
@@ -336,6 +382,7 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {
+    calendarRingAnimationController.dispose();
     goalInputController.dispose();
     super.onClose();
   }

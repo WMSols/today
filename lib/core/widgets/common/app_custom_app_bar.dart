@@ -5,8 +5,9 @@ import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
-import 'package:today/core/utils/app_formatter/app_formatter.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
+import 'package:today/core/widgets/common/app_user_profile_image.dart';
+import 'package:today/core/widgets/features/home/header/home_notification_button.dart';
 
 enum AppCustomAppBarVariant {
   homeStatus,
@@ -19,8 +20,12 @@ enum AppCustomAppBarVariant {
 class AppCustomAppBar extends StatelessWidget {
   const AppCustomAppBar.homeStatus({
     super.key,
-    required this.now,
-    required this.onTapDate,
+    required this.greetingName,
+    required this.greetingTimeOfDay,
+    this.profilePhotoUrl,
+    this.onTapProfile,
+    this.onTapNotifications,
+    this.hasUnreadNotifications = false,
   }) : variant = AppCustomAppBarVariant.homeStatus,
        title = null,
        onBack = null,
@@ -29,16 +34,24 @@ class AppCustomAppBar extends StatelessWidget {
 
   const AppCustomAppBar.backOnly({super.key, this.onBack})
     : variant = AppCustomAppBarVariant.backOnly,
-      now = null,
-      onTapDate = null,
+      greetingName = null,
+      greetingTimeOfDay = null,
+      profilePhotoUrl = null,
+      onTapProfile = null,
+      onTapNotifications = null,
+      hasUnreadNotifications = false,
       title = null,
       trailing = null,
       onTapUnlockPro = null;
 
   const AppCustomAppBar.titleOnly({super.key, required this.title})
     : variant = AppCustomAppBarVariant.titleOnly,
-      now = null,
-      onTapDate = null,
+      greetingName = null,
+      greetingTimeOfDay = null,
+      profilePhotoUrl = null,
+      onTapProfile = null,
+      onTapNotifications = null,
+      hasUnreadNotifications = false,
       onBack = null,
       trailing = null,
       onTapUnlockPro = null;
@@ -49,21 +62,33 @@ class AppCustomAppBar extends StatelessWidget {
     this.onBack,
     this.trailing,
   }) : variant = AppCustomAppBarVariant.titleWithActions,
-       now = null,
-       onTapDate = null,
+       greetingName = null,
+       greetingTimeOfDay = null,
+       profilePhotoUrl = null,
+       onTapProfile = null,
+       onTapNotifications = null,
+       hasUnreadNotifications = false,
        onTapUnlockPro = null;
 
   const AppCustomAppBar.unlockProChip({super.key, this.onTapUnlockPro})
     : variant = AppCustomAppBarVariant.unlockProChip,
-      now = null,
-      onTapDate = null,
+      greetingName = null,
+      greetingTimeOfDay = null,
+      profilePhotoUrl = null,
+      onTapProfile = null,
+      onTapNotifications = null,
+      hasUnreadNotifications = false,
       title = null,
       onBack = null,
       trailing = null;
 
   final AppCustomAppBarVariant variant;
-  final DateTime? now;
-  final VoidCallback? onTapDate;
+  final String? greetingName;
+  final String? greetingTimeOfDay;
+  final String? profilePhotoUrl;
+  final VoidCallback? onTapProfile;
+  final VoidCallback? onTapNotifications;
+  final bool hasUnreadNotifications;
   final String? title;
   final VoidCallback? onBack;
   final Widget? trailing;
@@ -72,51 +97,56 @@ class AppCustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final outline = isDark ? AppColors.lightGrey : AppColors.grey;
     final card = isDark ? AppColors.darkGrey : AppColors.grey;
     final onSurface = isDark ? AppColors.white : AppColors.black;
-    final muted = AppColors.grey;
+    final muted = isDark ? AppColors.grey : AppColors.black;
 
     switch (variant) {
       case AppCustomAppBarVariant.homeStatus:
-        final current = now ?? DateTime.now();
-        final dayLabel = AppFormatter.dayNameFull(current.weekday);
-        final monthLabel = AppFormatter.monthNameFull(current.month);
+        final outline = isDark ? AppColors.grey : AppColors.black;
+        final avatarSize = AppResponsive.scaleSize(context, 44);
+        final greetingStyle = AppTextStyles.bodyText(context).copyWith(
+          color: outline,
+          fontWeight: FontWeight.w400,
+          fontSize: AppResponsive.scaleSize(context, 14),
+          height: 1.3,
+        );
+        final nameStyle = greetingStyle.copyWith(
+          color: onSurface,
+          fontWeight: FontWeight.w600,
+          fontSize: AppResponsive.scaleSize(context, 18),
+          height: 1.15,
+        );
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: onTapDate,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '$dayLabel, ${current.day} $monthLabel',
-                      style: AppTextStyles.bodyText(context).copyWith(
-                        color: outline,
-                        fontWeight: FontWeight.w600,
-                        fontSize: AppResponsive.scaleSize(context, 10),
-                      ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppUserProfileImage(
+                    size: avatarSize,
+                    photoUrl: profilePhotoUrl,
+                    onTap: onTapProfile,
+                  ),
+                  AppSpacing.vertical(context, 0.01),
+                  RichText(
+                    text: TextSpan(
+                      style: greetingStyle,
+                      children: [
+                        TextSpan(text: AppTexts.homeGreetingHeyPrefix),
+                        TextSpan(text: greetingName ?? '', style: nameStyle),
+                        TextSpan(text: AppTexts.homeGreetingHeySuffix),
+                      ],
                     ),
-                    AppSpacing.vertical(context, 0.01),
-                    Row(
-                      children: List.generate(7, (index) {
-                        final isActive = index < current.weekday;
-                        return Container(
-                          width: AppResponsive.scaleSize(context, 6),
-                          height: AppResponsive.scaleSize(context, 6),
-                          margin: EdgeInsets.only(
-                            right: AppResponsive.scaleSize(context, 6),
-                          ),
-                          color: isActive ? outline : card,
-                        );
-                      }),
-                    ),
-                  ],
-                ),
+                  ),
+                  Text(greetingTimeOfDay ?? '', style: greetingStyle),
+                ],
               ),
+            ),
+            HomeNotificationButton(
+              onPressed: onTapNotifications,
+              hasUnread: hasUnreadNotifications,
             ),
           ],
         );

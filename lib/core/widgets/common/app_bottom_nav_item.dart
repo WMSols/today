@@ -10,24 +10,22 @@ class AppBottomNavItem extends StatelessWidget {
     required this.index,
     required this.currentIndex,
     required this.label,
-    required this.iconPath,
+    required this.icon,
     required this.onTap,
   });
 
   final int index;
   final int currentIndex;
   final String label;
-  final String iconPath;
+  final IconData icon;
   final ValueChanged<int> onTap;
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final labelColor = isDark ? AppColors.white : AppColors.black;
     final isSelected = index == currentIndex;
     final targetIconSize = AppResponsive.iconSize(
       context,
-      factor: isSelected ? 0.92 : 1.18,
+      factor: isSelected ? 1.2 : 1.4,
     );
     return Expanded(
       child: GestureDetector(
@@ -60,11 +58,10 @@ class AppBottomNavItem extends StatelessWidget {
                     duration: const Duration(milliseconds: 260),
                     curve: Curves.easeOutCubic,
                     builder: (context, animatedSize, child) {
-                      return Image.asset(
-                        iconPath,
-                        width: animatedSize,
-                        height: animatedSize,
-                        fit: BoxFit.contain,
+                      return Icon(
+                        icon,
+                        size: animatedSize,
+                        color: AppColors.white,
                       );
                     },
                   ),
@@ -73,7 +70,7 @@ class AppBottomNavItem extends StatelessWidget {
                     Text(
                       label,
                       style: AppTextStyles.hintText(context).copyWith(
-                        color: labelColor,
+                        color: AppColors.white,
                         fontWeight: FontWeight.w600,
                         fontSize: AppResponsive.scaleSize(context, 10),
                         height: 1,

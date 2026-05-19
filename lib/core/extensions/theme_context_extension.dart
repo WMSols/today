@@ -10,7 +10,7 @@ extension ThemeContextExtension on BuildContext {
   Color get onSurfaceColor => isDarkMode ? AppColors.white : AppColors.black;
 
   Color get sectionCardColor =>
-      isDarkMode ? AppColors.darkGrey : AppColors.grey;
+      isDarkMode ? AppColors.lightGrey : AppColors.black;
 
   Color get mutedOnSurfaceColor =>
       isDarkMode ? AppColors.lightGrey : AppColors.grey;
