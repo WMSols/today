@@ -15,12 +15,16 @@ class AppBottomNavBarScaffold extends StatelessWidget {
     required this.onTap,
     required this.children,
     this.backgroundColor,
+    this.overlay,
   });
 
   final int currentIndex;
   final ValueChanged<int> onTap;
   final List<Widget> children;
   final Color? backgroundColor;
+
+  /// Full-screen layers above tab content (e.g. home FAB blur menu).
+  final Widget? overlay;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +44,7 @@ class AppBottomNavBarScaffold extends StatelessWidget {
             bottom: AppResponsive.scaleSize(context, 20),
             child: AppBottomNavBar(currentIndex: currentIndex, onTap: onTap),
           ),
+          if (overlay != null) overlay!,
         ],
       ),
     );

@@ -216,6 +216,10 @@ class AppTexts {
   static const String activeGoalsHeading = "ACTIVE GOALS";
   static const String noActiveGoalsYet = "No active goals yet";
 
+  // Home — FAB menu
+  static const String fabAddGoal = "New Goal";
+  static const String fabRestructureGoal = "Restructure";
+
   // Home — goal entry card
   static const String goalDurationLabel = "GOAL DURATION";
   static const String resetTimeLabel = "RESET TIME";
