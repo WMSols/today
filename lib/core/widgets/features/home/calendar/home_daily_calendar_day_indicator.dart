@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
 import 'package:today/core/utils/app_helper/app_helper.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';

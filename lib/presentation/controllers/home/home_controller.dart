@@ -186,6 +186,10 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     Get.toNamed<void>(AppRoutes.homeCalendar);
   }
 
+  void openPlanner() {
+    Get.toNamed<void>(AppRoutes.planner);
+  }
+
   void openStatsTab() {
     if (Get.isRegistered<MainAppController>()) {
       Get.find<MainAppController>().openStatsTab();
