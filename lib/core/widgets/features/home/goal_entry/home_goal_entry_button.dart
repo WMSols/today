@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:today/core/utils/app_images/app_images.dart';
 
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
+import 'package:today/core/utils/app_spacing/app_spacing.dart';
 
 class HomeGoalEntryButton extends StatelessWidget {
   const HomeGoalEntryButton({super.key, this.onTap});
@@ -19,7 +21,13 @@ class HomeGoalEntryButton extends StatelessWidget {
         height: AppResponsive.scaleSize(context, 44),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: isDark ? AppColors.white : AppColors.black,
+          color: isDark ? AppColors.black : AppColors.white,
+        ),
+        child: Padding(
+          padding: AppSpacing.all(context),
+          child: Image.asset(
+            isDark ? AppImages.appLogoWhite : AppImages.appLogoBlack,
+          ),
         ),
       ),
     );

@@ -22,11 +22,11 @@ class AppDropDownButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final panel = isDark ? AppColors.darkGrey : AppColors.grey;
+    final panel = isDark ? AppColors.black : AppColors.white;
     final onPanel = isDark ? AppColors.white : AppColors.black;
     return Container(
       margin: EdgeInsets.only(right: AppResponsive.scaleSize(context, 10)),
-      padding: AppSpacing.symmetric(context, h: 0.02, v: 0.002),
+      padding: AppSpacing.symmetric(context, h: 0.02, v: 0),
       decoration: BoxDecoration(
         color: panel,
         borderRadius: BorderRadius.circular(
@@ -39,7 +39,7 @@ class AppDropDownButton extends StatelessWidget {
           hint: Text(
             label,
             style: AppTextStyles.labelText(context).copyWith(
-              color: AppColors.grey,
+              color: onPanel,
               fontWeight: FontWeight.w800,
               fontSize: AppResponsive.scaleSize(context, 10),
             ),
@@ -47,7 +47,7 @@ class AppDropDownButton extends StatelessWidget {
           dropdownColor: panel,
           icon: Icon(
             Icons.keyboard_arrow_down_rounded,
-            color: AppColors.grey,
+            color: onPanel,
             size: AppResponsive.iconSize(context),
           ),
           items: items

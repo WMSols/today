@@ -5,8 +5,8 @@ import 'package:today/core/widgets/buttons/app_dropdown_button.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/common/app_section_card.dart';
-import 'package:today/core/widgets/features/home/home_goal_entry_button.dart';
-import 'package:today/core/widgets/features/home/home_goal_entry_text_field.dart';
+import 'package:today/core/widgets/features/home/goal_entry/home_goal_entry_button.dart';
+import 'package:today/core/widgets/features/home/goal_entry/home_goal_entry_text_field.dart';
 import 'package:today/presentation/controllers/home/home_controller.dart';
 
 class HomeGoalEntryCard extends GetView<HomeController> {

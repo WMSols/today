@@ -8,8 +8,8 @@ import 'package:today/core/utils/app_styles/app_text_styles.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/common/app_custom_app_bar.dart';
 import 'package:today/core/widgets/feedback/app_loading_indicator.dart';
-import 'package:today/core/widgets/features/home/home_calendar_year_grid.dart';
-import 'package:today/core/widgets/features/home/home_daily_quote_view.dart';
+import 'package:today/core/widgets/features/home/calendar/home_calendar_year_grid.dart';
+import 'package:today/core/widgets/features/home/calendar/home_daily_quote_view.dart';
 import 'package:today/presentation/controllers/home/home_controller.dart';
 
 class HomeCalendarScreen extends GetView<HomeController> {

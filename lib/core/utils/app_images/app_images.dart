@@ -34,7 +34,7 @@ class AppImages {
   static const String settings = 'assets/images/icons/settings.png';
 
   /// Bottom nav — reuses lifetime stats icon until a dedicated asset exists.
-  static const String analyticsNav = 'assets/images/icons/lifetime_stats.png';
+  static const String analyticsNav = 'assets/images/icons/tasks_completed.png';
 
   // Avatars
   static const String aiAvatar = 'assets/images/avatars/ai_avatar.png';

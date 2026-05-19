@@ -19,15 +19,12 @@ class NotificationsScreen extends GetView<NotificationsController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppCustomAppBar.backOnly(onBack: () => Get.back<void>()),
-          AppSpacing.vertical(context, 0.02),
-          Text(
-            AppTexts.notificationsTitle,
-            style: AppTextStyles.headline(context).copyWith(
-              color: context.onSurfaceColor,
-              fontWeight: FontWeight.w600,
-            ),
+          AppCustomAppBar.titleWithActions(
+            title: AppTexts.notificationsTitle,
+            onBack: () => Get.back<void>(),
           ),
+          AppSpacing.vertical(context, 0.02),
+
           AppSpacing.vertical(context, 0.02),
           Text(
             AppTexts.notificationsDescription,
