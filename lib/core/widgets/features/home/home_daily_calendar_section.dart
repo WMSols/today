@@ -89,15 +89,7 @@ class HomeDailyCalendarSection extends StatelessWidget {
     final today = DateTime(now.year, now.month, now.day);
     final sunday = today.subtract(Duration(days: today.weekday % 7));
 
-    const progressByIndex = <double>[
-      0.0,
-      0.25,
-      0.85,
-      0.92,
-      0.55,
-      0.0,
-      0.15,
-    ];
+    const progressByIndex = <double>[0.0, 0.25, 0.85, 0.92, 0.55, 0.0, 0.15];
 
     return List.generate(7, (index) {
       final date = sunday.add(Duration(days: index));
@@ -116,7 +108,8 @@ class HomeDailyCalendarSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = days ??
+    final items =
+        days ??
         (displayMode == HomeDailyCalendarDisplayMode.statusIcon
             ? dummyDaysForStats()
             : dummyDays());

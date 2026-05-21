@@ -82,7 +82,7 @@ class AppSectionCardHeader extends StatelessWidget {
         Text(
           title,
           style: AppTextStyles.labelText(context).copyWith(
-            color: context.onSurfaceColor,
+            color: context.onSectionCardColor,
             fontWeight: FontWeight.w600,
             fontSize: AppResponsive.scaleSize(context, titleFontSize),
           ),

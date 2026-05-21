@@ -33,7 +33,7 @@ class PlannerChatIntro extends StatelessWidget {
         AppSpacing.vertical(context, 0.03),
         userMessages.isEmpty
             ? const PlannerMessageBubble(
-                avatarPath: AppImages.userAvatar,
+                avatarPath: AppImages.userProfile,
                 sender: PlannerMessageSender.user,
                 isTyping: true,
               )
@@ -47,7 +47,7 @@ class PlannerChatIntro extends StatelessWidget {
                           : AppSpacing.verticalValue(context, 0.02),
                     ),
                     child: PlannerMessageBubble(
-                      avatarPath: AppImages.userAvatar,
+                      avatarPath: AppImages.userProfile,
                       sender: PlannerMessageSender.user,
                       message: msg,
                     ),

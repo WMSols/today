@@ -16,27 +16,25 @@ class MainAppScreen extends GetView<MainAppController> {
   @override
   Widget build(BuildContext context) {
     final home = Get.find<HomeController>();
-    return Obx(
-      () {
-        final isHomeTab =
-            controller.selectedTabIndex.value == MainAppController.homeTabIndex;
-        return AppBottomNavBarScaffold(
-          currentIndex: controller.selectedTabIndex.value,
-          onTap: controller.selectTab,
-          overlay: isHomeTab
-              ? AppFABMenuButton(
-                  onAddGoal: home.openPlanner,
-                  onRestructureGoal: home.openPlanner,
-                )
-              : null,
-          children: const [
-            HomeBody(),
-            GoalsBody(),
-            AnalyticsScreen(),
-            SettingsBody(),
-          ],
-        );
-      },
-    );
+    return Obx(() {
+      final isHomeTab =
+          controller.selectedTabIndex.value == MainAppController.homeTabIndex;
+      return AppBottomNavBarScaffold(
+        currentIndex: controller.selectedTabIndex.value,
+        onTap: controller.selectTab,
+        overlay: isHomeTab
+            ? AppFABMenuButton(
+                onAddGoal: home.openPlanner,
+                onRestructureGoal: home.openPlanner,
+              )
+            : null,
+        children: const [
+          HomeBody(),
+          GoalsBody(),
+          AnalyticsScreen(),
+          SettingsBody(),
+        ],
+      );
+    });
   }
 }

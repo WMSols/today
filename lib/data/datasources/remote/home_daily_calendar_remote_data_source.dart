@@ -27,8 +27,7 @@ class HomeDailyCalendarRemoteDataSource {
     required bool forStatsTab,
     DateTime? anchor,
   }) async {
-    final progressList =
-        forStatsTab ? _statsProgressByDay : _homeProgressByDay;
+    final progressList = forStatsTab ? _statsProgressByDay : _homeProgressByDay;
 
     return List<Map<String, dynamic>>.generate(
       progressList.length,

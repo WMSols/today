@@ -1,4 +1,6 @@
 ﻿import 'package:flutter/material.dart';
+
+import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_fonts/app_fonts.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
@@ -32,12 +34,11 @@ class AppTextStyles {
   );
 
   static TextStyle buttonText(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return TextStyle(
       fontSize: AppResponsive.screenWidth(context) * 0.045,
       fontFamily: AppFonts.mainFont,
       fontWeight: FontWeight.w600,
-      color: isDark ? AppColors.primary : AppColors.secondary,
+      color: context.accentPalette.buttonFilledForeground,
     );
   }
 

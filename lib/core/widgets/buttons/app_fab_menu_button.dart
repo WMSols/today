@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
@@ -193,10 +194,8 @@ class _AppFABTrigger extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final palette = context.accentPalette;
     final logo = AppImages.appLogoWhite;
-    final background = isDark ? AppColors.lightGrey : AppColors.black;
-
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -207,10 +206,14 @@ class _AppFABTrigger extends StatelessWidget {
           height: size,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: background,
+            color: palette.fabBackground,
             boxShadow: [
               BoxShadow(
-                color: AppColors.black.withValues(alpha: isDark ? 0.35 : 0.12),
+                color: AppColors.black.withValues(
+                  alpha: Theme.of(context).brightness == Brightness.dark
+                      ? 0.35
+                      : 0.12,
+                ),
                 blurRadius: AppResponsive.scaleSize(context, 12),
                 offset: Offset(0, AppResponsive.scaleSize(context, 4)),
               ),
@@ -246,9 +249,8 @@ class _AppFABMenuActionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final surface = isDark ? AppColors.lightGrey : AppColors.black;
-    final onSurface = AppColors.white;
+    final palette = context.accentPalette;
+    final onSurface = palette.fabMenuForeground;
     final muted = AppColors.grey;
     final radius = AppResponsive.radius(context, factor: 5);
 
@@ -263,12 +265,9 @@ class _AppFABMenuActionTile extends StatelessWidget {
           child: Container(
             padding: AppSpacing.symmetric(context, h: 0.035, v: 0.012),
             decoration: BoxDecoration(
-              color: surface,
+              color: palette.fabMenuSurface,
               borderRadius: BorderRadius.circular(radius),
-              border: Border.all(
-                color: isDark ? AppColors.lightGrey : AppColors.grey,
-                width: 0.5,
-              ),
+              border: Border.all(color: palette.fabMenuBorder, width: 0.5),
               boxShadow: [
                 BoxShadow(
                   color: AppColors.black.withValues(alpha: 0.08),

@@ -88,7 +88,9 @@ class SettingsController extends GetxController {
 
   void openSettingsTab() {
     if (Get.isRegistered<MainAppController>()) {
-      Get.find<MainAppController>().selectTab(MainAppController.settingsTabIndex);
+      Get.find<MainAppController>().selectTab(
+        MainAppController.settingsTabIndex,
+      );
     }
   }
 

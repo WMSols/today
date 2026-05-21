@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
+import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
@@ -97,12 +98,12 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final barHeight = AppResponsive.screenHeight(context) * 0.07;
     final radius = AppResponsive.radius(context, factor: 5);
     const itemsCount = 4;
-    final barTint = isDark ? AppColors.lightGrey : AppColors.black;
-    final bubbleTint = isDark ? AppColors.black : AppColors.lightGrey;
+    final palette = context.accentPalette;
+    final barColor = palette.navBar;
+    final bubbleColor = palette.navBubble;
 
     return Center(
       child: ClipRRect(
@@ -113,7 +114,7 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
             width: AppResponsive.screenWidth(context) * 0.88,
             height: barHeight,
             decoration: BoxDecoration(
-              color: barTint,
+              color: barColor,
               borderRadius: BorderRadius.circular(radius),
             ),
             padding: EdgeInsets.all(AppResponsive.scaleSize(context, 3)),
@@ -153,7 +154,7 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
                               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: bubbleTint,
+                                  color: bubbleColor,
                                   borderRadius: BorderRadius.circular(
                                     AppResponsive.scaleSize(context, 26),
                                   ),

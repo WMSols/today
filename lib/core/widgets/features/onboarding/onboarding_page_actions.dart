@@ -39,6 +39,7 @@ class OnboardingPageActions extends StatelessWidget {
             label: primaryLabel,
             primary: false,
             onPressed: onPrimaryTap,
+            useAccentPalette: false,
           ),
         ),
         if (showSocialButtons) ...[

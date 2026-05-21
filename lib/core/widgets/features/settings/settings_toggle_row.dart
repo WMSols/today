@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
@@ -33,7 +34,7 @@ class SettingsToggleRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final labelColor = isDark ? AppColors.white : AppColors.black;
+    final labelColor = context.onSectionCardColor;
     final inactiveTrack = isDark ? AppColors.lightGrey : AppColors.grey;
     const knobColor = AppColors.secondary;
     final outlineColor = isDark ? AppColors.lightGrey : AppColors.grey;

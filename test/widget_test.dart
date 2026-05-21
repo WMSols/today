@@ -2,8 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:today/core/theme/app_theme.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/presentation/controllers/onboarding/onboarding_controller.dart';
+import 'package:today/presentation/controllers/settings/accent_color_controller.dart';
 import 'package:today/presentation/controllers/settings/theme_controller.dart';
 import 'package:today/presentation/routes/app_pages.dart';
 import 'package:today/presentation/screens/onboarding/onboarding_screen.dart';
@@ -18,7 +20,9 @@ void main() {
       permanent: true,
     );
     Get.put<ThemeController>(ThemeController(), permanent: true);
+    Get.put<AccentColorController>(AccentColorController(), permanent: true);
     await Get.find<ThemeController>().loadFromStorage();
+    await Get.find<AccentColorController>().loadFromStorage();
     Get.put<OnboardingController>(OnboardingController());
   });
 
@@ -27,7 +31,7 @@ void main() {
   testWidgets('onboarding screen shows get started CTA', (tester) async {
     await tester.pumpWidget(
       GetMaterialApp(
-        theme: ThemeData.light(),
+        theme: AppTheme.light(),
         home: const OnboardingScreen(),
         getPages: AppPages.pages,
       ),

@@ -5,7 +5,8 @@ import 'package:today/domain/entities/home_daily_calendar_day_entity.dart';
 import 'package:today/domain/repositories/home_daily_calendar_repository.dart';
 import 'package:today/domain/usecases/get_weekly_calendar_usecase.dart';
 
-class AnalyticsController extends GetxController with GetTickerProviderStateMixin {
+class AnalyticsController extends GetxController
+    with GetTickerProviderStateMixin {
   static const Duration _calendarRingAnimationDuration = Duration(seconds: 2);
 
   AnalyticsController(this._getWeeklyCalendarUseCase);

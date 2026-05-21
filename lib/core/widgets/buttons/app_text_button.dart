@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 
+import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
@@ -15,6 +16,7 @@ class AppTextButton extends StatelessWidget {
     this.icon,
     this.iconPosition = IconPosition.left,
     this.style,
+    this.useAccentPalette = true,
   });
 
   final String label;
@@ -23,10 +25,15 @@ class AppTextButton extends StatelessWidget {
   final IconPosition iconPosition;
   final TextStyle? style;
 
+  /// When false, uses neutral black/white link color instead of the accent.
+  final bool useAccentPalette;
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final linkColor = isDark ? AppColors.secondary : AppColors.primary;
+    final linkColor = useAccentPalette
+        ? context.accentPalette.buttonOutlinedForeground
+        : (isDark ? AppColors.secondary : AppColors.primary);
     final textStyle =
         style ?? AppTextStyles.bodyText(context).copyWith(color: linkColor);
     final content = Row(

@@ -7,7 +7,7 @@ class AppUserProfileImage extends StatelessWidget {
   const AppUserProfileImage({
     super.key,
     required this.size,
-    this.imagePath = AppImages.userAvatar,
+    this.imagePath = AppImages.userProfile,
     this.photoUrl,
     this.onTap,
   });

@@ -52,7 +52,9 @@ class HomeDailyCalendarActivityRingPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant HomeDailyCalendarActivityRingPainter oldDelegate) {
+  bool shouldRepaint(
+    covariant HomeDailyCalendarActivityRingPainter oldDelegate,
+  ) {
     return oldDelegate.progress != progress ||
         oldDelegate.trackColor != trackColor ||
         oldDelegate.progressColor != progressColor ||

@@ -24,10 +24,7 @@ class SettingsProfileHeader extends StatelessWidget {
     return Column(
       children: [
         Center(
-          child: AppUserProfileImage(
-            size: avatarSize,
-            photoUrl: photoUrl,
-          ),
+          child: AppUserProfileImage(size: avatarSize, photoUrl: photoUrl),
         ),
         AppSpacing.vertical(context, 0.015),
         Text(
