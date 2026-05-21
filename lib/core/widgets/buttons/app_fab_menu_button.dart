@@ -195,7 +195,8 @@ class _AppFABTrigger extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.accentPalette;
-    final logo = AppImages.appLogoWhite;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final logo = isDark ? AppImages.appLogoWhite : AppImages.appLogoBlack;
     return Material(
       color: Colors.transparent,
       child: InkWell(

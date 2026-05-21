@@ -12,9 +12,12 @@ class AppSectionCard extends StatelessWidget {
     required this.child,
     this.onTap,
     this.paddingHorizontal = 0.04,
-    this.paddingVertical = 0.04,
-    this.radiusFactor = 5,
+    this.paddingVertical = 0.01,
+    this.radiusFactor = 2,
     this.width,
+    this.backgroundColor,
+    this.borderColor,
+    this.borderWidth = 0,
   });
 
   final Widget child;
@@ -23,6 +26,9 @@ class AppSectionCard extends StatelessWidget {
   final double paddingVertical;
   final double radiusFactor;
   final double? width;
+  final Color? backgroundColor;
+  final Color? borderColor;
+  final double borderWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +40,13 @@ class AppSectionCard extends StatelessWidget {
         v: paddingVertical,
       ),
       decoration: BoxDecoration(
-        color: context.sectionCardColor,
+        color: backgroundColor ?? context.sectionCardColor,
         borderRadius: BorderRadius.circular(
           AppResponsive.radius(context, factor: radiusFactor),
         ),
+        border: borderWidth > 0 && borderColor != null
+            ? Border.all(color: borderColor!, width: borderWidth)
+            : null,
       ),
       child: child,
     );

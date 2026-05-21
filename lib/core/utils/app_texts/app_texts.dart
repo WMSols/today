@@ -36,6 +36,20 @@ class AppTexts {
   static const String authWelcomeSubtitle =
       "Login or create your account to continue.";
 
+  // Home — dashboard cards
+  static String homeAiGeneratedAt(String time) => 'Generated at $time';
+  static const String homeAiSummaryLead = ', you completed ';
+  static const String homeAiSummaryMid =
+      ' of your tasks yesterday. Today\'s focus is on ';
+  static const String homeAiSummaryTail = '. AI plan ready.';
+  static const String homeViewAiPlan = 'View AI Plan';
+  static const String homeDailyPlanNotSetTitle =
+      'Daily Plan Is Not Set Completely';
+  static const String homeAddGoal = 'Add Goal';
+  static const String homeYourProgress = 'Your Progress';
+  static const String homeTasksRingLabel = 'TASKS';
+  static const String homeAiFocusDefault = 'consistency';
+
   // Home
   static const String homeGoalEntryHint =
       'Enter a goal you want to achieve ...';
@@ -43,10 +57,10 @@ class AppTexts {
   static const String homeGreetingHeyPrefix = 'Hey! ';
   static const String homeGreetingHeySuffix = ',';
   static const String homeGreetingGuestName = 'there';
-  static const String greetingMorning = 'Good Morning 🌅';
-  static const String greetingAfternoon = 'Good Afternoon ☀️';
-  static const String greetingEvening = 'Good Evening 🌇';
-  static const String greetingNight = 'Good Night 🌙';
+  static const String greetingMorning = 'Good Morning';
+  static const String greetingAfternoon = 'Good Afternoon';
+  static const String greetingEvening = 'Good Evening';
+  static const String greetingNight = 'Good Night';
 
   // Planner
   static const String plannerMessageInputHint = 'Type your message...';
@@ -245,6 +259,7 @@ class AppTexts {
 
   // Home — tasks section
   static const String todaysTasksHeading = "TODAY'S TASKS";
+  static const String viewAll = 'View All';
 
   // Home — default goal title
   static const String goalDefaultTitle = "Goal";

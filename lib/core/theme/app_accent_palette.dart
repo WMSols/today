@@ -20,10 +20,12 @@ class AppAccentPalette {
     required this.fabMenuSurface,
     required this.fabMenuForeground,
     required this.fabMenuBorder,
+    required this.bottomSheet,
   });
 
   final Color accent;
   final Color sectionCard;
+  final Color bottomSheet;
   final Color onSectionCard;
   final Color navBar;
   final Color navBubble;
@@ -51,6 +53,7 @@ class AppAccentPalette {
     final isDark = brightness == Brightness.dark;
     final filledBg = isDark ? AppColors.secondary : AppColors.primary;
     final filledFg = isDark ? AppColors.primary : AppColors.secondary;
+    final fabBackground = isDark ? AppColors.primary : AppColors.secondary;
     final navBar = isDark ? AppColors.lightGrey : AppColors.black;
     final navBubble = isDark ? AppColors.black : AppColors.lightGrey;
 
@@ -65,10 +68,11 @@ class AppAccentPalette {
       buttonFilledForeground: filledFg,
       buttonOutlinedForeground: filledFg,
       buttonOutlinedBorder: filledFg,
-      fabBackground: navBar,
+      fabBackground: fabBackground,
       fabMenuSurface: navBar,
       fabMenuForeground: AppColors.white,
       fabMenuBorder: isDark ? AppColors.lightGrey : AppColors.grey,
+      bottomSheet: AppColors.black,
     );
   }
 
@@ -97,6 +101,7 @@ class AppAccentPalette {
       fabMenuBorder: isDark
           ? _tint(base, 0.35).withValues(alpha: 0.6)
           : _shade(base, 0.15).withValues(alpha: 0.5),
+      bottomSheet: sectionCard,
     );
   }
 

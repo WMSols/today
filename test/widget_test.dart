@@ -9,7 +9,6 @@ import 'package:today/presentation/controllers/settings/accent_color_controller.
 import 'package:today/presentation/controllers/settings/theme_controller.dart';
 import 'package:today/presentation/routes/app_pages.dart';
 import 'package:today/presentation/screens/onboarding/onboarding_screen.dart';
-import 'package:flutter/material.dart';
 
 void main() {
   setUp(() async {

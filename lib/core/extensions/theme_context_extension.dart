@@ -23,6 +23,8 @@ extension ThemeContextExtension on BuildContext {
 
   Color get sectionCardColor => accentPalette.sectionCard;
 
+  Color get bottomSheetColor => accentPalette.bottomSheet;
+
   Color get onSectionCardColor => accentPalette.onSectionCard;
 
   Color get mutedOnSurfaceColor =>

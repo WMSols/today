@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:today/core/network/zen_quote_service.dart';
+import 'package:today/core/utils/app_formatter/app_formatter.dart';
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/feedback/app_toast.dart';
@@ -8,6 +10,8 @@ import 'package:today/domain/entities/home_daily_calendar_day_entity.dart';
 import 'package:today/domain/entities/goal_card_entity.dart';
 import 'package:today/domain/entities/active_goal_task_entity.dart';
 import 'package:today/domain/entities/goal_history_day_entity.dart';
+import 'package:today/domain/entities/home_today_task_entity.dart';
+import 'package:today/domain/usecases/get_home_today_tasks_usecase.dart';
 import 'package:today/domain/usecases/create_goal_usecase.dart';
 import 'package:today/domain/usecases/complete_task_usecase.dart';
 import 'package:today/domain/usecases/delete_goal_usecase.dart';
@@ -18,6 +22,9 @@ import 'package:today/domain/usecases/get_weekly_calendar_usecase.dart';
 import 'package:today/domain/repositories/home_daily_calendar_repository.dart';
 import 'package:today/presentation/controllers/goals/goal_cards_controller.dart';
 import 'package:today/presentation/controllers/main/main_app_controller.dart';
+import 'package:today/presentation/controllers/settings/settings_controller.dart';
+import 'package:today/core/widgets/common/app_bottom_sheet.dart';
+import 'package:today/core/widgets/features/home/goal_entry/home_add_goal_bottom_sheet.dart';
 import 'package:today/presentation/routes/app_routes.dart';
 
 class ActiveGoalOverviewDisplay {
@@ -56,6 +63,8 @@ class HomeCalendarDisplay {
 
 class HomeController extends GetxController with GetTickerProviderStateMixin {
   static const Duration _calendarRingAnimationDuration = Duration(seconds: 2);
+  static const String _lastAiPlanKey = 'last_ai_plan_generated_at_ms';
+  static const int homeTodayTasksPreviewLimit = 5;
 
   HomeController(
     this._goalCardsController,
@@ -66,6 +75,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     this._getGoalHistoryUseCase,
     this._deleteGoalUseCase,
     this._getWeeklyCalendarUseCase,
+    this._getHomeTodayTasksUseCase,
   );
 
   final GoalCardsController _goalCardsController;
@@ -76,6 +86,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   final GetGoalHistoryUseCase _getGoalHistoryUseCase;
   final DeleteGoalUseCase _deleteGoalUseCase;
   final GetWeeklyCalendarUseCase _getWeeklyCalendarUseCase;
+  final GetHomeTodayTasksUseCase _getHomeTodayTasksUseCase;
 
   final RxBool isLoading = false.obs;
   final RxBool isCreatingGoal = false.obs;
@@ -85,9 +96,14 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       <GoalHistoryDayEntity>[].obs;
   final RxList<HomeDailyCalendarDayEntity> calendarDays =
       <HomeDailyCalendarDayEntity>[].obs;
+  final RxList<HomeTodayTaskEntity> todayTasks = <HomeTodayTaskEntity>[].obs;
+  final RxString selectedTodayTaskId = ''.obs;
+  final Rxn<DateTime> lastAiPlanGeneratedAt = Rxn<DateTime>();
 
   late final AnimationController calendarRingAnimationController;
+  late final AnimationController todayProgressRingAnimationController;
   final RxDouble calendarRingAnimationFactor = 0.0.obs;
+  final RxDouble todayProgressRingAnimationFactor = 0.0.obs;
 
   final Rxn<({String quote, String author})> calendarQuote = Rxn();
   final RxBool isCalendarQuoteLoading = false.obs;
@@ -135,6 +151,104 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     );
   }
 
+  String get dashboardUserName {
+    if (Get.isRegistered<SettingsController>()) {
+      return Get.find<SettingsController>().greetingDisplayName;
+    }
+    return AppTexts.homeGreetingGuestName;
+  }
+
+  String get aiFocusKeyword => AppTexts.homeAiFocusDefault;
+
+  String get lastAiPlanGeneratedAtLabel {
+    final at = lastAiPlanGeneratedAt.value;
+    final fallback = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      6,
+      30,
+    );
+    return AppFormatter.timeOfDay(at ?? fallback);
+  }
+
+  double get yesterdayCompletionProgress {
+    final days = calendarDays;
+    if (days.isEmpty) return 0;
+    final todayIndex = days.indexWhere((d) => d.isToday);
+    if (todayIndex > 0) {
+      return days[todayIndex - 1].progress.clamp(0.0, 1.0);
+    }
+    return 0;
+  }
+
+  int get todayTasksTotalCount => todayTasks.length;
+
+  int get todayTasksCompletedCount {
+    if (todayTasks.isEmpty) return 0;
+    return todayTasks
+        .where((t) => t.status == HomeTodayTaskStatus.completed)
+        .length;
+  }
+
+  /// Share of today's home tasks marked completed (drives progress card).
+  double get todayTasksCompletionProgress {
+    final total = todayTasksTotalCount;
+    if (total == 0) return 0;
+    return (todayTasksCompletedCount / total).clamp(0.0, 1.0);
+  }
+
+  /// Progress card color, %, and ring — completed ÷ total today's tasks only.
+  double get todayProgressCardRatio => todayTasksCompletionProgress;
+
+  /// Ring center label, e.g. `3/6`.
+  String get todayProgressCardTasksFraction =>
+      '$todayTasksCompletedCount/$todayTasksTotalCount';
+
+  double get todayCompletionProgress {
+    if (todayTasks.isNotEmpty) {
+      return todayTasksCompletionProgress;
+    }
+    for (final day in calendarDays) {
+      if (day.isToday) return day.progress.clamp(0.0, 1.0);
+    }
+    if (goalCards.isEmpty) return 0;
+    var sum = 0.0;
+    for (final goal in goalCards) {
+      sum += goal.progress;
+    }
+    return (sum / goalCards.length).clamp(0.0, 1.0);
+  }
+
+  double get dailyPlanProgress {
+    if (goalCards.isEmpty) return 0;
+    var sum = 0.0;
+    for (final goal in goalCards) {
+      sum += goal.progress;
+    }
+    return (sum / goalCards.length).clamp(0.0, 1.0);
+  }
+
+  int get todayTasksCompleted {
+    if (todayTasks.isNotEmpty) {
+      return todayTasks
+          .where((t) => t.status == HomeTodayTaskStatus.completed)
+          .length;
+    }
+    final card = selectedGoalCard ?? (goalCards.isNotEmpty ? goalCards.first : null);
+    if (card != null) {
+      final match = RegExp(r'(\d+)\s*/\s*(\d+)').firstMatch(card.tasksText);
+      if (match != null) {
+        return int.tryParse(match.group(1)!) ?? 0;
+      }
+    }
+    return (todayCompletionProgress * 6).round();
+  }
+
+  List<HomeTodayTaskEntity> get homeTodayTasksPreview => todayTasks
+      .take(homeTodayTasksPreviewLimit)
+      .toList(growable: false);
+
   HomeCalendarDisplay get calendarDisplay {
     final now = DateTime.now();
     final dayOfYear = _dayOfYear(now);
@@ -154,9 +268,82 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       vsync: this,
       duration: _calendarRingAnimationDuration,
     )..addListener(_syncCalendarRingAnimationFactor);
+    todayProgressRingAnimationController = AnimationController(
+      vsync: this,
+      duration: _calendarRingAnimationDuration,
+    )..addListener(_syncTodayProgressRingAnimationFactor);
     ever(goalCards, (_) => _syncSelectedGoalId());
+    _loadLastAiPlanTime();
     loadGoalCards();
     loadWeeklyCalendar();
+    loadTodayTasks();
+  }
+
+  Future<void> loadTodayTasks() async {
+    try {
+      final items = await _getHomeTodayTasksUseCase();
+      todayTasks.assignAll(items);
+      _playTodayProgressRingAnimation();
+    } catch (_) {
+      _showError(AppTexts.homeUnableLoadTodayTasks);
+    }
+  }
+
+  void selectTodayTask(String taskId) {
+    if (taskId.isEmpty) return;
+    final task = todayTasks.firstWhereOrNull((t) => t.id == taskId);
+    if (task == null || !task.isPending) return;
+    selectedTodayTaskId.value =
+        selectedTodayTaskId.value == taskId ? '' : taskId;
+  }
+
+  void completeTodayTask(String taskId) {
+    _setTodayTaskStatus(taskId, HomeTodayTaskStatus.completed);
+    selectedTodayTaskId.value = '';
+    AppToast.showSuccess(AppTexts.toastTaskCompleted);
+  }
+
+  void skipTodayTask(String taskId) {
+    _setTodayTaskStatus(taskId, HomeTodayTaskStatus.skipped);
+    selectedTodayTaskId.value = '';
+    AppToast.showInformation(AppTexts.toastTaskSkippedTitle);
+  }
+
+  void _setTodayTaskStatus(String taskId, HomeTodayTaskStatus status) {
+    final index = todayTasks.indexWhere((t) => t.id == taskId);
+    if (index < 0) return;
+    todayTasks[index] = todayTasks[index].copyWith(status: status);
+    todayTasks.refresh();
+    _playTodayProgressRingAnimation();
+  }
+
+  void _syncTodayProgressRingAnimationFactor() {
+    todayProgressRingAnimationFactor.value = Curves.easeOutCubic.transform(
+      todayProgressRingAnimationController.value,
+    );
+  }
+
+  void _playTodayProgressRingAnimation() {
+    todayProgressRingAnimationController.forward(from: 0);
+  }
+
+  void _loadLastAiPlanTime() {
+    if (!Get.isRegistered<SharedPreferences>()) return;
+    final ms = Get.find<SharedPreferences>().getInt(_lastAiPlanKey);
+    if (ms != null) {
+      lastAiPlanGeneratedAt.value = DateTime.fromMillisecondsSinceEpoch(ms);
+    }
+  }
+
+  static Future<void> recordLastAiPlanGeneratedAt(DateTime when) async {
+    if (!Get.isRegistered<SharedPreferences>()) return;
+    await Get.find<SharedPreferences>().setInt(
+      _lastAiPlanKey,
+      when.millisecondsSinceEpoch,
+    );
+    if (Get.isRegistered<HomeController>()) {
+      Get.find<HomeController>().lastAiPlanGeneratedAt.value = when;
+    }
   }
 
   void _syncCalendarRingAnimationFactor() {
@@ -188,6 +375,21 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
 
   void openPlanner() {
     Get.toNamed<void>(AppRoutes.planner);
+  }
+
+  void openAddGoalSheet() {
+    final context = Get.context;
+    if (context == null) return;
+    AppBottomSheet.show<void>(
+      context,
+      child: const HomeAddGoalBottomSheet(),
+    );
+  }
+
+  void openGoalsTab() {
+    if (Get.isRegistered<MainAppController>()) {
+      Get.find<MainAppController>().selectTab(MainAppController.goalsTabIndex);
+    }
   }
 
   void openStatsTab() {
@@ -332,9 +534,9 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     }
   }
 
-  Future<void> createGoalFromDraft() async {
+  Future<bool> createGoalFromDraft() async {
     final text = goalDraft.value.trim();
-    if (text.length < 3) return;
+    if (text.length < 3) return false;
     isCreatingGoal.value = true;
     try {
       await _createGoalUseCase(
@@ -347,10 +549,20 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       goalDraft.value = '';
       AppToast.showSuccess(AppTexts.toastGoalCreated);
       await loadGoalCards();
+      return true;
     } catch (_) {
       _showError(AppTexts.homeUnableCreateGoal);
+      return false;
     } finally {
       isCreatingGoal.value = false;
+    }
+  }
+
+  Future<void> submitGoalDraftAndCloseSheet() async {
+    final created = await createGoalFromDraft();
+    if (!created) return;
+    if (Get.isBottomSheetOpen == true) {
+      Get.back<void>();
     }
   }
 
@@ -387,6 +599,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   @override
   void onClose() {
     calendarRingAnimationController.dispose();
+    todayProgressRingAnimationController.dispose();
     goalInputController.dispose();
     super.onClose();
   }

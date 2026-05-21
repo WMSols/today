@@ -61,6 +61,59 @@ class AppButtonColors {
   }
 }
 
+/// Visual scale for [AppButton]. [medium] matches the default layout.
+enum AppButtonSize { small, medium, large }
+
+class _AppButtonMetrics {
+  const _AppButtonMetrics({
+    required this.paddingHorizontal,
+    required this.paddingVertical,
+    required this.fontScale,
+    required this.iconScale,
+    required this.radiusFactor,
+    required this.loaderScale,
+  });
+
+  final double paddingHorizontal;
+  final double paddingVertical;
+  final double fontScale;
+  final double iconScale;
+  final double radiusFactor;
+  final double loaderScale;
+
+  static _AppButtonMetrics forSize(AppButtonSize? size) {
+    switch (size ?? AppButtonSize.medium) {
+      case AppButtonSize.small:
+        return const _AppButtonMetrics(
+          paddingHorizontal: 0.02,
+          paddingVertical: 0.005,
+          fontScale: 0.8,
+          iconScale: 0.8,
+          radiusFactor: 2,
+          loaderScale: 0.8,
+        );
+      case AppButtonSize.medium:
+        return const _AppButtonMetrics(
+          paddingHorizontal: 0.04,
+          paddingVertical: 0.015,
+          fontScale: 1,
+          iconScale: 1,
+          radiusFactor: 5,
+          loaderScale: 1,
+        );
+      case AppButtonSize.large:
+        return const _AppButtonMetrics(
+          paddingHorizontal: 0.05,
+          paddingVertical: 0.02,
+          fontScale: 1.08,
+          iconScale: 1.08,
+          radiusFactor: 5,
+          loaderScale: 1.08,
+        );
+    }
+  }
+}
+
 class AppButton extends StatelessWidget {
   const AppButton({
     super.key,
@@ -74,6 +127,7 @@ class AppButton extends StatelessWidget {
     this.useHapticFeedback = true,
     this.useAccentPalette = true,
     this.colors,
+    this.size,
   });
 
   final String label;
@@ -94,6 +148,9 @@ class AppButton extends StatelessWidget {
 
   /// When null, [AppButtonColors.defaults] or [AppButtonColors.neutral] is used.
   final AppButtonColors? colors;
+
+  /// When null, [AppButtonSize.medium] is used.
+  final AppButtonSize? size;
 
   static const _animationDuration = Duration(milliseconds: 220);
 
@@ -117,9 +174,19 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final metrics = _AppButtonMetrics.forSize(size);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isDisabled = !isLoading && onPressed == null;
     final effectivePrimary = primary && !isDisabled;
+    final baseButtonTextStyle = AppTextStyles.buttonText(context);
+    final buttonTextStyle = baseButtonTextStyle.copyWith(
+      fontSize: (baseButtonTextStyle.fontSize ?? 14) * metrics.fontScale,
+    );
+    final iconSize = AppResponsive.iconSize(context, factor: metrics.iconScale);
+    final borderRadius = AppResponsive.radius(
+      context,
+      factor: metrics.radiusFactor,
+    );
 
     final scheme =
         colors ??
@@ -156,14 +223,15 @@ class AppButton extends StatelessWidget {
             children: [
               Text(
                 loadingLabel ?? _defaultLoadingLabel(label),
-                style: AppTextStyles.buttonText(
-                  context,
-                ).copyWith(color: foregroundColor),
+                style: buttonTextStyle.copyWith(color: foregroundColor),
               ),
               AppSpacing.horizontal(context, 0.01),
               Lottie.asset(
                 loadingLottie,
-                width: AppResponsive.buttonLoaderSize(context),
+                width: AppResponsive.buttonLoaderSize(
+                  context,
+                  factor: metrics.loaderScale,
+                ),
                 fit: BoxFit.contain,
               ),
             ],
@@ -173,35 +241,23 @@ class AppButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (icon != null && iconPosition == IconPosition.left) ...[
-                Icon(
-                  icon,
-                  size: AppResponsive.iconSize(context),
-                  color: iconColor,
-                ),
+                Icon(icon, size: iconSize, color: iconColor),
                 AppSpacing.horizontal(context, 0.01),
               ],
               Text(
                 label,
-                style: AppTextStyles.buttonText(
-                  context,
-                ).copyWith(color: foregroundColor),
+                style: buttonTextStyle.copyWith(color: foregroundColor),
               ),
               if (icon != null && iconPosition == IconPosition.right) ...[
                 AppSpacing.horizontal(context, 0.01),
-                Icon(
-                  icon,
-                  size: AppResponsive.iconSize(context),
-                  color: iconColor,
-                ),
+                Icon(icon, size: iconSize, color: iconColor),
               ],
             ],
           );
 
     return Material(
       color: Colors.transparent,
-      borderRadius: BorderRadius.circular(
-        AppResponsive.radius(context, factor: 5),
-      ),
+      borderRadius: BorderRadius.circular(borderRadius),
       child: InkWell(
         onTap: isLoading
             ? null
@@ -215,18 +271,18 @@ class AppButton extends StatelessWidget {
                 }
                 onPressed!();
               },
-        borderRadius: BorderRadius.circular(
-          AppResponsive.radius(context, factor: 5),
-        ),
+        borderRadius: BorderRadius.circular(borderRadius),
         child: AnimatedContainer(
           duration: _animationDuration,
           curve: Curves.easeOutCubic,
-          padding: AppSpacing.symmetric(context, h: 0.04, v: 0.015),
+          padding: AppSpacing.symmetric(
+            context,
+            h: metrics.paddingHorizontal,
+            v: metrics.paddingVertical,
+          ),
           decoration: BoxDecoration(
             color: backgroundColor,
-            borderRadius: BorderRadius.circular(
-              AppResponsive.radius(context, factor: 5),
-            ),
+            borderRadius: BorderRadius.circular(borderRadius),
             border: border,
           ),
           child: child,

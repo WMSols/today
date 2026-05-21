@@ -27,6 +27,10 @@ class AppImages {
   static const String medal2 = 'assets/images/icons/medal_2.png';
   static const String medal3 = 'assets/images/icons/medal_3.png';
   static const String streak = 'assets/images/icons/streak.png';
+  static const String morning = 'assets/images/icons/morning.png';
+  static const String afternoon = 'assets/images/icons/afternoon.png';
+  static const String evening = 'assets/images/icons/evening.png';
+  static const String night = 'assets/images/icons/night.png';
 
   // Bottom Navigation Icons
   static const String home = 'assets/images/icons/home.png';

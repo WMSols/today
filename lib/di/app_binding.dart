@@ -10,6 +10,10 @@ import 'package:today/data/datasources/remote/planner_remote_data_source.dart';
 import 'package:today/data/datasources/remote/auth_remote_data_source.dart';
 import 'package:today/data/datasources/remote/active_goal_remote_data_source.dart';
 import 'package:today/data/datasources/remote/home_daily_calendar_remote_data_source.dart';
+import 'package:today/data/datasources/remote/home_today_tasks_remote_data_source.dart';
+import 'package:today/data/repositories/home_today_tasks_repository_impl.dart';
+import 'package:today/domain/repositories/home_today_tasks_repository.dart';
+import 'package:today/domain/usecases/get_home_today_tasks_usecase.dart';
 import 'package:today/data/repositories/active_goal_repository_impl.dart';
 import 'package:today/data/repositories/home_daily_calendar_repository_impl.dart';
 import 'package:today/data/repositories/auth_repository_impl.dart';
@@ -67,6 +71,10 @@ class AppBinding extends Bindings {
       HomeDailyCalendarRemoteDataSource.new,
       fenix: true,
     );
+    Get.lazyPut<HomeTodayTasksRemoteDataSource>(
+      HomeTodayTasksRemoteDataSource.new,
+      fenix: true,
+    );
 
     // Repositories
     Get.lazyPut<GoalRepository>(
@@ -95,6 +103,12 @@ class AppBinding extends Bindings {
     Get.lazyPut<HomeDailyCalendarRepository>(
       () => HomeDailyCalendarRepositoryImpl(
         Get.find<HomeDailyCalendarRemoteDataSource>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<HomeTodayTasksRepository>(
+      () => HomeTodayTasksRepositoryImpl(
+        Get.find<HomeTodayTasksRemoteDataSource>(),
       ),
       fenix: true,
     );
@@ -154,6 +168,10 @@ class AppBinding extends Bindings {
     );
     Get.lazyPut<GetWeeklyCalendarUseCase>(
       () => GetWeeklyCalendarUseCase(Get.find<HomeDailyCalendarRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetHomeTodayTasksUseCase>(
+      () => GetHomeTodayTasksUseCase(Get.find<HomeTodayTasksRepository>()),
       fenix: true,
     );
   }
