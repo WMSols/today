@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:today/core/utils/app_formatter/app_formatter.dart';
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
@@ -104,11 +105,20 @@ class AppCustomAppBar extends StatelessWidget {
     switch (variant) {
       case AppCustomAppBarVariant.homeStatus:
         final outline = isDark ? AppColors.grey : AppColors.black;
+        final dividerColor = isDark
+            ? AppColors.darkGrey
+            : AppColors.grey.withValues(alpha: 0.3);
         final avatarSize = AppResponsive.scaleSize(context, 44);
-        final greetingStyle = AppTextStyles.bodyText(context).copyWith(
+        final normalStyle = AppTextStyles.bodyText(context).copyWith(
           color: outline,
           fontWeight: FontWeight.w400,
           fontSize: AppResponsive.scaleSize(context, 14),
+          height: 1.3,
+        );
+        final greetingStyle = AppTextStyles.bodyText(context).copyWith(
+          color: outline,
+          fontWeight: FontWeight.w600,
+          fontSize: AppResponsive.scaleSize(context, 22),
           height: 1.3,
         );
         final nameStyle = greetingStyle.copyWith(
@@ -117,36 +127,62 @@ class AppCustomAppBar extends StatelessWidget {
           fontSize: AppResponsive.scaleSize(context, 18),
           height: 1.15,
         );
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        return Column(
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppUserProfileImage(
-                    size: avatarSize,
-                    photoUrl: profilePhotoUrl,
-                    onTap: onTapProfile,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(greetingTimeOfDay ?? '', style: greetingStyle),
+                          AppSpacing.horizontal(context, 0.015),
+                          Image.asset(
+                            AppFormatter.timeOfDayGreetingImage(),
+                            width: AppResponsive.scaleSize(context, 26),
+                            height: AppResponsive.scaleSize(context, 26),
+                            fit: BoxFit.contain,
+                          ),
+                        ],
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          style: normalStyle,
+                          children: [
+                            TextSpan(text: AppTexts.homeGreetingHeyPrefix),
+                            TextSpan(
+                              text: greetingName ?? '',
+                              style: nameStyle,
+                            ),
+                            TextSpan(text: AppTexts.homeGreetingHeySuffix),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  AppSpacing.vertical(context, 0.01),
-                  RichText(
-                    text: TextSpan(
-                      style: greetingStyle,
-                      children: [
-                        TextSpan(text: AppTexts.homeGreetingHeyPrefix),
-                        TextSpan(text: greetingName ?? '', style: nameStyle),
-                        TextSpan(text: AppTexts.homeGreetingHeySuffix),
-                      ],
-                    ),
-                  ),
-                  Text(greetingTimeOfDay ?? '', style: greetingStyle),
-                ],
-              ),
+                ),
+                HomeNotificationButton(
+                  onPressed: onTapNotifications,
+                  hasUnread: hasUnreadNotifications,
+                ),
+                AppSpacing.horizontal(context, 0.02),
+                AppUserProfileImage(
+                  size: avatarSize,
+                  photoUrl: profilePhotoUrl,
+                  onTap: onTapProfile,
+                ),
+              ],
             ),
-            HomeNotificationButton(
-              onPressed: onTapNotifications,
-              hasUnread: hasUnreadNotifications,
+            AppSpacing.vertical(context, 0.01),
+            Divider(
+              color: dividerColor,
+              height: AppResponsive.scaleSize(context, 1),
             ),
           ],
         );

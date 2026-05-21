@@ -17,6 +17,7 @@ class AppTextButton extends StatelessWidget {
     this.iconPosition = IconPosition.left,
     this.style,
     this.useAccentPalette = true,
+    this.color,
   });
 
   final String label;
@@ -28,14 +29,18 @@ class AppTextButton extends StatelessWidget {
   /// When false, uses neutral black/white link color instead of the accent.
   final bool useAccentPalette;
 
+  /// Overrides the resolved link color for label and icon.
+  final Color? color;
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final linkColor = useAccentPalette
         ? context.accentPalette.buttonOutlinedForeground
         : (isDark ? AppColors.secondary : AppColors.primary);
-    final textStyle =
-        style ?? AppTextStyles.bodyText(context).copyWith(color: linkColor);
+    final textStyle = (style ?? AppTextStyles.bodyText(context)).copyWith(
+      color: color ?? style?.color ?? linkColor,
+    );
     final content = Row(
       mainAxisSize: MainAxisSize.min,
       children: [

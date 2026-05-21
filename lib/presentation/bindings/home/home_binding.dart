@@ -8,6 +8,7 @@ import 'package:today/domain/usecases/get_goal_cards_usecase.dart';
 import 'package:today/domain/usecases/get_goal_history_usecase.dart';
 import 'package:today/domain/usecases/skip_task_usecase.dart';
 import 'package:today/domain/usecases/get_weekly_calendar_usecase.dart';
+import 'package:today/domain/usecases/get_home_today_tasks_usecase.dart';
 import 'package:today/presentation/controllers/goals/goal_cards_controller.dart';
 import 'package:today/presentation/controllers/home/home_controller.dart';
 
@@ -30,6 +31,7 @@ class HomeBinding extends Bindings {
           Get.find<GetGoalHistoryUseCase>(),
           Get.find<DeleteGoalUseCase>(),
           Get.find<GetWeeklyCalendarUseCase>(),
+          Get.find<GetHomeTodayTasksUseCase>(),
         ),
       );
     }

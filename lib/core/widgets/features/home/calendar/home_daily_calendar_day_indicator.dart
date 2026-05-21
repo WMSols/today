@@ -4,7 +4,7 @@ import 'package:today/core/utils/app_helper/app_helper.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
-import 'package:today/core/widgets/features/home/calendar/home_daily_calendar_activity_ring_painter.dart';
+import 'package:today/core/widgets/common/app_progress_ring.dart';
 import 'package:today/core/widgets/features/home/calendar/home_daily_calendar_display_mode.dart';
 import 'package:today/domain/entities/home_daily_calendar_day_entity.dart';
 
@@ -63,31 +63,21 @@ class _RingIndicator extends StatelessWidget {
     final trackColor = AppColors.white.withValues(alpha: isDark ? 0.14 : 0.2);
     final progressColor = AppHelper.activityColor(activity);
 
-    return SizedBox(
-      width: ringSize,
-      height: ringSize,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          CustomPaint(
-            size: Size.square(ringSize),
-            painter: HomeDailyCalendarActivityRingPainter(
-              progress: animatedProgress,
-              trackColor: trackColor,
-              progressColor: progressColor,
-              strokeWidth: strokeWidth,
-            ),
-          ),
-          Text(
-            '$date',
-            style: AppTextStyles.labelText(context).copyWith(
-              color: AppColors.white,
-              fontWeight: FontWeight.w700,
-              fontSize: AppResponsive.scaleSize(context, 11),
-              height: 1,
-            ),
-          ),
-        ],
+    return AppProgressRing(
+      progress: animatedProgress,
+      size: ringSize,
+      strokeWidth: strokeWidth,
+      trackColor: trackColor,
+      progressColor: progressColor,
+      animationFactor: 1,
+      center: Text(
+        '$date',
+        style: AppTextStyles.labelText(context).copyWith(
+          color: AppColors.white,
+          fontWeight: FontWeight.w700,
+          fontSize: AppResponsive.scaleSize(context, 11),
+          height: 1,
+        ),
       ),
     );
   }
@@ -133,18 +123,12 @@ class _StatusIconIndicator extends StatelessWidget {
     }
 
     if (clamped <= 0 || activity == HomeDailyCalendarActivityLevel.none) {
-      return SizedBox(
-        width: ringSize,
-        height: ringSize,
-        child: CustomPaint(
-          size: Size.square(ringSize),
-          painter: HomeDailyCalendarActivityRingPainter(
-            progress: 0,
-            trackColor: trackColor,
-            progressColor: Colors.transparent,
-            strokeWidth: strokeWidth,
-          ),
-        ),
+      return AppProgressRing(
+        progress: 0,
+        size: ringSize,
+        strokeWidth: strokeWidth,
+        trackColor: trackColor,
+        progressColor: Colors.transparent,
       );
     }
 
@@ -153,27 +137,16 @@ class _StatusIconIndicator extends StatelessWidget {
         ? Icons.warning
         : Icons.close;
 
-    return SizedBox(
-      width: ringSize,
-      height: ringSize,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          CustomPaint(
-            size: Size.square(ringSize),
-            painter: HomeDailyCalendarActivityRingPainter(
-              progress: animatedProgress,
-              trackColor: trackColor,
-              progressColor: progressColor,
-              strokeWidth: strokeWidth,
-            ),
-          ),
-          Icon(
-            centerIcon,
-            size: AppResponsive.scaleSize(context, 16),
-            color: progressColor,
-          ),
-        ],
+    return AppProgressRing(
+      progress: animatedProgress,
+      size: ringSize,
+      strokeWidth: strokeWidth,
+      trackColor: trackColor,
+      progressColor: progressColor,
+      center: Icon(
+        centerIcon,
+        size: AppResponsive.scaleSize(context, 16),
+        color: progressColor,
       ),
     );
   }

@@ -24,6 +24,7 @@ class HomeGoalEntryTextField extends StatelessWidget {
       keyboardType: TextInputType.multiline,
       minLines: 1,
       maxLines: null,
+      cursorColor: AppColors.white,
       style: AppTextStyles.bodyText(context).copyWith(
         color: AppColors.white,
         fontWeight: FontWeight.w600,
