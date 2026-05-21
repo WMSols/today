@@ -13,6 +13,7 @@ import 'package:today/core/init/app_system_ui.dart';
 import 'package:today/di/app_binding.dart';
 import 'package:today/domain/usecases/get_me_usecase.dart';
 import 'package:today/domain/repositories/auth_repository.dart';
+import 'package:today/presentation/controllers/settings/accent_color_controller.dart';
 import 'package:today/presentation/controllers/settings/haptics_controller.dart';
 import 'package:today/presentation/controllers/settings/theme_controller.dart';
 import 'package:today/firebase_options.dart';
@@ -52,6 +53,7 @@ abstract class AppInitializer {
       );
     }
     await Get.find<ThemeController>().loadFromStorage();
+    await Get.find<AccentColorController>().loadFromStorage();
     SystemChrome.setSystemUIOverlayStyle(
       AppSystemUi.overlayFor(overlayForStoredTheme()),
     );

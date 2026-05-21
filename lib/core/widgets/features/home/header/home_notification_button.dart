@@ -23,9 +23,7 @@ class HomeNotificationButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final buttonSize = size ?? AppResponsive.scaleSize(context, 44);
     final badgeSize = AppResponsive.scaleSize(context, 8);
-    final isDark = context.isDarkMode;
-    final backgroundColor = isDark ? AppColors.darkGrey : AppColors.white;
-
+    final palette = context.accentPalette;
     return SizedBox(
       width: buttonSize,
       height: buttonSize,
@@ -33,17 +31,13 @@ class HomeNotificationButton extends StatelessWidget {
         clipBehavior: Clip.none,
         alignment: Alignment.center,
         children: [
-          Material(
-            color: backgroundColor,
-            shape: const CircleBorder(),
-            child: AppIconButton(
-              icon: Iconsax.notification,
-              color: AppColors.white,
-              onPressed: onPressed,
-              backgroundColor: isDark ? AppColors.lightGrey : AppColors.black,
-              size: AppResponsive.scaleSize(context, 22),
-              paddingFactor: 1.5,
-            ),
+          AppIconButton(
+            icon: Iconsax.notification,
+            color: AppColors.white,
+            onPressed: onPressed,
+            backgroundColor: palette.navBar,
+            size: AppResponsive.scaleSize(context, 22),
+            paddingFactor: 1.5,
           ),
           if (hasUnread)
             Positioned(

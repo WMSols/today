@@ -105,8 +105,9 @@ class SplashController extends GetxController {
     }
 
     if (Get.currentRoute == AppRoutes.splash) {
-      await Get.find<AppAnimationController>()
-          .offAllFromSplash<void>(AppInitializer.initialRoute);
+      await Get.find<AppAnimationController>().offAllFromSplash<void>(
+        AppInitializer.initialRoute,
+      );
     }
   }
 

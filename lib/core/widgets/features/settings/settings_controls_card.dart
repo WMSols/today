@@ -8,6 +8,7 @@ import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/common/app_section_card.dart';
+import 'package:today/core/widgets/features/settings/settings_accent_color_row.dart';
 import 'package:today/core/widgets/features/settings/settings_toggle_row.dart';
 import 'package:today/presentation/controllers/settings/theme_controller.dart';
 
@@ -58,7 +59,7 @@ class SettingsControlsCard extends StatelessWidget {
                 child: Text(
                   AppTexts.notificationPreferencesLink,
                   style: AppTextStyles.labelText(context).copyWith(
-                    color: context.onSurfaceColor,
+                    color: context.onSectionCardColor,
                     fontWeight: FontWeight.w600,
                     fontSize: AppResponsive.scaleSize(context, 10),
                     decoration: TextDecoration.underline,
@@ -67,6 +68,8 @@ class SettingsControlsCard extends StatelessWidget {
               ),
             ),
           ],
+          AppSpacing.vertical(context, 0.025),
+          const SettingsAccentColorRow(),
           AppSpacing.vertical(context, 0.025),
           GetBuilder<ThemeController>(
             builder: (themeCtrl) {

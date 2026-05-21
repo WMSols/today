@@ -268,6 +268,12 @@ class AppTexts {
   static const String settingsHapticsLabel = "HAPTICS";
   static const String settingsNotificationsLabel = "NOTIFICATIONS";
   static const String notificationPreferencesLink = "Notification preferences";
+  static const String settingsAccentColorLabel = "PALETTE COLOR";
+  static const String settingsAccentClassic = "Classic";
+  static const String settingsAccentBrown = "Brown";
+  static const String settingsAccentGold = "Gold";
+  static const String settingsAccentGreen = "Green";
+  static const String settingsAccentViolet = "Violet";
 
   // Settings — profile / session
   static const String profileUnavailableTitle = "Profile unavailable";

@@ -67,7 +67,8 @@ class HomeDailyCalendarDayItem extends StatelessWidget {
             displayMode: displayMode,
             isDark: isDark,
             animatedProgress:
-                day.progress.clamp(0.0, 1.0) * ringAnimationFactor.clamp(0.0, 1.0),
+                day.progress.clamp(0.0, 1.0) *
+                ringAnimationFactor.clamp(0.0, 1.0),
           ),
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
+import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/presentation/controllers/settings/haptics_controller.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_lotties/app_lotties.dart';
@@ -28,7 +29,27 @@ class AppButtonColors {
   final Color outlinedForeground;
   final Color outlinedBorder;
 
-  factory AppButtonColors.defaults(BuildContext context) {
+  /// Accent-aware colors from settings. Set [useAccentPalette] to false on
+  /// [AppButton] for neutral black/white styling instead.
+  factory AppButtonColors.defaults(
+    BuildContext context, {
+    bool useAccentPalette = true,
+  }) {
+    if (!useAccentPalette) {
+      return AppButtonColors.neutral(context);
+    }
+    final palette = context.accentPalette;
+    return AppButtonColors(
+      filledBackground: palette.buttonFilled,
+      filledForeground: palette.buttonFilledForeground,
+      outlinedBackground: Colors.transparent,
+      outlinedForeground: palette.buttonOutlinedForeground,
+      outlinedBorder: palette.buttonOutlinedBorder,
+    );
+  }
+
+  /// Monochrome black/white button colors (ignores accent setting).
+  factory AppButtonColors.neutral(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return AppButtonColors(
       filledBackground: isDark ? AppColors.secondary : AppColors.primary,
@@ -51,6 +72,7 @@ class AppButton extends StatelessWidget {
     this.iconPosition = IconPosition.left,
     this.loadingLabel,
     this.useHapticFeedback = true,
+    this.useAccentPalette = true,
     this.colors,
   });
 
@@ -67,7 +89,10 @@ class AppButton extends StatelessWidget {
   /// Light impact on tap when [HapticsController] is registered and enabled.
   final bool useHapticFeedback;
 
-  /// When null, [AppButtonColors.defaults] is used.
+  /// When false, uses neutral black/white colors instead of the accent palette.
+  final bool useAccentPalette;
+
+  /// When null, [AppButtonColors.defaults] or [AppButtonColors.neutral] is used.
   final AppButtonColors? colors;
 
   static const _animationDuration = Duration(milliseconds: 220);
@@ -96,7 +121,9 @@ class AppButton extends StatelessWidget {
     final isDisabled = !isLoading && onPressed == null;
     final effectivePrimary = primary && !isDisabled;
 
-    final scheme = colors ?? AppButtonColors.defaults(context);
+    final scheme =
+        colors ??
+        AppButtonColors.defaults(context, useAccentPalette: useAccentPalette);
 
     final Color backgroundColor;
     final Color foregroundColor;

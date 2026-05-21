@@ -24,9 +24,7 @@ class AuthSocialSection extends GetView<AuthController> {
           width: double.infinity,
           child: Row(
             children: [
-              Expanded(
-                child: Divider(color: dividerColor, thickness: 1),
-              ),
+              Expanded(child: Divider(color: dividerColor, thickness: 1)),
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: AppSpacing.horizontalValue(context, 0.02),
@@ -34,15 +32,12 @@ class AuthSocialSection extends GetView<AuthController> {
                 child: Text(
                   AppTexts.authOrContinueWith,
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.bodyText(context).copyWith(
-                    color: dividerColor,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: AppTextStyles.bodyText(
+                    context,
+                  ).copyWith(color: dividerColor, fontWeight: FontWeight.w500),
                 ),
               ),
-              Expanded(
-                child: Divider(color: dividerColor, thickness: 1),
-              ),
+              Expanded(child: Divider(color: dividerColor, thickness: 1)),
             ],
           ),
         ),

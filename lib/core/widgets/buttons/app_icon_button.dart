@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/presentation/controllers/settings/haptics_controller.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
@@ -16,6 +17,7 @@ class AppIconButton extends StatelessWidget {
     this.color,
     this.backgroundColor,
     this.useHapticFeedback = true,
+    this.useAccentPalette = true,
   });
 
   final IconData icon;
@@ -26,16 +28,24 @@ class AppIconButton extends StatelessWidget {
   final Color? backgroundColor;
   final bool useHapticFeedback;
 
+  /// When false, uses neutral on-surface icon color instead of the accent.
+  final bool useAccentPalette;
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final palette = context.accentPalette;
     final iconSize = size ?? AppResponsive.iconSize(context, factor: 1.3);
-    final defaultIcon = isDark ? AppColors.white : AppColors.black;
+    final iconColor =
+        color ??
+        (useAccentPalette
+            ? palette.buttonFilledForeground
+            : (isDark ? AppColors.white : AppColors.black));
+    final bg = backgroundColor ?? Colors.transparent;
+
     return Material(
-      color: backgroundColor ?? Colors.transparent,
-      borderRadius: BorderRadius.circular(
-        AppResponsive.radius(context, factor: 5),
-      ),
+      color: bg,
+      shape: const CircleBorder(),
       child: InkWell(
         onTap: onPressed == null
             ? null
@@ -47,12 +57,10 @@ class AppIconButton extends StatelessWidget {
                 }
                 onPressed!();
               },
-        borderRadius: BorderRadius.circular(
-          AppResponsive.radius(context, factor: 5),
-        ),
+        customBorder: const CircleBorder(),
         child: Padding(
           padding: AppSpacing.all(context, factor: paddingFactor ?? 1),
-          child: Icon(icon, size: iconSize, color: color ?? defaultIcon),
+          child: Icon(icon, size: iconSize, color: iconColor),
         ),
       ),
     );

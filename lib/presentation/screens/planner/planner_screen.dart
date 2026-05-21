@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -63,10 +64,8 @@ class PlannerScreen extends GetView<PlannerController> {
                   ),
                   AppSpacing.horizontal(context, 0.02),
                   AppIconButton(
-                    color: isDark ? AppColors.primary : AppColors.secondary,
-                    backgroundColor: isDark
-                        ? AppColors.secondary
-                        : AppColors.primary,
+                    color: context.accentPalette.buttonFilledForeground,
+                    backgroundColor: context.accentPalette.buttonFilled,
                     icon: Iconsax.send_1,
                     onPressed: controller.onSendTap,
                   ),
