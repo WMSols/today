@@ -38,5 +38,17 @@ abstract class AuthRepository {
 
   Future<MeEntity> getMe();
   Future<String?> getAccessToken();
+  Future<bool> getRememberMePreference({bool defaultValue = true});
+  Future<void> saveRememberMePreference(bool value);
+
+  Future<void> saveLoginCredentials({
+    required String email,
+    required String password,
+  });
+
+  Future<({String? email, String? password})> getLoginCredentials();
+
+  Future<void> clearLoginCredentials();
+
   Future<void> clearSession();
 }

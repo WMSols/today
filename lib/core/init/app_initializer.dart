@@ -66,6 +66,10 @@ abstract class AppInitializer {
 
     try {
       final authRepository = Get.find<AuthRepository>();
+      if (!await authRepository.getRememberMePreference()) {
+        await _clearFirebaseSession(authRepository);
+        return AppRoutes.onboarding;
+      }
       final token = await authRepository.getAccessToken();
       if (token == null || token.isEmpty) {
         return await _tryRestoreFromFirebase(authRepository);
@@ -84,6 +88,10 @@ abstract class AppInitializer {
   /// Firebase + local session only (no Dio / getMe / exchangeFirebaseSession).
   static Future<String> _resolveInitialRouteOffline() async {
     final authRepository = Get.find<AuthRepository>();
+    if (!await authRepository.getRememberMePreference()) {
+      await _clearFirebaseSession(authRepository);
+      return AppRoutes.onboarding;
+    }
     final token = await authRepository.getAccessToken();
     if (token != null && token.isNotEmpty) {
       return AppRoutes.mainApp;
@@ -94,6 +102,10 @@ abstract class AppInitializer {
   static Future<String> _tryRestoreFromFirebaseOffline(
     AuthRepository authRepository,
   ) async {
+    if (!await authRepository.getRememberMePreference()) {
+      await _clearFirebaseSession(authRepository);
+      return AppRoutes.onboarding;
+    }
     try {
       final firebaseUser = FirebaseAuth.instance.currentUser;
       if (firebaseUser == null) return AppRoutes.onboarding;
@@ -105,9 +117,7 @@ abstract class AppInitializer {
       );
       return AppRoutes.mainApp;
     } catch (_) {
-      try {
-        await Get.find<FirebaseAuthGateway>().signOut();
-      } catch (_) {}
+      await _clearFirebaseSession(authRepository);
       return AppRoutes.onboarding;
     }
   }
@@ -115,6 +125,10 @@ abstract class AppInitializer {
   static Future<String> _tryRestoreFromFirebase(
     AuthRepository authRepository,
   ) async {
+    if (!await authRepository.getRememberMePreference()) {
+      await _clearFirebaseSession(authRepository);
+      return AppRoutes.onboarding;
+    }
     try {
       final firebaseUser = FirebaseAuth.instance.currentUser;
       if (firebaseUser == null) return AppRoutes.onboarding;
@@ -127,10 +141,19 @@ abstract class AppInitializer {
       await Get.find<GetMeUseCase>()();
       return AppRoutes.mainApp;
     } catch (_) {
-      try {
-        await Get.find<FirebaseAuthGateway>().signOut();
-      } catch (_) {}
+      await _clearFirebaseSession(authRepository);
       return AppRoutes.onboarding;
     }
+  }
+
+  static Future<void> _clearFirebaseSession(
+    AuthRepository authRepository,
+  ) async {
+    try {
+      await Get.find<FirebaseAuthGateway>().signOut();
+    } catch (_) {}
+    try {
+      await authRepository.clearSession();
+    } catch (_) {}
   }
 }
