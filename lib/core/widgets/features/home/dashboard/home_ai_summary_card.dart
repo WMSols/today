@@ -86,7 +86,7 @@ class HomeAiSummaryCard extends GetView<HomeController> {
               ),
             );
           }),
-          AppSpacing.vertical(context, 0.02),
+          AppSpacing.vertical(context, 0.01),
           Align(
             alignment: Alignment.centerLeft,
             child: AppButton(
@@ -94,6 +94,13 @@ class HomeAiSummaryCard extends GetView<HomeController> {
               onPressed: controller.openGoalsTab,
               useAccentPalette: false,
               size: AppButtonSize.small,
+              colors: AppButtonColors(
+                filledBackground: AppColors.black,
+                filledForeground: AppColors.white,
+                outlinedBackground: Colors.transparent,
+                outlinedForeground: Colors.transparent,
+                outlinedBorder: Colors.transparent,
+              ),
             ),
           ),
         ],
