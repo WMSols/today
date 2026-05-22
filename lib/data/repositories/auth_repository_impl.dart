@@ -48,10 +48,7 @@ class AuthRepositoryImpl implements AuthRepository {
     final session = AuthSessionModel.fromJson(
       raw['session'] as Map<String, dynamic>,
     );
-    await _sessionStorage.saveAccessToken(
-      session.accessToken,
-      persist: rememberMe,
-    );
+    await _persistSession(session.accessToken, rememberMe: rememberMe);
     return AuthResultEntity(user: user, session: session);
   }
 
@@ -69,10 +66,7 @@ class AuthRepositoryImpl implements AuthRepository {
     final session = AuthSessionModel.fromJson(
       raw['session'] as Map<String, dynamic>,
     );
-    await _sessionStorage.saveAccessToken(
-      session.accessToken,
-      persist: rememberMe,
-    );
+    await _persistSession(session.accessToken, rememberMe: rememberMe);
     return AuthResultEntity(user: user, session: session);
   }
 
@@ -81,7 +75,43 @@ class AuthRepositoryImpl implements AuthRepository {
     required String idToken,
     bool rememberMe = true,
   }) {
-    return _sessionStorage.saveAccessToken(idToken, persist: rememberMe);
+    return _persistSession(idToken, rememberMe: rememberMe);
+  }
+
+  Future<void> _persistSession(String token, {required bool rememberMe}) async {
+    await _sessionStorage.saveRememberMePreference(rememberMe);
+    await _sessionStorage.saveAccessToken(token, persist: rememberMe);
+  }
+
+  @override
+  Future<bool> getRememberMePreference({bool defaultValue = true}) {
+    return _sessionStorage.getRememberMePreference(defaultValue: defaultValue);
+  }
+
+  @override
+  Future<void> saveRememberMePreference(bool value) {
+    return _sessionStorage.saveRememberMePreference(value);
+  }
+
+  @override
+  Future<void> saveLoginCredentials({
+    required String email,
+    required String password,
+  }) {
+    return _sessionStorage.saveLoginCredentials(
+      email: email,
+      password: password,
+    );
+  }
+
+  @override
+  Future<({String? email, String? password})> getLoginCredentials() {
+    return _sessionStorage.getLoginCredentials();
+  }
+
+  @override
+  Future<void> clearLoginCredentials() {
+    return _sessionStorage.clearLoginCredentials();
   }
 
   @override

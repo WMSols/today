@@ -58,8 +58,15 @@ class AuthController extends GetxController {
         !isSignupConfirmPasswordVisible.value;
   }
 
-  void toggleRememberMe(bool? value) {
-    rememberMe.value = value ?? false;
+  Future<void> toggleRememberMe(bool? value) async {
+    final enabled = value ?? false;
+    rememberMe.value = enabled;
+    await _authRepository.saveRememberMePreference(enabled);
+    if (!enabled) {
+      await _authRepository.clearLoginCredentials();
+      loginEmailController.clear();
+      loginPasswordController.clear();
+    }
   }
 
   AppButtonColors authTabColors(bool isDark) {
@@ -163,6 +170,7 @@ class AuthController extends GetxController {
           password: loginPasswordController.text,
         );
         await _persistApiSessionAfterFirebase(cred);
+        await _persistLoginCredentialsIfNeeded();
         await _completeAuthAndGoHome(AppTexts.loginSuccessful);
       } else {
         final cred = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -285,6 +293,41 @@ class AuthController extends GetxController {
     } else {
       await Get.offAllNamed<void>(AppRoutes.mainApp);
     }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    _loadRememberMePreference();
+  }
+
+  Future<void> _loadRememberMePreference() async {
+    rememberMe.value = await _authRepository.getRememberMePreference();
+    if (!rememberMe.value) return;
+
+    final saved = await _authRepository.getLoginCredentials();
+    final email = saved.email?.trim();
+    if (email != null && email.isNotEmpty) {
+      loginEmailController.text = email;
+    }
+    final password = saved.password;
+    if (password != null && password.isNotEmpty) {
+      loginPasswordController.text = password;
+    }
+  }
+
+  Future<void> _persistLoginCredentialsIfNeeded() async {
+    if (!isLoginMode.value) return;
+
+    if (rememberMe.value) {
+      await _authRepository.saveLoginCredentials(
+        email: loginEmailController.text.trim(),
+        password: loginPasswordController.text,
+      );
+      return;
+    }
+
+    await _authRepository.clearLoginCredentials();
   }
 
   @override
