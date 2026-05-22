@@ -15,10 +15,8 @@ class AppImages {
   static const String easyTasks = 'assets/images/icons/easy_task.png';
   static const String hardTasks = 'assets/images/icons/hard_task.png';
   static const String mediumTasks = 'assets/images/icons/medium_task.png';
-  static const String goalsCreated = 'assets/images/icons/goals_created.png';
   static const String goalDetails = 'assets/images/icons/goal_details.png';
   static const String emptyGoal = 'assets/images/icons/empty_goal.png';
-  static const String lifetimeStats = 'assets/images/icons/lifetime_stats.png';
   static const String proPlanTick = 'assets/images/icons/pro_plan_tick.png';
   static const String tasksCompleted =
       'assets/images/icons/tasks_completed.png';

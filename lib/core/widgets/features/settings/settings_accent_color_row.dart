@@ -12,12 +12,7 @@ import 'package:today/presentation/controllers/settings/accent_color_controller.
 class SettingsAccentColorRow extends StatelessWidget {
   const SettingsAccentColorRow({super.key});
 
-  static const _selectable = [
-    AppAccentColor.classic,
-    AppAccentColor.brown,
-    AppAccentColor.green,
-    AppAccentColor.violet,
-  ];
+  static const _selectable = [AppAccentColor.classic, AppAccentColor.lavendar];
 
   @override
   Widget build(BuildContext context) {
@@ -117,9 +112,7 @@ class _AccentSwatch extends StatelessWidget {
 
   static String _labelFor(AppAccentColor option) => switch (option) {
     AppAccentColor.classic => AppTexts.settingsAccentClassic,
-    AppAccentColor.brown => AppTexts.settingsAccentBrown,
-    AppAccentColor.green => AppTexts.settingsAccentGreen,
-    AppAccentColor.violet => AppTexts.settingsAccentViolet,
+    AppAccentColor.lavendar => AppTexts.settingsAccentLavendar,
   };
 
   static const _classicGradient = LinearGradient(

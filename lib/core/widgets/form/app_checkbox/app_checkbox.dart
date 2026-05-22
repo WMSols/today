@@ -10,6 +10,7 @@ class AppCheckbox extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.label,
+    this.labelColor,
     this.borderColor,
     this.checkColor,
     this.backgroundColor,
@@ -18,6 +19,7 @@ class AppCheckbox extends StatelessWidget {
   final bool value;
   final String? label;
   final ValueChanged<bool?>? onChanged;
+  final Color? labelColor;
   final Color? borderColor;
   final Color? checkColor;
   final Color? backgroundColor;
@@ -53,19 +55,16 @@ class AppCheckbox extends StatelessWidget {
     }
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         checkbox,
-        Expanded(
-          child: Text(
-            label!,
-            overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.labelText(
-              context,
-            ).copyWith(color: borderAndLabel),
-          ),
+        Text(
+          label!,
+          overflow: TextOverflow.ellipsis,
+          style: AppTextStyles.labelText(
+            context,
+          ).copyWith(color: labelColor ?? borderAndLabel),
         ),
       ],
     );

@@ -67,25 +67,27 @@ class AppSectionCard extends StatelessWidget {
 class AppSectionCardHeader extends StatelessWidget {
   const AppSectionCardHeader({
     super.key,
-    required this.iconPath,
+    required this.icon,
     required this.title,
+    this.iconColor,
     this.iconSizeFactor = 0.8,
     this.titleFontSize = 10,
   });
 
-  final String iconPath;
+  final IconData icon;
   final String title;
   final double iconSizeFactor;
+  final Color? iconColor;
   final double titleFontSize;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Image.asset(
-          iconPath,
-          width: AppResponsive.iconSize(context, factor: iconSizeFactor),
-          height: AppResponsive.iconSize(context, factor: iconSizeFactor),
+        Icon(
+          icon,
+          size: AppResponsive.iconSize(context, factor: iconSizeFactor),
+          color: iconColor ?? context.onSectionCardColor,
         ),
         AppSpacing.horizontal(context, 0.02),
         Text(

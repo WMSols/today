@@ -8,6 +8,11 @@ import 'package:today/core/utils/app_colors/app_colors.dart';
 extension ThemeContextExtension on BuildContext {
   bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
 
+  AppAccentColor get accentColor {
+    final extension = Theme.of(this).extension<AppAccentThemeExtension>();
+    return extension?.accent ?? AppAccentColor.classic;
+  }
+
   AppAccentPalette get accentPalette {
     final extension = Theme.of(this).extension<AppAccentThemeExtension>();
     if (extension != null) return extension.palette;

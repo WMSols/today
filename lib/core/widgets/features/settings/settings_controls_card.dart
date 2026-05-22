@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:today/core/utils/app_colors/app_colors.dart';
 
-import 'package:today/core/extensions/theme_context_extension.dart';
-import 'package:today/core/utils/app_images/app_images.dart';
-import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
-import 'package:today/core/utils/app_styles/app_text_styles.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/common/app_section_card.dart';
 import 'package:today/core/widgets/features/settings/settings_accent_color_row.dart';
@@ -19,14 +17,12 @@ class SettingsControlsCard extends StatelessWidget {
     required this.notificationsEnabled,
     required this.onHapticsChanged,
     required this.onNotificationsChanged,
-    this.onNotificationPreferencesTap,
   });
 
   final bool hapticsEnabled;
   final bool notificationsEnabled;
   final ValueChanged<bool> onHapticsChanged;
   final ValueChanged<bool> onNotificationsChanged;
-  final VoidCallback? onNotificationPreferencesTap;
 
   @override
   Widget build(BuildContext context) {
@@ -35,42 +31,26 @@ class SettingsControlsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const AppSectionCardHeader(
-            iconPath: AppImages.settings,
+            icon: Iconsax.setting_4,
             title: AppTexts.settingsSectionHeading,
+            iconColor: AppColors.white,
           ),
-          AppSpacing.vertical(context, 0.03),
+          AppSpacing.vertical(context, 0.02),
           SettingsToggleRow(
             label: AppTexts.settingsHapticsLabel,
             value: hapticsEnabled,
             onChanged: onHapticsChanged,
           ),
-          AppSpacing.vertical(context, 0.025),
+          AppSpacing.vertical(context, 0.015),
           SettingsToggleRow(
             label: AppTexts.settingsNotificationsLabel,
             value: notificationsEnabled,
             onChanged: onNotificationsChanged,
           ),
-          if (onNotificationPreferencesTap != null) ...[
-            AppSpacing.vertical(context, 0.015),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: onNotificationPreferencesTap,
-                child: Text(
-                  AppTexts.notificationPreferencesLink,
-                  style: AppTextStyles.labelText(context).copyWith(
-                    color: context.onSectionCardColor,
-                    fontWeight: FontWeight.w600,
-                    fontSize: AppResponsive.scaleSize(context, 10),
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ),
-            ),
-          ],
-          AppSpacing.vertical(context, 0.025),
+
+          AppSpacing.vertical(context, 0.015),
           const SettingsAccentColorRow(),
-          AppSpacing.vertical(context, 0.025),
+          AppSpacing.vertical(context, 0.015),
           GetBuilder<ThemeController>(
             builder: (themeCtrl) {
               final useSystem =

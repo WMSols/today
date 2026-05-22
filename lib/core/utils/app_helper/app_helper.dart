@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_formatter/app_formatter.dart';
 
@@ -53,6 +54,104 @@ class AppHelper {
         .map((e) => e.trim())
         .where((e) => e.isNotEmpty)
         .toList();
+  }
+
+  /// Iconsax icon inferred from [title] keywords until API exposes goal category.
+  static IconData goalIconForTitle(String title) {
+    final normalized = title.toLowerCase();
+    if (_titleMatches(normalized, const [
+      'run',
+      'cardio',
+      'workout',
+      'gym',
+      'exercise',
+      'walk',
+      'jog',
+      'fitness',
+      'sport',
+    ])) {
+      return Iconsax.activity;
+    }
+    if (_titleMatches(normalized, const [
+      'read',
+      'book',
+      'page',
+      'study',
+      'learn',
+      'course',
+    ])) {
+      return Iconsax.book;
+    }
+    if (_titleMatches(normalized, const [
+      'meditat',
+      'yoga',
+      'mindful',
+      'breath',
+      'calm',
+      'relax',
+    ])) {
+      return Iconsax.heart;
+    }
+    if (_titleMatches(normalized, const ['sleep', 'rest', 'bed'])) {
+      return Iconsax.moon;
+    }
+    if (_titleMatches(normalized, const ['water', 'hydrat', 'drink'])) {
+      return Iconsax.drop;
+    }
+    if (_titleMatches(normalized, const [
+      'diet',
+      'eat',
+      'food',
+      'meal',
+      'nutrition',
+      'calorie',
+    ])) {
+      return Iconsax.cup;
+    }
+    if (_titleMatches(normalized, const [
+      'code',
+      'program',
+      'develop',
+      'software',
+    ])) {
+      return Iconsax.code;
+    }
+    if (_titleMatches(normalized, const [
+      'work',
+      'office',
+      'job',
+      'career',
+      'meeting',
+    ])) {
+      return Iconsax.briefcase;
+    }
+    if (_titleMatches(normalized, const [
+      'money',
+      'save',
+      'budget',
+      'finance',
+    ])) {
+      return Iconsax.wallet;
+    }
+    if (_titleMatches(normalized, const [
+      'music',
+      'guitar',
+      'piano',
+      'practice',
+    ])) {
+      return Iconsax.music;
+    }
+    if (_titleMatches(normalized, const ['health', 'wellness', 'wellbeing'])) {
+      return Iconsax.health;
+    }
+    return Iconsax.flag;
+  }
+
+  static bool _titleMatches(String normalized, List<String> keywords) {
+    for (final keyword in keywords) {
+      if (normalized.contains(keyword)) return true;
+    }
+    return false;
   }
 
   /// Accent color for active goal task difficulty labels.

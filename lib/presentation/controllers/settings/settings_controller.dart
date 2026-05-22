@@ -94,14 +94,10 @@ class SettingsController extends GetxController {
     }
   }
 
-  void openSubscription() {
-    Get.toNamed(AppRoutes.subscription);
-  }
-
   Future<void> logout() async {
     await _firebaseAuthGateway.signOut();
     await _authRepository.clearSession();
     AppToast.showSuccess(AppTexts.loggedOutSuccess);
-    Get.offAllNamed(AppRoutes.onboarding);
+    Get.offAllNamed(AppRoutes.auth);
   }
 }

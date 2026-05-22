@@ -269,15 +269,6 @@ class AppTexts {
   static String calendarDaysLeftInYear(int daysLeft, int year) =>
       "$daysLeft $calendarDaysLeftInYearMiddle $year";
 
-  // Settings — stats card
-  static const String lifetimeStatsHeading = "LIFETIME STATS";
-  static const String statsGoalsCreatedLabel = "GOALS CREATED";
-  static const String statsTasksCompletedLabel = "TASKS COMPLETED";
-  static const String statsProductivityScoreLabel = "PRODUCTIVITY SCORE";
-  static const String statsPlaceholderZero = "0";
-  static const String statsPlaceholderZeroSlashZero = "0/0";
-  static const String statsPlaceholderDash = "—";
-
   // Settings — controls
   static const String settingsSectionHeading = "SETTINGS";
   static const String settingsHapticsLabel = "HAPTICS";
@@ -285,10 +276,7 @@ class AppTexts {
   static const String notificationPreferencesLink = "Notification preferences";
   static const String settingsAccentColorLabel = "PALETTE COLOR";
   static const String settingsAccentClassic = "Classic";
-  static const String settingsAccentBrown = "Brown";
-  static const String settingsAccentGold = "Gold";
-  static const String settingsAccentGreen = "Green";
-  static const String settingsAccentViolet = "Violet";
+  static const String settingsAccentLavendar = "Lavendar";
 
   // Settings — profile / session
   static const String profileUnavailableTitle = "Profile unavailable";
