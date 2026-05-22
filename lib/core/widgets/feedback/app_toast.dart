@@ -134,7 +134,7 @@ class AppToast extends StatelessWidget {
       snackStyle: SnackStyle.FLOATING,
       margin: AppSpacing.symmetric(context, h: 0.04, v: 0.02),
       borderRadius: AppResponsive.radius(context, factor: 1.6),
-      duration: const Duration(seconds: 5),
+      duration: const Duration(seconds: 2),
     );
   }
 

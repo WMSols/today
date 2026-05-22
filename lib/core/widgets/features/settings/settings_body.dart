@@ -9,7 +9,6 @@ import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/buttons/app_button.dart';
 import 'package:today/core/widgets/features/settings/settings_controls_card.dart';
 import 'package:today/core/widgets/features/settings/settings_profile_header.dart';
-import 'package:today/core/widgets/features/settings/settings_stats_card.dart';
 import 'package:today/presentation/controllers/settings/settings_controller.dart';
 
 class SettingsBody extends GetView<SettingsController> {
@@ -36,15 +35,12 @@ class SettingsBody extends GetView<SettingsController> {
             ),
           ),
           AppSpacing.vertical(context, 0.03),
-          SettingsStatsCard(onTap: controller.openSubscription),
-          AppSpacing.vertical(context, 0.02),
           Obx(
             () => SettingsControlsCard(
               hapticsEnabled: controller.haptics.enabled.value,
               notificationsEnabled: controller.notificationsEnabled.value,
               onHapticsChanged: controller.haptics.setEnabled,
               onNotificationsChanged: controller.setNotifications,
-              onNotificationPreferencesTap: controller.openNotifications,
             ),
           ),
           AppSpacing.vertical(context, 0.02),

@@ -117,14 +117,16 @@ class SettingsToggleRow extends StatelessWidget {
           ),
         ),
         if (showSystemCheckbox && onSystemChanged != null) ...[
-          Flexible(
-            child: AppCheckbox(
-              value: systemCheckboxValue,
-              label: AppTexts.themeSystem,
-              onChanged: onSystemChanged!,
-            ),
+          AppCheckbox(
+            value: systemCheckboxValue,
+            label: AppTexts.themeSystem,
+            backgroundColor: AppColors.white,
+            borderColor: AppColors.white,
+            checkColor: AppColors.black,
+            onChanged: onSystemChanged!,
+            labelColor: AppColors.white,
           ),
-          SizedBox(width: AppResponsive.scaleSize(context, 6)),
+          SizedBox(width: AppResponsive.scaleSize(context, 8)),
         ],
         toggle,
       ],
