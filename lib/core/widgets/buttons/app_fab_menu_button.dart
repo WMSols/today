@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'package:today/core/extensions/theme_context_extension.dart';
+import 'package:today/core/theme/app_accent_color.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
@@ -196,7 +197,9 @@ class _AppFABTrigger extends StatelessWidget {
   Widget build(BuildContext context) {
     final palette = context.accentPalette;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final logo = isDark ? AppImages.appLogoWhite : AppImages.appLogoBlack;
+    final logo = context.accentColor == AppAccentColor.lavendar
+        ? AppImages.appLogoWhite
+        : (isDark ? AppImages.appLogoWhite : AppImages.appLogoBlack);
     return Material(
       color: Colors.transparent,
       child: InkWell(

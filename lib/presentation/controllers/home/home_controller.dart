@@ -235,7 +235,8 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
           .where((t) => t.status == HomeTodayTaskStatus.completed)
           .length;
     }
-    final card = selectedGoalCard ?? (goalCards.isNotEmpty ? goalCards.first : null);
+    final card =
+        selectedGoalCard ?? (goalCards.isNotEmpty ? goalCards.first : null);
     if (card != null) {
       final match = RegExp(r'(\d+)\s*/\s*(\d+)').firstMatch(card.tasksText);
       if (match != null) {
@@ -245,9 +246,8 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     return (todayCompletionProgress * 6).round();
   }
 
-  List<HomeTodayTaskEntity> get homeTodayTasksPreview => todayTasks
-      .take(homeTodayTasksPreviewLimit)
-      .toList(growable: false);
+  List<HomeTodayTaskEntity> get homeTodayTasksPreview =>
+      todayTasks.take(homeTodayTasksPreviewLimit).toList(growable: false);
 
   HomeCalendarDisplay get calendarDisplay {
     final now = DateTime.now();
@@ -293,8 +293,9 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     if (taskId.isEmpty) return;
     final task = todayTasks.firstWhereOrNull((t) => t.id == taskId);
     if (task == null || !task.isPending) return;
-    selectedTodayTaskId.value =
-        selectedTodayTaskId.value == taskId ? '' : taskId;
+    selectedTodayTaskId.value = selectedTodayTaskId.value == taskId
+        ? ''
+        : taskId;
   }
 
   void completeTodayTask(String taskId) {
@@ -380,10 +381,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   void openAddGoalSheet() {
     final context = Get.context;
     if (context == null) return;
-    AppBottomSheet.show<void>(
-      context,
-      child: const HomeAddGoalBottomSheet(),
-    );
+    AppBottomSheet.show<void>(context, child: const HomeAddGoalBottomSheet());
   }
 
   void openGoalsTab() {
