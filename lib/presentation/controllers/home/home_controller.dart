@@ -89,6 +89,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   final GetHomeTodayTasksUseCase _getHomeTodayTasksUseCase;
 
   final RxBool isLoading = false.obs;
+  final RxBool isRefreshing = false.obs;
   final RxBool isCreatingGoal = false.obs;
   final RxList<ActiveGoalTaskEntity> activeGoalTasks =
       <ActiveGoalTaskEntity>[].obs;
@@ -286,6 +287,19 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       _playTodayProgressRingAnimation();
     } catch (_) {
       _showError(AppTexts.homeUnableLoadTodayTasks);
+    }
+  }
+
+  Future<void> refreshHome() async {
+    isRefreshing.value = true;
+    try {
+      await Future.wait([
+        loadGoalCards(),
+        loadWeeklyCalendar(),
+        loadTodayTasks(),
+      ]);
+    } finally {
+      isRefreshing.value = false;
     }
   }
 
