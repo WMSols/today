@@ -64,8 +64,7 @@ class _AppPullToRefreshState extends State<AppPullToRefresh>
   }
 
   Duration get _headerTransitionDuration =>
-      widget.headerTransitionDuration ??
-      const Duration(milliseconds: 260);
+      widget.headerTransitionDuration ?? const Duration(milliseconds: 260);
 
   double _triggerDistance(BuildContext context) =>
       widget.triggerDistance ?? AppResponsive.scaleSize(context, 72);
@@ -214,7 +213,9 @@ class _AppPullToRefreshState extends State<AppPullToRefresh>
     required double indicatorOpacity,
     required double indicatorScale,
   }) {
-    final easedOpacity = Curves.easeOut.transform(indicatorOpacity.clamp(0.0, 1.0));
+    final easedOpacity = Curves.easeOut.transform(
+      indicatorOpacity.clamp(0.0, 1.0),
+    );
     return ColoredBox(
       color: _refreshBackground,
       child: SizedBox(
@@ -288,7 +289,10 @@ class _AppPullToRefreshState extends State<AppPullToRefresh>
     final indicatorScale = 0.5 + (0.5 * pullProgress);
     final headerFadeOpacity = _isRefreshing
         ? 1.0
-        : (displayOffset / AppResponsive.scaleSize(context, 20)).clamp(0.0, 1.0);
+        : (displayOffset / AppResponsive.scaleSize(context, 20)).clamp(
+            0.0,
+            1.0,
+          );
     final showHeader = displayOffset > 0;
 
     return Stack(

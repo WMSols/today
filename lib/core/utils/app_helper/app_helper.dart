@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_formatter/app_formatter.dart';
+
 enum HomeDailyCalendarActivityLevel { none, success, warning, error }
 
 class AppHelper {
