@@ -9,7 +9,7 @@ enum AppAccentColor {
 
   Color get color => switch (this) {
     AppAccentColor.classic => AppAccentColor._unused,
-    AppAccentColor.lavendar => const Color(0xFF605DFF),
+    AppAccentColor.lavendar => const Color(0xFF403EB3),
   };
 
   bool get isClassic => this == AppAccentColor.classic;

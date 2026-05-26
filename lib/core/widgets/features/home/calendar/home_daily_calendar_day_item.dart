@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_helper/app_helper.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
@@ -26,9 +25,8 @@ class HomeDailyCalendarDayItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = context.isDarkMode;
     final activity = AppHelper.activityFromProgress(day.progress);
-    final progressColor = AppHelper.activityColor(activity);
+    final statusColor = AppHelper.activityColor(activity);
     final capsuleHeight = AppResponsive.scaleSize(context, 76);
     final labelStyle = AppTextStyles.labelText(context).copyWith(
       color: AppColors.white,
@@ -40,18 +38,11 @@ class HomeDailyCalendarDayItem extends StatelessWidget {
     final capsule = Container(
       height: capsuleHeight,
       decoration: BoxDecoration(
+        color: statusColor,
         borderRadius: BorderRadius.circular(capsuleHeight / 2),
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: AppHelper.capsuleGradient(
-            isDark: isDark,
-            progressColor: progressColor,
-          ),
-        ),
         border: day.isToday
             ? Border.all(
-                color: progressColor,
+                color: AppColors.white,
                 width: AppResponsive.scaleSize(context, 1),
               )
             : null,
@@ -65,7 +56,6 @@ class HomeDailyCalendarDayItem extends StatelessWidget {
             day: day,
             activity: activity,
             displayMode: displayMode,
-            isDark: isDark,
             animatedProgress:
                 day.progress.clamp(0.0, 1.0) *
                 ringAnimationFactor.clamp(0.0, 1.0),

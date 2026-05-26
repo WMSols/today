@@ -96,7 +96,7 @@ class AppHelper {
       return Iconsax.moon;
     }
     if (_titleMatches(normalized, const ['water', 'hydrat', 'drink'])) {
-      return Iconsax.drop;
+      return Iconsax.bubble;
     }
     if (_titleMatches(normalized, const [
       'diet',
@@ -145,6 +145,11 @@ class AppHelper {
       return Iconsax.health;
     }
     return Iconsax.flag;
+  }
+
+  /// Iconsax icon inferred from today's task [title] (same rules as [goalIconForTitle]).
+  static IconData homeTodayTaskIconForTitle(String title) {
+    return goalIconForTitle(title);
   }
 
   static bool _titleMatches(String normalized, List<String> keywords) {
@@ -209,15 +214,6 @@ class AppHelper {
 
   static Color activityColorForProgress(double progress) {
     return activityColor(activityFromProgress(progress));
-  }
-
-  /// Top: progress tint; bottom: theme surface (white / black).
-  static List<Color> capsuleGradient({
-    required bool isDark,
-    required Color progressColor,
-  }) {
-    final bottom = AppColors.black;
-    return [progressColor, bottom];
   }
 }
 

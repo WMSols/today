@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
@@ -16,14 +17,12 @@ class HomeDailyPlanCard extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final onCard = context.onSectionCardColor;
     final ringSize = AppResponsive.scaleSize(context, 72);
-    final trackColor = AppColors.white.withValues(alpha: 0.2);
+    final trackColor = context.sectionCardRingTrackColor;
     final progressColor = AppColors.white;
 
     return AppSectionCard(
-      backgroundColor: AppColors.black,
-      borderColor: AppColors.white,
-      borderWidth: AppResponsive.scaleSize(context, 1),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -41,7 +40,7 @@ class HomeDailyPlanCard extends GetView<HomeController> {
                   centerValue:
                       '${(controller.dailyPlanProgress * 100).round()}%',
                   centerValueStyle: AppTextStyles.labelText(context).copyWith(
-                    color: AppColors.white,
+                    color: onCard,
                     fontWeight: FontWeight.w700,
                     fontSize: AppResponsive.scaleSize(context, 14),
                     height: 1,
@@ -56,7 +55,7 @@ class HomeDailyPlanCard extends GetView<HomeController> {
                     Text(
                       AppTexts.homeDailyPlanNotSetTitle,
                       style: AppTextStyles.labelText(context).copyWith(
-                        color: AppColors.white,
+                        color: onCard,
                         fontWeight: FontWeight.w600,
                         fontSize: AppResponsive.scaleSize(context, 18),
                         height: 1.3,
@@ -66,11 +65,10 @@ class HomeDailyPlanCard extends GetView<HomeController> {
                     AppButton(
                       label: AppTexts.homeAddGoal,
                       onPressed: controller.openAddGoalSheet,
-                      useAccentPalette: false,
                       size: AppButtonSize.small,
                       colors: AppButtonColors(
-                        filledBackground: AppColors.white,
-                        filledForeground: AppColors.black,
+                        filledBackground: AppColors.success,
+                        filledForeground: AppColors.white,
                         outlinedBackground: Colors.transparent,
                         outlinedForeground: AppColors.white,
                         outlinedBorder: AppColors.white,

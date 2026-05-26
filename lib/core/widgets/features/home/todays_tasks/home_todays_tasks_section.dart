@@ -9,7 +9,7 @@ import 'package:today/core/utils/app_styles/app_text_styles.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/buttons/app_button.dart';
 import 'package:today/core/widgets/buttons/app_text_button.dart';
-import 'package:today/core/widgets/features/home/todays_tasks/home_today_task_item.dart';
+import 'package:today/core/widgets/features/home/todays_tasks/home_today_tasks_timeline.dart';
 import 'package:today/presentation/controllers/home/home_controller.dart';
 
 class HomeTodaysTasksSection extends GetView<HomeController> {
@@ -40,26 +40,15 @@ class HomeTodaysTasksSection extends GetView<HomeController> {
             ),
           ],
         ),
+        AppSpacing.vertical(context, 0.012),
         Obx(() {
           final tasks = controller.homeTodayTasksPreview;
-          return Column(
-            children: List.generate(tasks.length, (index) {
-              final task = tasks[index];
-              return Padding(
-                padding: EdgeInsets.only(
-                  bottom: index < tasks.length - 1
-                      ? AppSpacing.verticalValue(context, 0.005)
-                      : 0,
-                ),
-                child: HomeTodayTaskItem(
-                  task: task,
-                  isSelected: controller.selectedTodayTaskId.value == task.id,
-                  onTap: () => controller.selectTodayTask(task.id),
-                  onDone: () => controller.completeTodayTask(task.id),
-                  onSkip: () => controller.skipTodayTask(task.id),
-                ),
-              );
-            }),
+          return HomeTodayTasksTimeline(
+            tasks: tasks,
+            selectedTaskId: controller.selectedTodayTaskId.value,
+            onTaskTap: controller.selectTodayTask,
+            onTaskDone: controller.completeTodayTask,
+            onTaskSkip: controller.skipTodayTask,
           );
         }),
       ],
