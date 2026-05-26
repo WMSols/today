@@ -34,4 +34,8 @@ extension ThemeContextExtension on BuildContext {
 
   Color get mutedOnSurfaceColor =>
       isDarkMode ? AppColors.lightGrey : AppColors.grey;
+
+  /// Subtle track behind progress rings on [sectionCardColor] surfaces.
+  Color get sectionCardRingTrackColor =>
+      onSectionCardColor.withValues(alpha: isDarkMode ? 0.14 : 0.2);
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
@@ -16,10 +17,9 @@ class HomeAiSummaryCard extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final onCard = context.onSectionCardColor;
+
     return AppSectionCard(
-      backgroundColor: AppColors.white,
-      borderColor: AppColors.black,
-      borderWidth: AppResponsive.scaleSize(context, 1),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -27,7 +27,7 @@ class HomeAiSummaryCard extends GetView<HomeController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.asset(
-                AppImages.appLogoBlack,
+                AppImages.appLogoWhite,
                 width: AppResponsive.iconSize(context, factor: 2),
                 height: AppResponsive.iconSize(context, factor: 2),
               ),
@@ -38,7 +38,7 @@ class HomeAiSummaryCard extends GetView<HomeController> {
                     controller.lastAiPlanGeneratedAtLabel,
                   ),
                   style: AppTextStyles.labelText(context).copyWith(
-                    color: AppColors.grey,
+                    color: AppColors.white,
                     fontSize: AppResponsive.scaleSize(context, 10),
                     fontWeight: FontWeight.w500,
                   ),
@@ -50,37 +50,23 @@ class HomeAiSummaryCard extends GetView<HomeController> {
           Obx(() {
             final yesterdayPct = (controller.yesterdayCompletionProgress * 100)
                 .round();
+            final emphasis = TextStyle(
+              fontWeight: FontWeight.w600,
+              color: onCard,
+            );
             return RichText(
               text: TextSpan(
                 style: AppTextStyles.bodyText(context).copyWith(
-                  color: AppColors.black,
+                  color: onCard,
                   fontSize: AppResponsive.scaleSize(context, 12),
                   height: 1.35,
                 ),
                 children: [
-                  TextSpan(
-                    text: controller.dashboardUserName,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.black,
-                    ),
-                  ),
+                  TextSpan(text: controller.dashboardUserName, style: emphasis),
                   const TextSpan(text: AppTexts.homeAiSummaryLead),
-                  TextSpan(
-                    text: '$yesterdayPct%',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.black,
-                    ),
-                  ),
+                  TextSpan(text: '$yesterdayPct%', style: emphasis),
                   const TextSpan(text: AppTexts.homeAiSummaryMid),
-                  TextSpan(
-                    text: controller.aiFocusKeyword,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.black,
-                    ),
-                  ),
+                  TextSpan(text: controller.aiFocusKeyword, style: emphasis),
                   const TextSpan(text: AppTexts.homeAiSummaryTail),
                 ],
               ),
@@ -92,14 +78,13 @@ class HomeAiSummaryCard extends GetView<HomeController> {
             child: AppButton(
               label: AppTexts.homeViewAiPlan,
               onPressed: controller.openGoalsTab,
-              useAccentPalette: false,
               size: AppButtonSize.small,
               colors: AppButtonColors(
-                filledBackground: AppColors.black,
-                filledForeground: AppColors.white,
+                filledBackground: AppColors.white,
+                filledForeground: AppColors.black,
                 outlinedBackground: Colors.transparent,
-                outlinedForeground: Colors.transparent,
-                outlinedBorder: Colors.transparent,
+                outlinedForeground: AppColors.white,
+                outlinedBorder: AppColors.white,
               ),
             ),
           ),

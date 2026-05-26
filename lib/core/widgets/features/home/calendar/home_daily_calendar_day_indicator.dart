@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:today/core/utils/app_helper/app_helper.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:today/core/utils/app_helper/app_helper.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
 import 'package:today/core/widgets/common/app_progress_ring.dart';
@@ -14,15 +14,18 @@ class HomeDailyCalendarDayIndicator extends StatelessWidget {
     required this.day,
     required this.activity,
     required this.displayMode,
-    required this.isDark,
     required this.animatedProgress,
   });
 
   final HomeDailyCalendarDayEntity day;
   final HomeDailyCalendarActivityLevel activity;
   final HomeDailyCalendarDisplayMode displayMode;
-  final bool isDark;
   final double animatedProgress;
+
+  static const Color _ringProgressColor = AppColors.white;
+
+  static Color _ringTrackColor(BuildContext context) =>
+      AppColors.white.withValues(alpha: 0.2);
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +34,13 @@ class HomeDailyCalendarDayIndicator extends StatelessWidget {
         progress: day.progress,
         animatedProgress: animatedProgress,
         activity: activity,
-        isDark: isDark,
+        trackColor: _ringTrackColor(context),
       );
     }
     return _RingIndicator(
       date: day.date,
       animatedProgress: animatedProgress,
-      activity: activity,
-      isDark: isDark,
+      trackColor: _ringTrackColor(context),
     );
   }
 }
@@ -47,28 +49,24 @@ class _RingIndicator extends StatelessWidget {
   const _RingIndicator({
     required this.date,
     required this.animatedProgress,
-    required this.activity,
-    required this.isDark,
+    required this.trackColor,
   });
 
   final int date;
   final double animatedProgress;
-  final HomeDailyCalendarActivityLevel activity;
-  final bool isDark;
+  final Color trackColor;
 
   @override
   Widget build(BuildContext context) {
     final ringSize = AppResponsive.scaleSize(context, 34);
     final strokeWidth = AppResponsive.scaleSize(context, 4);
-    final trackColor = AppColors.white.withValues(alpha: isDark ? 0.14 : 0.2);
-    final progressColor = AppHelper.activityColor(activity);
 
     return AppProgressRing(
       progress: animatedProgress,
       size: ringSize,
       strokeWidth: strokeWidth,
       trackColor: trackColor,
-      progressColor: progressColor,
+      progressColor: HomeDailyCalendarDayIndicator._ringProgressColor,
       animationFactor: 1,
       center: Text(
         '$date',
@@ -88,36 +86,31 @@ class _StatusIconIndicator extends StatelessWidget {
     required this.progress,
     required this.animatedProgress,
     required this.activity,
-    required this.isDark,
+    required this.trackColor,
   });
 
   final double progress;
   final double animatedProgress;
   final HomeDailyCalendarActivityLevel activity;
-  final bool isDark;
+  final Color trackColor;
 
   @override
   Widget build(BuildContext context) {
     final ringSize = AppResponsive.scaleSize(context, 34);
     final strokeWidth = AppResponsive.scaleSize(context, 2.5);
-    final trackColor = AppColors.white.withValues(alpha: isDark ? 0.14 : 0.2);
     final clamped = progress.clamp(0.0, 1.0);
 
     if (clamped >= AppHelper.successThreshold) {
-      return Container(
-        width: ringSize,
-        height: ringSize,
-        decoration: BoxDecoration(
-          color: AppHelper.activityColor(
-            HomeDailyCalendarActivityLevel.success,
-          ),
-          shape: BoxShape.circle,
-        ),
-        alignment: Alignment.center,
-        child: Icon(
+      return AppProgressRing(
+        progress: 1,
+        size: ringSize,
+        strokeWidth: strokeWidth,
+        trackColor: trackColor,
+        progressColor: HomeDailyCalendarDayIndicator._ringProgressColor,
+        center: Icon(
           Icons.check,
           size: AppResponsive.scaleSize(context, 18),
-          color: AppColors.white,
+          color: HomeDailyCalendarDayIndicator._ringProgressColor,
         ),
       );
     }
@@ -132,7 +125,6 @@ class _StatusIconIndicator extends StatelessWidget {
       );
     }
 
-    final progressColor = AppHelper.activityColor(activity);
     final centerIcon = activity == HomeDailyCalendarActivityLevel.warning
         ? Icons.warning
         : Icons.close;
@@ -142,11 +134,11 @@ class _StatusIconIndicator extends StatelessWidget {
       size: ringSize,
       strokeWidth: strokeWidth,
       trackColor: trackColor,
-      progressColor: progressColor,
+      progressColor: HomeDailyCalendarDayIndicator._ringProgressColor,
       center: Icon(
         centerIcon,
         size: AppResponsive.scaleSize(context, 16),
-        color: progressColor,
+        color: HomeDailyCalendarDayIndicator._ringProgressColor,
       ),
     );
   }

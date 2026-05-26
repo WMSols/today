@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:today/core/extensions/theme_context_extension.dart';
-
 import 'package:today/core/utils/app_colors/app_colors.dart';
+
 import 'package:today/core/utils/app_formatter/app_formatter.dart';
 import 'package:today/core/utils/app_helper/app_helper.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
@@ -26,15 +26,14 @@ class HomeProgressCard extends GetView<HomeController> {
       final statusColor = totalTasks > 0
           ? AppHelper.activityColorForProgress(progress)
           : AppHelper.activityColor(HomeDailyCalendarActivityLevel.none);
+      final onCard = context.onSectionCardColor;
       final ringSize = AppResponsive.scaleSize(context, 88);
-      final trackColor = AppColors.white.withValues(alpha: 0.25);
-      final progressColor = AppColors.white;
+      final trackColor = context.sectionCardRingTrackColor;
       final percentLabel = '${(progress * 100).round()}%';
       final tasksFraction = controller.todayProgressCardTasksFraction;
       final dateLabel = AppFormatter.dayMonthYear(DateTime.now());
 
       return AppSectionCard(
-        backgroundColor: statusColor,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -46,8 +45,8 @@ class HomeProgressCard extends GetView<HomeController> {
                     children: [
                       AppIconButton(
                         icon: Iconsax.arrow_right_3,
-                        color: AppColors.white,
-                        backgroundColor: context.sectionCardColor,
+                        color: onCard,
+                        backgroundColor: context.accentPalette.navBubble,
                         size: AppResponsive.iconSize(context, factor: 0.6),
                         onPressed: controller.openStatsTab,
                       ),
@@ -55,7 +54,7 @@ class HomeProgressCard extends GetView<HomeController> {
                       Text(
                         AppTexts.homeYourProgress,
                         style: AppTextStyles.labelText(context).copyWith(
-                          color: AppColors.white,
+                          color: onCard,
                           fontWeight: FontWeight.w500,
                           fontSize: AppResponsive.scaleSize(context, 12),
                         ),
@@ -76,8 +75,8 @@ class HomeProgressCard extends GetView<HomeController> {
                   Text(
                     dateLabel,
                     style: AppTextStyles.labelText(context).copyWith(
-                      color: AppColors.white.withValues(alpha: 0.92),
-                      fontSize: AppResponsive.scaleSize(context, 11),
+                      color: AppColors.white,
+                      fontSize: AppResponsive.scaleSize(context, 10),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -89,7 +88,7 @@ class HomeProgressCard extends GetView<HomeController> {
               size: ringSize,
               strokeWidth: AppResponsive.scaleSize(context, 6),
               trackColor: trackColor,
-              progressColor: progressColor,
+              progressColor: statusColor,
               animationFactor:
                   controller.todayProgressRingAnimationFactor.value,
               style: AppProgressRingStyle.simple,
