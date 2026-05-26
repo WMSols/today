@@ -28,6 +28,10 @@ class GoalsController extends GetxController {
 
   Future<bool> loadGoalCards() => _goalCardsController.loadGoalCards();
 
+  Future<void> refreshGoals() async {
+    await loadGoalCards();
+  }
+
   int get goalsTotalCount => goalCards.length;
 
   double get goalsAggregateProgress {

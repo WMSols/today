@@ -304,6 +304,15 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     }
   }
 
+  Future<void> refreshTodaysTasks() async {
+    isRefreshing.value = true;
+    try {
+      await Future.wait([loadTodayTasks(), loadWeeklyCalendar()]);
+    } finally {
+      isRefreshing.value = false;
+    }
+  }
+
   void selectTodayTask(String taskId) {
     if (taskId.isEmpty) return;
     final task = todayTasks.firstWhereOrNull((t) => t.id == taskId);
