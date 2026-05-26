@@ -107,6 +107,9 @@ class AppTexts {
       "Your brain uses less energy starting a task than avoiding it.";
   // Goals
   static const String goals = "Goals";
+  static const String goalsProgressLabel = 'PROGRESS';
+  static const String goalsTotalLabel = 'GOALS';
+  static const String goalsCompletedTasksLabel = 'COMPLETED';
   static const String emptyGoalTitle = "This is awkwardly empty.";
   static const String emptyGoalSubtitle =
       "Your future self is waiting - add a goal to get started.";

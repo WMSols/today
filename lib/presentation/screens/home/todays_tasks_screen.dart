@@ -9,7 +9,7 @@ import 'package:today/core/widgets/common/app_daily_quote_section.dart';
 import 'package:today/core/widgets/common/app_page_scaffold.dart';
 import 'package:today/core/widgets/feedback/app_loading_indicator.dart';
 import 'package:today/core/widgets/features/home/todays_tasks/home_today_tasks_timeline.dart';
-import 'package:today/core/widgets/features/home/todays_tasks/todays_tasks_stats_row.dart';
+import 'package:today/core/widgets/features/home/todays_tasks/todays_tasks_stats_section.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/presentation/controllers/home/home_controller.dart';
 
@@ -33,7 +33,7 @@ class TodaysTasksScreen extends GetView<HomeController> {
                 onBack: Get.back<void>,
               ),
               AppSpacing.vertical(context, 0.02),
-              const TodaysTasksStatsRow(),
+              const TodaysTasksStatsSection(),
               AppSpacing.vertical(context, 0.025),
               Expanded(
                 child: SingleChildScrollView(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:today/core/extensions/theme_context_extension.dart';
-import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:today/core/utils/app_helper/app_helper.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
@@ -17,7 +17,6 @@ class GoalsCardItem extends StatelessWidget {
     required this.percentText,
     required this.totalTasksText,
     required this.progress,
-    required this.iconPath,
     this.onTap,
   });
 
@@ -27,7 +26,6 @@ class GoalsCardItem extends StatelessWidget {
   final String percentText;
   final String totalTasksText;
   final double progress;
-  final String iconPath;
   final VoidCallback? onTap;
 
   @override
@@ -51,11 +49,11 @@ class GoalsCardItem extends StatelessWidget {
                         fontSize: AppResponsive.scaleSize(context, 14),
                       ),
                     ),
-                    AppSpacing.vertical(context, 0.004),
+                    AppSpacing.vertical(context, 0.005),
                     Text(
                       dayText,
                       style: AppTextStyles.labelText(context).copyWith(
-                        color: AppColors.grey,
+                        color: context.onSurfaceColor,
                         fontWeight: FontWeight.w600,
                         fontSize: AppResponsive.scaleSize(context, 10),
                       ),
@@ -63,14 +61,14 @@ class GoalsCardItem extends StatelessWidget {
                   ],
                 ),
               ),
-              Image.asset(
-                iconPath,
-                width: AppResponsive.iconSize(context, factor: 1.15),
-                height: AppResponsive.iconSize(context, factor: 1.15),
+              Icon(
+                AppHelper.goalIconForTitle(title),
+                size: AppResponsive.iconSize(context, factor: 1.1),
+                color: context.onSurfaceColor,
               ),
             ],
           ),
-          AppSpacing.vertical(context, 0.03),
+          AppSpacing.vertical(context, 0.02),
           GoalProgressMetrics(
             progress: progress,
             tasksText: tasksText,
