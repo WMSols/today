@@ -33,7 +33,7 @@ class HomeTodaysTasksSection extends GetView<HomeController> {
             ),
             AppTextButton(
               label: AppTexts.viewAll,
-              onPressed: controller.openGoalsTab,
+              onPressed: controller.openTodaysTasksScreen,
               color: context.accentPalette.accent,
               icon: Iconsax.arrow_right_3,
               iconPosition: IconPosition.right,

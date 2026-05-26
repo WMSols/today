@@ -25,6 +25,7 @@ import 'package:today/presentation/controllers/main/main_app_controller.dart';
 import 'package:today/presentation/controllers/settings/settings_controller.dart';
 import 'package:today/core/widgets/common/app_bottom_sheet.dart';
 import 'package:today/core/widgets/features/home/goal_entry/home_add_goal_bottom_sheet.dart';
+import 'package:today/presentation/controllers/animation/app_animation_controller.dart';
 import 'package:today/presentation/routes/app_routes.dart';
 
 class ActiveGoalOverviewDisplay {
@@ -402,6 +403,11 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     if (Get.isRegistered<MainAppController>()) {
       Get.find<MainAppController>().selectTab(MainAppController.goalsTabIndex);
     }
+  }
+
+  void openTodaysTasksScreen() {
+    ensureCalendarQuoteLoaded();
+    AppAnimationController.pushNamed<void>(AppRoutes.todaysTasks);
   }
 
   void openStatsTab() {

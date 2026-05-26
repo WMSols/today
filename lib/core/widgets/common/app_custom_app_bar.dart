@@ -227,7 +227,7 @@ class AppCustomAppBar extends StatelessWidget {
                 style: AppTextStyles.heading(context).copyWith(
                   color: muted,
                   fontWeight: FontWeight.w600,
-                  fontSize: AppResponsive.scaleSize(context, 19),
+                  fontSize: AppResponsive.scaleSize(context, 18),
                 ),
               ),
             ),

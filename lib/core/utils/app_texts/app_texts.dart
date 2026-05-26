@@ -259,6 +259,9 @@ class AppTexts {
 
   // Home — tasks section
   static const String todaysTasksHeading = "TODAY'S TASKS";
+  static const String todaysTasksProgressLabel = 'PROGRESS';
+  static const String todaysTasksTotalLabel = 'TOTAL';
+  static const String todaysTasksCompletedLabel = 'COMPLETED';
   static const String viewAll = 'View All';
 
   // Home — default goal title

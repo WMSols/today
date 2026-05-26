@@ -127,6 +127,49 @@ class AppProgressRing extends StatelessWidget {
 
 enum AppProgressRingStyle { simple, layered }
 
+/// Horizontal progress bar with optional animated fill (matches ring animation).
+class AppLinearProgressBar extends StatelessWidget {
+  const AppLinearProgressBar({
+    super.key,
+    required this.progress,
+    this.trackColor,
+    this.progressColor,
+    this.animationFactor = 1.0,
+    this.height,
+    this.borderRadiusFactor = 5,
+  });
+
+  final double progress;
+  final Color? trackColor;
+  final Color? progressColor;
+  final double animationFactor;
+  final double? height;
+  final double borderRadiusFactor;
+
+  @override
+  Widget build(BuildContext context) {
+    final animatedProgress =
+        progress.clamp(0.0, 1.0) * animationFactor.clamp(0.0, 1.0);
+    final barHeight = height ?? AppResponsive.scaleSize(context, 8);
+    final radius = BorderRadius.circular(
+      AppResponsive.radius(context, factor: borderRadiusFactor),
+    );
+
+    return ClipRRect(
+      borderRadius: radius,
+      child: LinearProgressIndicator(
+        value: animatedProgress,
+        minHeight: barHeight,
+        backgroundColor: trackColor ?? Colors.transparent,
+        borderRadius: radius,
+        valueColor: AlwaysStoppedAnimation<Color>(
+          progressColor ?? Colors.transparent,
+        ),
+      ),
+    );
+  }
+}
+
 class AppProgressRingPainter extends CustomPainter {
   const AppProgressRingPainter({
     required this.progress,

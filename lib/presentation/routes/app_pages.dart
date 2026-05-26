@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import 'package:today/presentation/controllers/animation/app_animation_controller.dart';
 import 'package:today/presentation/bindings/splash/splash_binding.dart';
 import 'package:today/presentation/screens/splash/splash_screen.dart';
 import 'package:today/presentation/bindings/auth/auth_binding.dart';
@@ -10,6 +11,7 @@ import 'package:today/presentation/screens/home/active_goal_details_screen.dart'
 import 'package:today/presentation/bindings/home/home_binding.dart';
 import 'package:today/presentation/screens/home/home_calendar_screen.dart';
 import 'package:today/presentation/screens/home/home_screen.dart';
+import 'package:today/presentation/screens/home/todays_tasks_screen.dart';
 import 'package:today/presentation/bindings/main/main_app_binding.dart';
 import 'package:today/presentation/screens/main/main_app_screen.dart';
 import 'package:today/presentation/bindings/settings/notifications_binding.dart';
@@ -51,6 +53,14 @@ abstract class AppPages {
       name: AppRoutes.homeCalendar,
       page: () => const HomeCalendarScreen(),
       binding: HomeBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.todaysTasks,
+      page: () => const TodaysTasksScreen(),
+      binding: HomeBinding(),
+      transition: AppAnimationController.pushTransition,
+      transitionDuration: AppAnimationController.pushDuration,
+      curve: AppAnimationController.pushCurve,
     ),
     GetPage(
       name: AppRoutes.activeGoalDetails,
