@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:today/core/extensions/theme_context_extension.dart';
-import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
@@ -28,12 +27,8 @@ class GoalProgressMetrics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labelColor = style == GoalProgressMetricsStyle.overview
-        ? context.mutedOnSurfaceColor
-        : AppColors.grey;
-    final footerColor = style == GoalProgressMetricsStyle.overview
-        ? context.onSurfaceColor
-        : AppColors.grey;
+    final labelColor = context.onSurfaceColor;
+    final footerColor = context.onSurfaceColor;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +57,7 @@ class GoalProgressMetrics extends StatelessWidget {
           ],
         ),
         if (footerText != null) ...[
-          AppSpacing.vertical(context, 0.03),
+          AppSpacing.vertical(context, 0.02),
           Text(
             footerText!,
             style: AppTextStyles.labelText(context).copyWith(
