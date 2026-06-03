@@ -216,8 +216,32 @@ class AppTexts {
 
   // Analytics tab
   static const String analyticsTitle = "Analytics";
-  static const String analyticsTabPlaceholder =
-      "Productivity scores, weekly consistency, and AI insights will appear here.";
+  static const String analyticsProductivityPercentageTitle =
+      "Productivity Percentage";
+  static const String analyticsWeeklyConsistencyTitle = "Weekly Consistency";
+  static const String analyticsTaskOutcomesTitle = "Task Outcomes";
+  static const String analyticsTaskOutcomesPeriodLabel = "This week";
+  static const String analyticsTaskOutcomesCompleted = "Completed";
+  static const String analyticsTaskOutcomesSkipped = "Skipped";
+  static const String analyticsTaskOutcomesPending = "Pending";
+  static const String analyticsTaskOutcomesEmpty =
+      "No tasks planned yet this week.";
+  static const String analyticsWeekAtAGlanceTitle = "Week at a Glance";
+  static const String analyticsWeekAtAGlanceAverage = "Average";
+  static const String analyticsWeekAtAGlanceBestDay = "Best Day";
+  static const String analyticsWeekAtAGlanceOnTrack = "On Track";
+  static const String analyticsWeekAtAGlanceEmptyInsight =
+      "Your week summary will appear once you have daily progress.";
+  static String analyticsWeekAtAGlanceInsight(String day, int percent) =>
+      '$day was your lowest day ($percent%). Focus there next.';
+  static String analyticsTaskOutcomesPlannedSummary(
+    int planned,
+    int finished,
+  ) => '$planned planned · $finished finished on time';
+  static const String analyticsActivityHeatmapTitle = "Activity Heatmap";
+  static const String analyticsHeatmapRangeLabel = "Last 12 Months";
+  static const String analyticsHeatmapLess = "Less";
+  static const String analyticsHeatmapMore = "More";
 
   // Notifications screen
   static const String notificationsTitle = "Notifications";
@@ -278,9 +302,16 @@ class AppTexts {
   // Settings — controls
   static const String settingsSectionHeading = "SETTINGS";
   static const String settingsHapticsLabel = "HAPTICS";
+  static const String settingsHapticsSubtitle = "Tap feedback on actions";
   static const String settingsNotificationsLabel = "NOTIFICATIONS";
+  static const String settingsNotificationsSubtitle = "Reminders and nudges";
+  static const String settingsVacationModeLabel = "VACATION MODE";
+  static const String settingsVacationModeSubtitle =
+      "Pause goals & tasks creation temporarily";
   static const String notificationPreferencesLink = "Notification preferences";
   static const String settingsAccentColorLabel = "PALETTE COLOR";
+  static const String settingsAccentColorSubtitle = "App accent palette";
+  static const String settingsDarkModeSubtitle = "Light or dark appearance";
   static const String settingsAccentClassic = "Classic";
   static const String settingsAccentLavendar = "Lavendar";
 

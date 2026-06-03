@@ -45,7 +45,7 @@ class AppBottomNavBarScaffold extends StatelessWidget {
             bottom: AppResponsive.scaleSize(context, 10),
             child: AppBottomNavBar(currentIndex: currentIndex, onTap: onTap),
           ),
-          if (overlay != null) overlay!,
+          ?overlay,
         ],
       ),
     );

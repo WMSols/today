@@ -16,6 +16,7 @@ import 'package:today/domain/repositories/auth_repository.dart';
 import 'package:today/presentation/controllers/settings/accent_color_controller.dart';
 import 'package:today/presentation/controllers/settings/haptics_controller.dart';
 import 'package:today/presentation/controllers/settings/theme_controller.dart';
+import 'package:today/presentation/controllers/settings/vacation_mode_controller.dart';
 import 'package:today/firebase_options.dart';
 
 /// Handles async app bootstrap: env, DI, and initial route resolution.
@@ -41,7 +42,9 @@ abstract class AppInitializer {
     );
     AppBinding().dependencies();
     Get.put<HapticsController>(HapticsController(), permanent: true);
+    Get.put<VacationModeController>(VacationModeController(), permanent: true);
     await Get.find<HapticsController>().loadFromStorage();
+    await Get.find<VacationModeController>().loadFromStorage();
     initialRoute = await _resolveInitialRoute();
   }
 
