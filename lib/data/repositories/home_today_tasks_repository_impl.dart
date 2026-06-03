@@ -13,4 +13,12 @@ class HomeTodayTasksRepositoryImpl implements HomeTodayTasksRepository {
     final raw = await _remote.fetchTodayTasks();
     return raw.map(HomeTodayTaskModel.fromJson).toList();
   }
+
+  @override
+  Future<void> updateTodayTaskStatus({
+    required String taskId,
+    required HomeTodayTaskStatus status,
+  }) async {
+    await _remote.updateTaskStatus(taskId: taskId, status: status.name);
+  }
 }

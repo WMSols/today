@@ -11,6 +11,7 @@ import 'package:today/domain/entities/goal_card_entity.dart';
 import 'package:today/domain/entities/active_goal_task_entity.dart';
 import 'package:today/domain/entities/goal_history_day_entity.dart';
 import 'package:today/domain/entities/home_today_task_entity.dart';
+import 'package:today/domain/repositories/home_today_tasks_repository.dart';
 import 'package:today/domain/usecases/get_home_today_tasks_usecase.dart';
 import 'package:today/domain/usecases/create_goal_usecase.dart';
 import 'package:today/domain/usecases/complete_task_usecase.dart';
@@ -77,6 +78,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     this._deleteGoalUseCase,
     this._getWeeklyCalendarUseCase,
     this._getHomeTodayTasksUseCase,
+    this._homeTodayTasksRepository,
   );
 
   final GoalCardsController _goalCardsController;
@@ -88,6 +90,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   final DeleteGoalUseCase _deleteGoalUseCase;
   final GetWeeklyCalendarUseCase _getWeeklyCalendarUseCase;
   final GetHomeTodayTasksUseCase _getHomeTodayTasksUseCase;
+  final HomeTodayTasksRepository _homeTodayTasksRepository;
 
   final RxBool isLoading = false.obs;
   final RxBool isRefreshing = false.obs;
@@ -322,13 +325,21 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
         : taskId;
   }
 
-  void completeTodayTask(String taskId) {
+  Future<void> completeTodayTask(String taskId) async {
+    await _homeTodayTasksRepository.updateTodayTaskStatus(
+      taskId: taskId,
+      status: HomeTodayTaskStatus.completed,
+    );
     _setTodayTaskStatus(taskId, HomeTodayTaskStatus.completed);
     selectedTodayTaskId.value = '';
     AppToast.showSuccess(AppTexts.toastTaskCompleted);
   }
 
-  void skipTodayTask(String taskId) {
+  Future<void> skipTodayTask(String taskId) async {
+    await _homeTodayTasksRepository.updateTodayTaskStatus(
+      taskId: taskId,
+      status: HomeTodayTaskStatus.skipped,
+    );
     _setTodayTaskStatus(taskId, HomeTodayTaskStatus.skipped);
     selectedTodayTaskId.value = '';
     AppToast.showInformation(AppTexts.toastTaskSkippedTitle);
@@ -518,6 +529,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       if (selectedGoalId.value.isNotEmpty) {
         await loadActiveGoalTasks(selectedGoalId.value);
       }
+      await _goalCardsController.loadGoalCards(force: true);
     } catch (_) {
       _showError(AppTexts.homeUnableCompleteTask);
     }
@@ -540,6 +552,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       if (selectedGoalId.value.isNotEmpty) {
         await loadActiveGoalTasks(selectedGoalId.value);
       }
+      await _goalCardsController.loadGoalCards(force: true);
     } catch (_) {
       _showError(AppTexts.homeUnableSkipTask);
     }

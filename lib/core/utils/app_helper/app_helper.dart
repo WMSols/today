@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_formatter/app_formatter.dart';
 
@@ -214,6 +215,62 @@ class AppHelper {
 
   static Color activityColorForProgress(double progress) {
     return activityColor(activityFromProgress(progress));
+  }
+
+  /// Heatmap cell fill from empty ([level] 0) through [AppColors.success].
+  static Color successHeatmapColor(
+    BuildContext context, {
+    required int level,
+    int maxLevel = 4,
+  }) {
+    return scaledSemanticFillColor(
+      context,
+      base: AppColors.success,
+      level: level,
+      maxLevel: maxLevel,
+    );
+  }
+
+  /// Thin outline for empty heatmap cells on section cards.
+  static Color successHeatmapEmptyBorderColor(BuildContext context) {
+    return context.onSectionCardColor.withValues(
+      alpha: context.isDarkMode ? 0.42 : 0.28,
+    );
+  }
+
+  /// Theme-aware ramp from section card → semantic base (heatmap, etc.).
+  static Color scaledSemanticFillColor(
+    BuildContext context, {
+    required Color base,
+    required int level,
+    int maxLevel = 4,
+  }) {
+    final cap = maxLevel.clamp(1, 10);
+    final clamped = level.clamp(0, cap);
+    if (clamped == 0) {
+      return context.sectionCardColor;
+    }
+    final t = clamped / cap;
+    final contrastAnchor = context.isDarkMode
+        ? AppColors.white
+        : AppColors.black;
+    final contrastAdjusted = Color.lerp(
+      base,
+      contrastAnchor,
+      context.isDarkMode ? 0.2 : 0.1,
+    )!;
+    final mappedT = 0.3 + (t * 0.7);
+    return Color.lerp(context.sectionCardColor, contrastAdjusted, mappedT)!;
+  }
+
+  static double averageProgress(Iterable<double> values) {
+    final list = values.toList(growable: false);
+    if (list.isEmpty) return 0;
+    var sum = 0.0;
+    for (final v in list) {
+      sum += v.clamp(0.0, 1.0);
+    }
+    return (sum / list.length).clamp(0.0, 1.0);
   }
 }
 

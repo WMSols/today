@@ -12,8 +12,8 @@ class GoalCardsController extends GetxController {
   final RxList<GoalCardEntity> goalCards = <GoalCardEntity>[].obs;
 
   /// Returns `true` when cards were loaded successfully.
-  Future<bool> loadGoalCards() async {
-    if (goalCards.isNotEmpty) {
+  Future<bool> loadGoalCards({bool force = false}) async {
+    if (!force && goalCards.isNotEmpty) {
       return true;
     }
     if (isLoading.value) {

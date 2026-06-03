@@ -9,7 +9,9 @@ import 'package:today/domain/usecases/get_goal_cards_usecase.dart';
 import 'package:today/domain/usecases/get_goal_history_usecase.dart';
 import 'package:today/domain/usecases/skip_task_usecase.dart';
 import 'package:today/domain/usecases/get_me_usecase.dart';
+import 'package:today/domain/usecases/get_analytics_dashboard_usecase.dart';
 import 'package:today/domain/usecases/get_weekly_calendar_usecase.dart';
+import 'package:today/domain/repositories/home_today_tasks_repository.dart';
 import 'package:today/domain/usecases/get_home_today_tasks_usecase.dart';
 import 'package:today/domain/repositories/auth_repository.dart';
 import 'package:today/presentation/controllers/analytics/analytics_controller.dart';
@@ -42,10 +44,11 @@ class MainAppBinding extends Bindings {
         Get.find<DeleteGoalUseCase>(),
         Get.find<GetWeeklyCalendarUseCase>(),
         Get.find<GetHomeTodayTasksUseCase>(),
+        Get.find<HomeTodayTasksRepository>(),
       ),
     );
     Get.lazyPut<AnalyticsController>(
-      () => AnalyticsController(Get.find<GetWeeklyCalendarUseCase>()),
+      () => AnalyticsController(Get.find<GetAnalyticsDashboardUseCase>()),
     );
     Get.lazyPut<SettingsController>(
       () => SettingsController(

@@ -32,8 +32,12 @@ class AppSectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final radius = BorderRadius.circular(
+      AppResponsive.radius(context, factor: radiusFactor),
+    );
     final content = Container(
       width: width ?? double.infinity,
+      clipBehavior: Clip.antiAlias,
       padding: AppSpacing.symmetric(
         context,
         h: paddingHorizontal,
@@ -41,9 +45,7 @@ class AppSectionCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: backgroundColor ?? context.sectionCardColor,
-        borderRadius: BorderRadius.circular(
-          AppResponsive.radius(context, factor: radiusFactor),
-        ),
+        borderRadius: radius,
         border: borderWidth > 0 && borderColor != null
             ? Border.all(color: borderColor!, width: borderWidth)
             : null,

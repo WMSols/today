@@ -9,18 +9,21 @@ import 'package:today/data/datasources/local/subscription_local_data_source.dart
 import 'package:today/data/datasources/remote/planner_remote_data_source.dart';
 import 'package:today/data/datasources/remote/auth_remote_data_source.dart';
 import 'package:today/data/datasources/remote/active_goal_remote_data_source.dart';
+import 'package:today/data/datasources/remote/analytics_remote_data_source.dart';
 import 'package:today/data/datasources/remote/home_daily_calendar_remote_data_source.dart';
 import 'package:today/data/datasources/remote/home_today_tasks_remote_data_source.dart';
 import 'package:today/data/repositories/home_today_tasks_repository_impl.dart';
 import 'package:today/domain/repositories/home_today_tasks_repository.dart';
 import 'package:today/domain/usecases/get_home_today_tasks_usecase.dart';
 import 'package:today/data/repositories/active_goal_repository_impl.dart';
+import 'package:today/data/repositories/analytics_repository_impl.dart';
 import 'package:today/data/repositories/home_daily_calendar_repository_impl.dart';
 import 'package:today/data/repositories/auth_repository_impl.dart';
 import 'package:today/data/repositories/goal_repository_impl.dart';
 import 'package:today/data/repositories/planner_repository_impl.dart';
 import 'package:today/data/repositories/subscription_repository_impl.dart';
 import 'package:today/domain/repositories/active_goal_repository.dart';
+import 'package:today/domain/repositories/analytics_repository.dart';
 import 'package:today/domain/repositories/home_daily_calendar_repository.dart';
 import 'package:today/domain/repositories/auth_repository.dart';
 import 'package:today/domain/repositories/goal_repository.dart';
@@ -38,6 +41,7 @@ import 'package:today/domain/usecases/create_goal_usecase.dart';
 import 'package:today/domain/usecases/complete_task_usecase.dart';
 import 'package:today/domain/usecases/skip_task_usecase.dart';
 import 'package:today/domain/usecases/delete_goal_usecase.dart';
+import 'package:today/domain/usecases/get_analytics_dashboard_usecase.dart';
 import 'package:today/domain/usecases/get_weekly_calendar_usecase.dart';
 import 'package:today/domain/usecases/save_goal_usecase.dart';
 
@@ -65,6 +69,10 @@ class AppBinding extends Bindings {
     );
     Get.lazyPut<ActiveGoalRemoteDataSource>(
       () => ActiveGoalRemoteDataSource(dio),
+      fenix: true,
+    );
+    Get.lazyPut<AnalyticsRemoteDataSource>(
+      AnalyticsRemoteDataSource.new,
       fenix: true,
     );
     Get.lazyPut<HomeDailyCalendarRemoteDataSource>(
@@ -98,6 +106,10 @@ class AppBinding extends Bindings {
     );
     Get.lazyPut<ActiveGoalRepository>(
       () => ActiveGoalRepositoryImpl(Get.find<ActiveGoalRemoteDataSource>()),
+      fenix: true,
+    );
+    Get.lazyPut<AnalyticsRepository>(
+      () => AnalyticsRepositoryImpl(Get.find<AnalyticsRemoteDataSource>()),
       fenix: true,
     );
     Get.lazyPut<HomeDailyCalendarRepository>(
@@ -164,6 +176,10 @@ class AppBinding extends Bindings {
     );
     Get.lazyPut<DeleteGoalUseCase>(
       () => DeleteGoalUseCase(Get.find<ActiveGoalRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetAnalyticsDashboardUseCase>(
+      () => GetAnalyticsDashboardUseCase(Get.find<AnalyticsRepository>()),
       fenix: true,
     );
     Get.lazyPut<GetWeeklyCalendarUseCase>(

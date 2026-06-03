@@ -256,10 +256,7 @@ class _AppPullToRefreshState extends State<AppPullToRefresh>
         return Stack(
           fit: StackFit.expand,
           alignment: Alignment.bottomCenter,
-          children: [
-            ...previousChildren,
-            if (currentChild != null) currentChild,
-          ],
+          children: [...previousChildren, ?currentChild],
         );
       },
       transitionBuilder: _headerTransition,
