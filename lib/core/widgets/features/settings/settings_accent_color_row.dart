@@ -4,11 +4,10 @@ import 'package:get/get.dart';
 import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/theme/app_accent_color.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
-import 'package:today/core/utils/app_styles/app_text_styles.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/presentation/controllers/settings/accent_color_controller.dart';
 
-/// Accent swatches in a settings row: classic plus single-color themes.
+/// Accent swatch picker used as the trailing control on [SettingsControlTile].
 class SettingsAccentColorRow extends StatelessWidget {
   const SettingsAccentColorRow({super.key});
 
@@ -16,39 +15,20 @@ class SettingsAccentColorRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labelColor = context.onSectionCardColor;
-    final labelStyle = AppTextStyles.bodyText(context).copyWith(
-      color: labelColor,
-      fontWeight: FontWeight.w600,
-      fontSize: AppResponsive.scaleSize(context, 14),
-    );
-
     return GetBuilder<AccentColorController>(
       builder: (accentCtrl) {
         final selected = accentCtrl.accent;
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        return Wrap(
+          spacing: AppResponsive.scaleSize(context, 8),
+          runSpacing: AppResponsive.scaleSize(context, 6),
+          alignment: WrapAlignment.end,
           children: [
-            Expanded(
-              child: Text(
-                AppTexts.settingsAccentColorLabel,
-                overflow: TextOverflow.ellipsis,
-                style: labelStyle,
+            for (final option in _selectable)
+              _AccentSwatch(
+                option: option,
+                isSelected: selected == option,
+                onTap: () => accentCtrl.setAccent(option),
               ),
-            ),
-            Wrap(
-              spacing: AppResponsive.scaleSize(context, 8),
-              runSpacing: AppResponsive.scaleSize(context, 6),
-              alignment: WrapAlignment.end,
-              children: [
-                for (final option in _selectable)
-                  _AccentSwatch(
-                    option: option,
-                    isSelected: selected == option,
-                    onTap: () => accentCtrl.setAccent(option),
-                  ),
-              ],
-            ),
           ],
         );
       },

@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
-import 'package:today/core/utils/app_styles/app_text_styles.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/form/app_checkbox/app_checkbox.dart';
 
+/// Custom settings switch used as the trailing control on [SettingsControlTile].
 class SettingsToggleRow extends StatelessWidget {
   const SettingsToggleRow({
     super.key,
-    required this.label,
     required this.value,
     required this.onChanged,
     this.showSystemCheckbox = false,
@@ -19,7 +17,6 @@ class SettingsToggleRow extends StatelessWidget {
     this.toggleLocked = false,
   });
 
-  final String label;
   final bool value;
   final ValueChanged<bool> onChanged;
 
@@ -34,7 +31,6 @@ class SettingsToggleRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final labelColor = context.onSectionCardColor;
     final inactiveTrack = isDark ? AppColors.lightGrey : AppColors.grey;
     const knobColor = AppColors.secondary;
     final outlineColor = isDark ? AppColors.lightGrey : AppColors.grey;
@@ -102,21 +98,10 @@ class SettingsToggleRow extends StatelessWidget {
       ),
     );
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Expanded(
-          child: Text(
-            label,
-            overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.bodyText(context).copyWith(
-              color: labelColor,
-              fontWeight: FontWeight.w600,
-              fontSize: AppResponsive.scaleSize(context, 14),
-            ),
-          ),
-        ),
-        if (showSystemCheckbox && onSystemChanged != null) ...[
+    if (showSystemCheckbox && onSystemChanged != null) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
           AppCheckbox(
             value: systemCheckboxValue,
             label: AppTexts.themeSystem,
@@ -127,9 +112,11 @@ class SettingsToggleRow extends StatelessWidget {
             labelColor: AppColors.white,
           ),
           SizedBox(width: AppResponsive.scaleSize(context, 8)),
+          toggle,
         ],
-        toggle,
-      ],
-    );
+      );
+    }
+
+    return toggle;
   }
 }

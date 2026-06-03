@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:today/core/auth/firebase_auth_gateway.dart';
 import 'package:today/core/constants/api_constants.dart';
 import 'package:today/presentation/controllers/settings/haptics_controller.dart';
+import 'package:today/presentation/controllers/settings/vacation_mode_controller.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/feedback/app_toast.dart';
 import 'package:today/domain/entities/me_entity.dart';
@@ -73,6 +74,8 @@ class SettingsController extends GetxController {
   }
 
   HapticsController get haptics => Get.find<HapticsController>();
+
+  VacationModeController get vacationMode => Get.find<VacationModeController>();
 
   void setNotifications(bool value) {
     notificationsEnabled.value = value;
