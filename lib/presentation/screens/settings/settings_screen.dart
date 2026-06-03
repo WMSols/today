@@ -40,8 +40,10 @@ class SettingsScreen extends GetView<SettingsController> {
               () => SettingsControlsCard(
                 hapticsEnabled: controller.haptics.enabled.value,
                 notificationsEnabled: controller.notificationsEnabled.value,
+                vacationModeEnabled: controller.vacationMode.enabled.value,
                 onHapticsChanged: controller.haptics.setEnabled,
                 onNotificationsChanged: controller.setNotifications,
+                onVacationModeChanged: controller.vacationMode.setEnabled,
               ),
             ),
             AppSpacing.vertical(context, 0.02),
