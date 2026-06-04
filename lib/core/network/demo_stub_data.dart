@@ -63,6 +63,32 @@ abstract final class DemoStubData {
     };
   }
 
+  /// Appends a manually created task for the current session.
+  static Map<String, dynamic> addTodayTask({
+    required String title,
+    required String timeLabel,
+    required DateTime scheduledDate,
+    required DateTime startDateTime,
+    required DateTime endDateTime,
+    String? notes,
+    bool isRecurring = false,
+  }) {
+    final id = 'task_${DateTime.now().millisecondsSinceEpoch}';
+    final task = <String, dynamic>{
+      'id': id,
+      'title': title,
+      'time_label': timeLabel,
+      'status': 'pending',
+      'scheduled_date': scheduledDate.toIso8601String(),
+      'start_at': startDateTime.toIso8601String(),
+      'end_at': endDateTime.toIso8601String(),
+      'is_recurring': isRecurring,
+      if (notes != null && notes.isNotEmpty) 'notes': notes,
+    };
+    _todayTasksSession.add(task);
+    return Map<String, dynamic>.from(task);
+  }
+
   static void setGoalTaskStatus(String taskId, String status) {
     _goalTaskStatuses[taskId] = status;
   }

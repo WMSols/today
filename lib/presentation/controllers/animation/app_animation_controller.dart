@@ -36,6 +36,24 @@ class AppAnimationController extends GetxController {
     );
   }
 
+  /// Replaces the current route (same transition as [pushNamed]).
+  static Future<T?>? offNamed<T>(String routeName, {dynamic arguments}) {
+    final page = pageFor(routeName);
+    if (page == null) {
+      return Get.offNamed<T>(routeName, arguments: arguments);
+    }
+
+    return Get.off<T>(
+      page.page,
+      routeName: routeName,
+      binding: page.binding,
+      arguments: arguments,
+      transition: pushTransition,
+      duration: pushDuration,
+      curve: pushCurve,
+    );
+  }
+
   /// Clears the stack and opens [MainAppScreen] with [MainAppBinding].
   Future<T?>? offAllToMainApp<T>() => offAllFromSplash<T>(AppRoutes.mainApp);
 

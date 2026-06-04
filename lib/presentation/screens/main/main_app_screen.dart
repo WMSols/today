@@ -25,6 +25,7 @@ class MainAppScreen extends GetView<MainAppController> {
         overlay: isHomeTab
             ? AppFABMenuButton(
                 onAddGoal: home.openPlanner,
+                onNewTask: home.openCreateTask,
                 onRestructureGoal: home.openPlanner,
               )
             : null,

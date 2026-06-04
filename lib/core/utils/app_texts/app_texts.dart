@@ -259,7 +259,35 @@ class AppTexts {
 
   // Home — FAB menu
   static const String fabAddGoal = "New Goal";
+  static const String fabNewTask = "New Task";
   static const String fabRestructureGoal = "Restructure";
+
+  // Create task screen
+  static const String createTaskTitle = "New Task";
+  static const String createTaskHeading = "Create New Task";
+  static const String createTaskScheduleLabel = "Schedule";
+  static const String createTaskTitleLabel = "Title";
+  static const String createTaskNotesLabel = "Notes";
+  static const String createTaskStartTimeLabel = "Start time";
+  static const String createTaskEndTimeLabel = "End time";
+  static const String createTaskRecurringLabel = "Recurring";
+  static const String createTaskRecurringSubtitle =
+      "Repeat this task on future days";
+  static const String createTaskButton = "Create Task";
+  static const String createTaskSchedulePlaceholder = "Select a date";
+  static const String createTaskTitleHint = "What do you need to do?";
+  static const String createTaskNotesHint = "Add details (optional)";
+  static const String createTaskTimePlaceholder = "Select time";
+  static const String createTaskTitleRequired = "Title is required";
+  static const String createTaskScheduleRequired = "Schedule date is required";
+  static const String createTaskStartTimeRequired = "Start time is required";
+  static const String createTaskEndTimeRequired = "End time is required";
+  static const String createTaskEndBeforeStart =
+      "End time must be after start time";
+  static const String createTaskSelectScheduleFirst =
+      "Select a schedule date first";
+  static const String toastTaskCreated = "Task created";
+  static const String createTaskUnableToCreate = "Unable to create task";
 
   // Home — goal entry card
   static const String goalDurationLabel = "GOAL DURATION";

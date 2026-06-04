@@ -413,6 +413,10 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     Get.toNamed<void>(AppRoutes.planner);
   }
 
+  void openCreateTask() {
+    AppAnimationController.pushNamed<void>(AppRoutes.createTask);
+  }
+
   void openAddGoalSheet() {
     final context = Get.context;
     if (context == null) return;

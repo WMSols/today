@@ -232,7 +232,7 @@ class HomeTodayTaskItem extends StatelessWidget {
                   switchOutCurve: _animCurve,
                   transitionBuilder: (child, animation) {
                     return SizeTransition(
-                      axisAlignment: -1,
+                      alignment: const Alignment(-1.0, -1.0),
                       sizeFactor: animation,
                       child: FadeTransition(opacity: animation, child: child),
                     );

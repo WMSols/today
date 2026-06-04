@@ -100,7 +100,6 @@ class AppCustomAppBar extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final card = isDark ? AppColors.darkGrey : AppColors.grey;
     final onSurface = isDark ? AppColors.white : AppColors.black;
-    final muted = isDark ? AppColors.grey : AppColors.black;
 
     switch (variant) {
       case AppCustomAppBarVariant.homeStatus:
@@ -203,7 +202,7 @@ class AppCustomAppBar extends StatelessWidget {
         return Text(
           title ?? '',
           style: AppTextStyles.headline(context).copyWith(
-            color: muted,
+            color: onSurface,
             fontWeight: FontWeight.w600,
             fontSize: AppResponsive.scaleSize(context, 28),
           ),
@@ -225,7 +224,7 @@ class AppCustomAppBar extends StatelessWidget {
                 title ?? '',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.heading(context).copyWith(
-                  color: muted,
+                  color: onSurface,
                   fontWeight: FontWeight.w600,
                   fontSize: AppResponsive.scaleSize(context, 18),
                 ),

@@ -7,6 +7,26 @@ class HomeTodayTasksRemoteDataSource {
     return DemoStubData.snapshotTodayTasks();
   }
 
+  Future<Map<String, dynamic>> createTask({
+    required String title,
+    required String timeLabel,
+    required DateTime scheduledDate,
+    required DateTime startDateTime,
+    required DateTime endDateTime,
+    String? notes,
+    bool isRecurring = false,
+  }) async {
+    return DemoStubData.addTodayTask(
+      title: title,
+      timeLabel: timeLabel,
+      scheduledDate: scheduledDate,
+      startDateTime: startDateTime,
+      endDateTime: endDateTime,
+      notes: notes,
+      isRecurring: isRecurring,
+    );
+  }
+
   Future<void> updateTaskStatus({
     required String taskId,
     required String status,

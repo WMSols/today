@@ -10,6 +10,7 @@ abstract class AppRoutes {
   static const todaysTasks = '/todays-tasks';
   static const planner = '/planner';
   static const creatingPlan = '/creating-plan';
+  static const createTask = '/create-task';
   static const subscription = '/subscription';
   static const goals = '/goals';
   static const settings = '/settings';
