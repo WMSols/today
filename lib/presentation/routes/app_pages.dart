@@ -19,7 +19,9 @@ import 'package:today/presentation/screens/settings/notifications_screen.dart';
 import 'package:today/presentation/bindings/onboarding/onboarding_binding.dart';
 import 'package:today/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:today/presentation/screens/planner/creating_plan_screen.dart';
+import 'package:today/presentation/bindings/planner/create_task_binding.dart';
 import 'package:today/presentation/bindings/planner/planner_binding.dart';
+import 'package:today/presentation/screens/planner/create_task_screen.dart';
 import 'package:today/presentation/screens/planner/planner_screen.dart';
 import 'package:today/presentation/routes/app_routes.dart';
 import 'package:today/presentation/bindings/settings/settings_binding.dart';
@@ -81,6 +83,14 @@ abstract class AppPages {
       name: AppRoutes.creatingPlan,
       page: () => const CreatingPlanScreen(),
       binding: PlannerBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.createTask,
+      page: () => const CreateTaskScreen(),
+      binding: CreateTaskBinding(),
+      transition: AppAnimationController.pushTransition,
+      transitionDuration: AppAnimationController.pushDuration,
+      curve: AppAnimationController.pushCurve,
     ),
     GetPage(
       name: AppRoutes.subscription,

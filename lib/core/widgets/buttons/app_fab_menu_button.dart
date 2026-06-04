@@ -19,10 +19,12 @@ class AppFABMenuButton extends StatefulWidget {
   const AppFABMenuButton({
     super.key,
     required this.onAddGoal,
+    required this.onNewTask,
     this.onRestructureGoal,
   });
 
   final VoidCallback onAddGoal;
+  final VoidCallback onNewTask;
 
   /// When null, [AppTexts.fabRestructureGoal] is shown disabled.
   final VoidCallback? onRestructureGoal;
@@ -92,6 +94,12 @@ class _AppFABMenuButtonState extends State<AppFABMenuButton>
     widget.onAddGoal();
   }
 
+  void _onNewTask() {
+    _impact();
+    _close();
+    widget.onNewTask();
+  }
+
   void _onRestructureGoal() {
     _impact();
     _close();
@@ -155,13 +163,19 @@ class _AppFABMenuButtonState extends State<AppFABMenuButton>
                       children: [
                         _AppFABMenuActionTile(
                           label: AppTexts.fabAddGoal,
-                          icon: Iconsax.add_circle,
+                          icon: Iconsax.flash_circle_1,
                           onTap: _onAddGoal,
                         ),
                         AppSpacing.vertical(context, 0.012),
                         _AppFABMenuActionTile(
+                          label: AppTexts.fabNewTask,
+                          icon: Iconsax.code_circle,
+                          onTap: _onNewTask,
+                        ),
+                        AppSpacing.vertical(context, 0.012),
+                        _AppFABMenuActionTile(
                           label: AppTexts.fabRestructureGoal,
-                          icon: Iconsax.refresh_circle,
+                          icon: Iconsax.repeat_circle,
                           onTap: widget.onRestructureGoal == null
                               ? null
                               : _onRestructureGoal,

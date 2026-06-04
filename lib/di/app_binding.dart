@@ -14,6 +14,7 @@ import 'package:today/data/datasources/remote/home_daily_calendar_remote_data_so
 import 'package:today/data/datasources/remote/home_today_tasks_remote_data_source.dart';
 import 'package:today/data/repositories/home_today_tasks_repository_impl.dart';
 import 'package:today/domain/repositories/home_today_tasks_repository.dart';
+import 'package:today/domain/usecases/create_today_task_usecase.dart';
 import 'package:today/domain/usecases/get_home_today_tasks_usecase.dart';
 import 'package:today/data/repositories/active_goal_repository_impl.dart';
 import 'package:today/data/repositories/analytics_repository_impl.dart';
@@ -188,6 +189,10 @@ class AppBinding extends Bindings {
     );
     Get.lazyPut<GetHomeTodayTasksUseCase>(
       () => GetHomeTodayTasksUseCase(Get.find<HomeTodayTasksRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<CreateTodayTaskUseCase>(
+      () => CreateTodayTaskUseCase(Get.find<HomeTodayTasksRepository>()),
       fenix: true,
     );
   }
