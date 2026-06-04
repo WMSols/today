@@ -6,6 +6,7 @@ import 'package:today/core/init/app_system_ui.dart';
 import 'package:today/core/theme/app_theme.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
+import 'package:today/core/widgets/feedback/app_no_connection_banner.dart';
 import 'package:today/presentation/bindings/main/initial_binding.dart';
 import 'package:today/presentation/controllers/settings/accent_color_controller.dart';
 import 'package:today/presentation/controllers/settings/theme_controller.dart';
@@ -38,7 +39,9 @@ class TodayApp extends StatelessWidget {
               value: AppSystemUi.overlayFor(brightness),
               child: ColoredBox(
                 color: surface,
-                child: child ?? const SizedBox.shrink(),
+                child: AppNoConnectionBanner(
+                  child: child ?? const SizedBox.shrink(),
+                ),
               ),
             );
           },

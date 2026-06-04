@@ -1,187 +1,101 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 
-import 'package:today/core/utils/app_colors/app_colors.dart';
-import 'package:today/core/utils/app_responsive/app_responsive.dart';
+import 'package:today/core/theme/app_toast_colors.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
 
 enum AppToastStatus { success, information, warning, error }
 
-class AppToast extends StatelessWidget {
-  const AppToast({
-    super.key,
-    required this.status,
-    required this.title,
-    this.subtitle,
-    this.icon,
-  });
+/// Full-width bottom bar with a single centered message (offline banner, toasts).
+class AppToastBar extends StatelessWidget {
+  const AppToastBar({super.key, required this.message, required this.style});
 
-  final AppToastStatus status;
-  final String title;
-  final String? subtitle;
-  final IconData? icon;
-
-  static String _defaultTitle(AppToastStatus status) {
-    switch (status) {
-      case AppToastStatus.success:
-        return 'Success';
-      case AppToastStatus.information:
-        return 'Information';
-      case AppToastStatus.warning:
-        return 'Warning';
-      case AppToastStatus.error:
-        return 'Error';
-    }
-  }
-
-  static IconData _defaultIcon(AppToastStatus status) {
-    switch (status) {
-      case AppToastStatus.success:
-        return Iconsax.tick_circle;
-      case AppToastStatus.information:
-        return Iconsax.info_circle;
-      case AppToastStatus.warning:
-        return Iconsax.warning_2;
-      case AppToastStatus.error:
-        return Iconsax.information;
-    }
-  }
-
-  static Color _backgroundColor(AppToastStatus status) {
-    switch (status) {
-      case AppToastStatus.success:
-        return AppColors.success;
-      case AppToastStatus.information:
-        return AppColors.information;
-      case AppToastStatus.warning:
-        return AppColors.warning;
-      case AppToastStatus.error:
-        return AppColors.error;
-    }
-  }
-
-  /// Shows a success toast. No blur effect.
-  static void showSuccess(String title, [String? subtitle]) {
-    _showToast(
-      status: AppToastStatus.success,
-      title: title,
-      subtitle: subtitle,
-    );
-  }
-
-  /// Shows an information toast. No blur effect.
-  static void showInformation(String title, [String? subtitle]) {
-    _showToast(
-      status: AppToastStatus.information,
-      title: title,
-      subtitle: subtitle,
-    );
-  }
-
-  /// Shows a warning toast. No blur effect.
-  static void showWarning(String title, [String? subtitle]) {
-    _showToast(
-      status: AppToastStatus.warning,
-      title: title,
-      subtitle: subtitle,
-    );
-  }
-
-  /// Shows an error toast. No blur effect.
-  static void showError(String title, [String? subtitle]) {
-    _showToast(status: AppToastStatus.error, title: title, subtitle: subtitle);
-  }
-
-  static void _showToast({
-    required AppToastStatus status,
-    required String title,
-    String? subtitle,
-    IconData? icon,
-  }) {
-    final context = Get.context!;
-    final effectiveTitle = title.isEmpty ? _defaultTitle(status) : title;
-    final effectiveIcon = icon ?? _defaultIcon(status);
-    final bgColor = _backgroundColor(status);
-
-    Get.rawSnackbar(
-      title: '',
-      message: '',
-      titleText: Text(
-        effectiveTitle,
-        style: AppTextStyles.bodyText(
-          context,
-        ).copyWith(fontWeight: FontWeight.w600, color: Colors.white),
-      ),
-      messageText: subtitle != null && subtitle.isNotEmpty
-          ? Text(
-              subtitle,
-              style: AppTextStyles.labelText(
-                context,
-              ).copyWith(color: Colors.white),
-            )
-          : const SizedBox.shrink(),
-      icon: Icon(
-        effectiveIcon,
-        color: Colors.white,
-        size: AppResponsive.scaleSize(context, 28),
-      ),
-      backgroundColor: bgColor,
-      overlayBlur: 0,
-      overlayColor: Colors.transparent,
-      snackPosition: SnackPosition.BOTTOM,
-      snackStyle: SnackStyle.FLOATING,
-      margin: AppSpacing.symmetric(context, h: 0.04, v: 0.02),
-      borderRadius: AppResponsive.radius(context, factor: 1.6),
-      duration: const Duration(seconds: 2),
-    );
-  }
+  final String message;
+  final AppToastStyle style;
 
   @override
   Widget build(BuildContext context) {
-    final effectiveTitle = title.isEmpty ? _defaultTitle(status) : title;
-    final effectiveIcon = icon ?? _defaultIcon(status);
-    final bgColor = _backgroundColor(status);
+    final brightness = Theme.of(context).brightness;
+    final backgroundColor = AppToastColors.background(style, brightness);
+    final foregroundColor = AppToastColors.foreground(style, brightness);
 
     return Material(
-      color: bgColor,
-      borderRadius: BorderRadius.circular(
-        AppResponsive.radius(context, factor: 1.6),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(
-            effectiveIcon,
-            color: Colors.white,
-            size: AppResponsive.scaleSize(context, 28),
-          ),
-          AppSpacing.horizontal(context, 0.02),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  effectiveTitle,
-                  style: AppTextStyles.bodyText(
-                    context,
-                  ).copyWith(fontWeight: FontWeight.w600, color: Colors.white),
-                ),
-                if (subtitle != null && subtitle!.isNotEmpty) ...[
-                  Text(
-                    subtitle!,
-                    style: AppTextStyles.labelText(
-                      context,
-                    ).copyWith(color: Colors.white),
-                  ),
-                ],
-              ],
+      color: backgroundColor,
+      child: SafeArea(
+        top: false,
+        child: Center(
+          child: Padding(
+            padding: AppSpacing.symmetric(context, v: 0.005, h: 0.04),
+            child: Text(
+              message,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.labelText(context).copyWith(
+                color: foregroundColor,
+                fontWeight: FontWeight.normal,
+                decoration: TextDecoration.none,
+                decorationColor: Colors.transparent,
+              ),
             ),
           ),
-        ],
+        ),
       ),
+    );
+  }
+}
+
+/// Transient bottom feedback using the same bar design as [AppNoConnectionBanner].
+abstract class AppToast {
+  AppToast._();
+
+  static const Duration _duration = Duration(seconds: 2);
+
+  static AppToastStyle _styleFor(AppToastStatus status) {
+    switch (status) {
+      case AppToastStatus.success:
+        return AppToastStyle.success;
+      case AppToastStatus.information:
+        return AppToastStyle.information;
+      case AppToastStatus.warning:
+        return AppToastStyle.warning;
+      case AppToastStatus.error:
+        return AppToastStyle.error;
+    }
+  }
+
+  static void showSuccess(String message) {
+    _show(status: AppToastStatus.success, message: message);
+  }
+
+  static void showInformation(String message) {
+    _show(status: AppToastStatus.information, message: message);
+  }
+
+  static void showWarning(String message) {
+    _show(status: AppToastStatus.warning, message: message);
+  }
+
+  static void showError(String message) {
+    _show(status: AppToastStatus.error, message: message);
+  }
+
+  static void _show({required AppToastStatus status, required String message}) {
+    final context = Get.context;
+    if (context == null || message.trim().isEmpty) return;
+
+    final style = _styleFor(status);
+
+    Get.rawSnackbar(
+      messageText: AppToastBar(message: message.trim(), style: style),
+      snackPosition: SnackPosition.BOTTOM,
+      snackStyle: SnackStyle.GROUNDED,
+      backgroundColor: Colors.transparent,
+      overlayBlur: 0,
+      overlayColor: Colors.transparent,
+      margin: EdgeInsets.zero,
+      borderRadius: 0,
+      padding: EdgeInsets.zero,
+      duration: _duration,
     );
   }
 }

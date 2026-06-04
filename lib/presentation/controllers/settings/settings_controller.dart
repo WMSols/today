@@ -63,10 +63,7 @@ class SettingsController extends GetxController {
       me.value = await _getMeUseCase();
     } catch (_) {
       if (ApiConstants.backendApiEnabled) {
-        AppToast.showWarning(
-          AppTexts.profileUnavailableTitle,
-          AppTexts.profileUnavailableBody,
-        );
+        AppToast.showWarning(AppTexts.profileUnavailableBody);
       }
     } finally {
       isProfileLoading.value = false;

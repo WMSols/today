@@ -96,24 +96,15 @@ class AuthController extends GetxController {
           e.code == GoogleSignInExceptionCode.uiUnavailable) {
         return;
       }
-      AppToast.showError(
-        AppTexts.googleSignInFailedTitle,
-        e.description ?? e.toString(),
-      );
+      AppToast.showError(e.description ?? e.toString());
     } on FirebaseAuthException catch (e) {
-      AppToast.showError(
-        AppTexts.googleSignInFailedTitle,
-        AuthErrorMessages.firebase(e),
-      );
+      AppToast.showError(AuthErrorMessages.firebase(e));
     } catch (e) {
       if (e is DioException) {
         final r = AuthErrorMessages.resolveDio(e, isLogin: true);
-        AppToast.showError(r.$1, r.$2);
+        AppToast.showError(r.$2.isNotEmpty ? r.$2 : r.$1);
       } else {
-        AppToast.showError(
-          AppTexts.googleSignInFailedTitle,
-          AppTexts.pleaseTryAgainShort,
-        );
+        AppToast.showError(AppTexts.pleaseTryAgainShort);
       }
     } finally {
       isLoading.value = false;
@@ -125,10 +116,7 @@ class AuthController extends GetxController {
     if (kIsWeb ||
         (defaultTargetPlatform != TargetPlatform.iOS &&
             defaultTargetPlatform != TargetPlatform.macOS)) {
-      AppToast.showInformation(
-        AppTexts.appleSignInInfoTitle,
-        AppTexts.appleSignInInfoBody,
-      );
+      AppToast.showInformation(AppTexts.appleSignInInfoBody);
       return;
     }
     isLoading.value = true;
@@ -138,19 +126,13 @@ class AuthController extends GetxController {
       await _persistApiSessionAfterFirebase(cred);
       await _completeAuthAndGoHome(AppTexts.signedInWithApple);
     } on FirebaseAuthException catch (e) {
-      AppToast.showError(
-        AppTexts.appleSignInFailedTitle,
-        AuthErrorMessages.firebase(e),
-      );
+      AppToast.showError(AuthErrorMessages.firebase(e));
     } catch (e) {
       if (e is DioException) {
         final r = AuthErrorMessages.resolveDio(e, isLogin: true);
-        AppToast.showError(r.$1, r.$2);
+        AppToast.showError(r.$2.isNotEmpty ? r.$2 : r.$1);
       } else {
-        AppToast.showError(
-          AppTexts.appleSignInFailedTitle,
-          AppTexts.pleaseTryAgainShort,
-        );
+        AppToast.showError(AppTexts.pleaseTryAgainShort);
       }
     } finally {
       isLoading.value = false;
@@ -187,12 +169,7 @@ class AuthController extends GetxController {
       if (Get.isRegistered<HapticsController>()) {
         Get.find<HapticsController>().impact();
       }
-      AppToast.showError(
-        isLoginMode.value
-            ? AppTexts.loginFailedTitle
-            : AppTexts.signUpFailedTitle,
-        AuthErrorMessages.firebase(e),
-      );
+      AppToast.showError(AuthErrorMessages.firebase(e));
     } catch (e) {
       if (Get.isRegistered<HapticsController>()) {
         Get.find<HapticsController>().impact();
@@ -202,14 +179,9 @@ class AuthController extends GetxController {
           e,
           isLogin: isLoginMode.value,
         );
-        AppToast.showError(resolved.$1, resolved.$2);
+        AppToast.showError(resolved.$2.isNotEmpty ? resolved.$2 : resolved.$1);
       } else {
-        AppToast.showError(
-          isLoginMode.value
-              ? AppTexts.loginFailedTitle
-              : AppTexts.signUpFailedTitle,
-          AppTexts.pleaseTryAgainShort,
-        );
+        AppToast.showError(AppTexts.pleaseTryAgainShort);
       }
     } finally {
       isLoading.value = false;

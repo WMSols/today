@@ -3,9 +3,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
 
-import 'package:today/core/utils/app_texts/app_texts.dart';
-import 'package:today/core/widgets/feedback/app_toast.dart';
-
 /// Provides connectivity status and guards for critical actions that require internet.
 class ConnectivityService extends GetxService {
   ConnectivityService() {
@@ -44,14 +41,8 @@ class ConnectivityService extends GetxService {
     return _hasConnection(result);
   }
 
-  /// Call before a critical action. Returns true if online; if no connection, shows toast and returns false.
-  Future<bool> guardConnection() async {
-    final connected = await hasConnection;
-    if (!connected) {
-      AppToast.showError(AppTexts.error, AppTexts.noInternet);
-    }
-    return connected;
-  }
+  /// Call before a critical action. Returns true if online; offline state is shown by [AppNoConnectionBanner].
+  Future<bool> guardConnection() async => hasConnection;
 
   @override
   void onClose() {
