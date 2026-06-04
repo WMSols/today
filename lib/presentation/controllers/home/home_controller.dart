@@ -342,7 +342,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     );
     _setTodayTaskStatus(taskId, HomeTodayTaskStatus.skipped);
     selectedTodayTaskId.value = '';
-    AppToast.showInformation(AppTexts.toastTaskSkippedTitle);
+    AppToast.showError(AppTexts.toastTaskSkippedTitle);
   }
 
   void _setTodayTaskStatus(String taskId, HomeTodayTaskStatus status) {
@@ -545,10 +545,10 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       final result = await _skipTaskUseCase(taskId);
       if (!result.already) {
         AppToast.showWarning(
-          AppTexts.toastTaskSkippedTitle,
           result.balance == null
-              ? null
-              : AppTexts.taskSkippedBalanceSubtitle(result.balance!),
+              ? AppTexts.toastTaskSkippedTitle
+              : '${AppTexts.toastTaskSkippedTitle} · '
+                    '${AppTexts.taskSkippedBalanceSubtitle(result.balance!)}',
         );
       } else {
         AppToast.showInformation(AppTexts.toastTaskAlreadySkipped);
@@ -636,7 +636,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
 
   void _showError(String message) {
     if (Get.context != null) {
-      AppToast.showError(AppTexts.error, message);
+      AppToast.showError(message);
     }
   }
 

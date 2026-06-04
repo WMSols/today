@@ -93,10 +93,7 @@ class CreateTaskController extends GetxController {
     if (context == null) return;
     final schedule = scheduledDate.value;
     if (schedule == null) {
-      AppToast.showError(
-        AppTexts.error,
-        AppTexts.createTaskSelectScheduleFirst,
-      );
+      AppToast.showError(AppTexts.createTaskSelectScheduleFirst);
       return;
     }
     _impact();
@@ -151,19 +148,19 @@ class CreateTaskController extends GetxController {
 
   bool _validateDateTimes() {
     if (scheduledDate.value == null) {
-      AppToast.showError(AppTexts.error, AppTexts.createTaskScheduleRequired);
+      AppToast.showError(AppTexts.createTaskScheduleRequired);
       return false;
     }
     if (startDateTime.value == null) {
-      AppToast.showError(AppTexts.error, AppTexts.createTaskStartTimeRequired);
+      AppToast.showError(AppTexts.createTaskStartTimeRequired);
       return false;
     }
     if (endDateTime.value == null) {
-      AppToast.showError(AppTexts.error, AppTexts.createTaskEndTimeRequired);
+      AppToast.showError(AppTexts.createTaskEndTimeRequired);
       return false;
     }
     if (!endDateTime.value!.isAfter(startDateTime.value!)) {
-      AppToast.showError(AppTexts.error, AppTexts.createTaskEndBeforeStart);
+      AppToast.showError(AppTexts.createTaskEndBeforeStart);
       return false;
     }
     return true;
@@ -195,7 +192,7 @@ class CreateTaskController extends GetxController {
       AppToast.showSuccess(AppTexts.toastTaskCreated);
       await AppAnimationController.offNamed<void>(AppRoutes.todaysTasks);
     } catch (_) {
-      AppToast.showError(AppTexts.error, AppTexts.createTaskUnableToCreate);
+      AppToast.showError(AppTexts.createTaskUnableToCreate);
     } finally {
       isSubmitting.value = false;
     }
