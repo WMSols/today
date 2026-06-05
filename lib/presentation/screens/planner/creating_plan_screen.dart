@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-
-import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
+import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_lotties/app_lotties.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
+import 'package:today/presentation/controllers/onboarding/creating_plan_controller.dart';
 
-class CreatingPlanScreen extends StatelessWidget {
+class CreatingPlanScreen extends GetView<CreatingPlanController> {
   const CreatingPlanScreen({super.key});
 
   @override
@@ -33,11 +34,11 @@ class CreatingPlanScreen extends StatelessWidget {
                 ),
               ),
               AppSpacing.vertical(context, 0.01),
-              Lottie.asset(
-                AppLotties.theoSpeech,
-                width: AppResponsive.scaleSize(context, 357),
-                height: AppResponsive.scaleSize(context, 357),
-                fit: BoxFit.contain,
+              Expanded(
+                child: Lottie.asset(
+                  AppLotties.creatingPlan,
+                  fit: BoxFit.contain,
+                ),
               ),
               AppSpacing.vertical(context, 0.01),
               Text(

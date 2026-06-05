@@ -14,8 +14,8 @@ import 'package:today/core/widgets/buttons/app_button.dart';
 import 'package:today/core/widgets/feedback/app_toast.dart';
 import 'package:today/domain/repositories/auth_repository.dart';
 import 'package:today/domain/usecases/get_me_usecase.dart';
-import 'package:today/presentation/controllers/animation/app_animation_controller.dart';
-import 'package:today/presentation/routes/app_routes.dart';
+import 'package:today/core/navigation/post_auth_navigation.dart';
+import 'package:today/presentation/routes/route_arguments.dart';
 
 class AuthController extends GetxController {
   AuthController(this._authRepository, this._firebaseAuth);
@@ -260,16 +260,23 @@ class AuthController extends GetxController {
       Get.find<HapticsController>().impact();
     }
     await Future<void>.delayed(const Duration(milliseconds: 300));
-    if (Get.isRegistered<AppAnimationController>()) {
-      await Get.find<AppAnimationController>().offAllToMainApp<void>();
-    } else {
-      await Get.offAllNamed<void>(AppRoutes.mainApp);
+    await PostAuthNavigation.goAfterAuth();
+  }
+
+  void _applyRouteArguments() {
+    final args = Get.arguments;
+    if (args is! Map) return;
+    if (args[AuthRouteArgs.openSignup] == true) {
+      switchMode(false);
+    } else if (args[AuthRouteArgs.openLogin] == true) {
+      switchMode(true);
     }
   }
 
   @override
   void onInit() {
     super.onInit();
+    _applyRouteArguments();
     _loadRememberMePreference();
   }
 

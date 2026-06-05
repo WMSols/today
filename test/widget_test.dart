@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:today/core/theme/app_theme.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
+import 'package:today/core/storage/initial_plan_storage.dart';
 import 'package:today/presentation/controllers/onboarding/onboarding_controller.dart';
 import 'package:today/presentation/controllers/settings/accent_color_controller.dart';
 import 'package:today/presentation/controllers/settings/theme_controller.dart';
@@ -22,7 +23,13 @@ void main() {
     Get.put<AccentColorController>(AccentColorController(), permanent: true);
     await Get.find<ThemeController>().loadFromStorage();
     await Get.find<AccentColorController>().loadFromStorage();
-    Get.put<OnboardingController>(OnboardingController());
+    Get.put<InitialPlanStorage>(
+      InitialPlanStorage(Get.find<SharedPreferences>()),
+      permanent: true,
+    );
+    Get.put<OnboardingController>(
+      OnboardingController(Get.find<InitialPlanStorage>()),
+    );
   });
 
   tearDown(Get.reset);

@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:today/core/init/unauthenticated_route_resolver.dart';
 import 'package:today/presentation/routes/app_routes.dart';
 import 'package:today/core/auth/firebase_auth_gateway.dart';
 import 'package:today/core/config/env_config.dart';
@@ -71,7 +72,7 @@ abstract class AppInitializer {
       final authRepository = Get.find<AuthRepository>();
       if (!await authRepository.getRememberMePreference()) {
         await _clearFirebaseSession(authRepository);
-        return AppRoutes.onboarding;
+        return UnauthenticatedRouteResolver.resolve();
       }
       final token = await authRepository.getAccessToken();
       if (token == null || token.isEmpty) {
@@ -93,7 +94,7 @@ abstract class AppInitializer {
     final authRepository = Get.find<AuthRepository>();
     if (!await authRepository.getRememberMePreference()) {
       await _clearFirebaseSession(authRepository);
-      return AppRoutes.onboarding;
+      return UnauthenticatedRouteResolver.resolve();
     }
     final token = await authRepository.getAccessToken();
     if (token != null && token.isNotEmpty) {
@@ -107,13 +108,15 @@ abstract class AppInitializer {
   ) async {
     if (!await authRepository.getRememberMePreference()) {
       await _clearFirebaseSession(authRepository);
-      return AppRoutes.onboarding;
+      return UnauthenticatedRouteResolver.resolve();
     }
     try {
       final firebaseUser = FirebaseAuth.instance.currentUser;
-      if (firebaseUser == null) return AppRoutes.onboarding;
+      if (firebaseUser == null) return UnauthenticatedRouteResolver.resolve();
       final idToken = await firebaseUser.getIdToken();
-      if (idToken == null || idToken.isEmpty) return AppRoutes.onboarding;
+      if (idToken == null || idToken.isEmpty) {
+        return UnauthenticatedRouteResolver.resolve();
+      }
       await authRepository.saveFirebaseIdTokenSession(
         idToken: idToken,
         rememberMe: true,
@@ -121,7 +124,7 @@ abstract class AppInitializer {
       return AppRoutes.mainApp;
     } catch (_) {
       await _clearFirebaseSession(authRepository);
-      return AppRoutes.onboarding;
+      return UnauthenticatedRouteResolver.resolve();
     }
   }
 
@@ -130,13 +133,15 @@ abstract class AppInitializer {
   ) async {
     if (!await authRepository.getRememberMePreference()) {
       await _clearFirebaseSession(authRepository);
-      return AppRoutes.onboarding;
+      return UnauthenticatedRouteResolver.resolve();
     }
     try {
       final firebaseUser = FirebaseAuth.instance.currentUser;
-      if (firebaseUser == null) return AppRoutes.onboarding;
+      if (firebaseUser == null) return UnauthenticatedRouteResolver.resolve();
       final idToken = await firebaseUser.getIdToken();
-      if (idToken == null || idToken.isEmpty) return AppRoutes.onboarding;
+      if (idToken == null || idToken.isEmpty) {
+        return UnauthenticatedRouteResolver.resolve();
+      }
       await authRepository.exchangeFirebaseSession(
         idToken: idToken,
         rememberMe: true,
@@ -145,7 +150,7 @@ abstract class AppInitializer {
       return AppRoutes.mainApp;
     } catch (_) {
       await _clearFirebaseSession(authRepository);
-      return AppRoutes.onboarding;
+      return UnauthenticatedRouteResolver.resolve();
     }
   }
 

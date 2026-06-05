@@ -1,11 +1,16 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
+import 'package:today/core/storage/initial_plan_storage.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/presentation/controllers/auth/auth_controller.dart';
 import 'package:today/presentation/routes/app_routes.dart';
 
 class OnboardingController extends GetxController {
+  OnboardingController(this._storage);
+
+  final InitialPlanStorage _storage;
+
   final RxInt currentPage = 0.obs;
   late final PageController pageController;
 
@@ -39,26 +44,30 @@ class OnboardingController extends GetxController {
     if (currentPage.value == 0) {
       nextPage();
     } else {
-      goToAuth();
+      goToCreateInitialPlan();
     }
   }
 
-  void goToAuth() {
-    Get.toNamed<void>(AppRoutes.auth);
+  Future<void> goToCreateInitialPlan() async {
+    await _storage.setOnboardingCompleted();
+    await Get.offNamed<void>(AppRoutes.createInitialPlan);
   }
 
-  void goToPlanner() {
-    Get.offAllNamed<void>(AppRoutes.planner);
+  Future<void> _completeOnboardingForSocialShortcut() async {
+    await _storage.setOnboardingCompleted();
+    await _storage.skipInitialPlanDraft();
   }
 
-  void onGoogleSocialTap() {
+  Future<void> onGoogleSocialTap() async {
     if (!Get.isRegistered<AuthController>()) return;
-    Get.find<AuthController>().signInWithGoogle();
+    await _completeOnboardingForSocialShortcut();
+    await Get.find<AuthController>().signInWithGoogle();
   }
 
-  void onAppleSocialTap() {
+  Future<void> onAppleSocialTap() async {
     if (!Get.isRegistered<AuthController>()) return;
-    Get.find<AuthController>().signInWithApple();
+    await _completeOnboardingForSocialShortcut();
+    await Get.find<AuthController>().signInWithApple();
   }
 
   @override

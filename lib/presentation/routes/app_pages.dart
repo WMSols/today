@@ -16,8 +16,13 @@ import 'package:today/presentation/bindings/main/main_app_binding.dart';
 import 'package:today/presentation/screens/main/main_app_screen.dart';
 import 'package:today/presentation/bindings/settings/notifications_binding.dart';
 import 'package:today/presentation/screens/settings/notifications_screen.dart';
+import 'package:today/presentation/bindings/onboarding/create_initial_plan_binding.dart';
+import 'package:today/presentation/bindings/onboarding/creating_plan_binding.dart';
 import 'package:today/presentation/bindings/onboarding/onboarding_binding.dart';
+import 'package:today/presentation/bindings/onboarding/plan_status_binding.dart';
+import 'package:today/presentation/screens/onboarding/create_initial_plan_screen.dart';
 import 'package:today/presentation/screens/onboarding/onboarding_screen.dart';
+import 'package:today/presentation/screens/onboarding/plan_status_screen.dart';
 import 'package:today/presentation/screens/planner/creating_plan_screen.dart';
 import 'package:today/presentation/bindings/planner/create_task_binding.dart';
 import 'package:today/presentation/bindings/planner/planner_binding.dart';
@@ -40,6 +45,16 @@ abstract class AppPages {
       name: AppRoutes.onboarding,
       page: () => const OnboardingScreen(),
       binding: OnboardingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.createInitialPlan,
+      page: () => const CreateInitialPlanScreen(),
+      binding: CreateInitialPlanBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.planStatus,
+      page: () => const PlanStatusScreen(),
+      binding: PlanStatusBinding(),
     ),
     GetPage(
       name: AppRoutes.auth,
@@ -82,7 +97,7 @@ abstract class AppPages {
     GetPage(
       name: AppRoutes.creatingPlan,
       page: () => const CreatingPlanScreen(),
-      binding: PlannerBinding(),
+      binding: CreatingPlanBinding(),
     ),
     GetPage(
       name: AppRoutes.createTask,
