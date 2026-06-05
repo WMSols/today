@@ -27,13 +27,7 @@ class PlannerScreen extends GetView<PlannerController> {
           padding: AppSpacing.symmetric(context, h: 0.04, v: 0.02),
           child: Column(
             children: [
-              Expanded(
-                child: Obx(
-                  () => PlannerChatIntro(
-                    userMessages: controller.userMessages.toList(),
-                  ),
-                ),
-              ),
+              const Expanded(child: PlannerChatIntro()),
               Obx(() {
                 if (!controller.showConfirmButton.value) {
                   return const SizedBox.shrink();

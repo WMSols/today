@@ -14,6 +14,12 @@ class AppLotties {
   static const String onboarding1 = 'assets/lotties/onboarding1.json';
   static const String onboarding2 = 'assets/lotties/onboarding2.json';
 
+  // Initial plan funnel
+  static const String createPlan = 'assets/lotties/create_plan.json';
+  static const String creatingPlan = 'assets/lotties/creating_plan.json';
+  static const String planReady = 'assets/lotties/plan_ready.json';
+  static const String planNotReady = 'assets/lotties/plan_not_ready.json';
+
   // Theo
   static const String theoDocument = 'assets/lotties/theo_document.json';
   static const String theoScrolling = 'assets/lotties/theo_scrolling.json';

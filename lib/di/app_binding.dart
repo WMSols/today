@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:today/core/auth/firebase_auth_gateway.dart';
 import 'package:today/core/network/connectivity_service.dart';
 import 'package:today/core/network/dio_client.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:today/core/storage/initial_plan_storage.dart';
 import 'package:today/core/storage/session_storage.dart';
 import 'package:today/data/datasources/local/goal_local_data_source.dart';
 import 'package:today/data/datasources/local/subscription_local_data_source.dart';
@@ -49,6 +51,12 @@ import 'package:today/domain/usecases/save_goal_usecase.dart';
 class AppBinding extends Bindings {
   @override
   void dependencies() {
+    if (Get.isRegistered<SharedPreferences>()) {
+      Get.put<InitialPlanStorage>(
+        InitialPlanStorage(Get.find<SharedPreferences>()),
+        permanent: true,
+      );
+    }
     final sessionStorage = SessionStorage();
     Get.put<SessionStorage>(sessionStorage, permanent: true);
     Get.lazyPut<FirebaseAuthGateway>(() => FirebaseAuthGateway(), fenix: true);

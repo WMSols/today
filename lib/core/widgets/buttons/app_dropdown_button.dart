@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
@@ -21,9 +21,11 @@ class AppDropDownButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final panel = isDark ? AppColors.black : AppColors.white;
-    final onPanel = isDark ? AppColors.white : AppColors.black;
+    final palette = context.accentPalette;
+    final panel = palette.sectionCard;
+    final onPanel = palette.onSectionCard;
+    final labelColor = onPanel.withValues(alpha: 0.75);
+
     return Container(
       margin: EdgeInsets.only(right: AppResponsive.scaleSize(context, 10)),
       padding: AppSpacing.symmetric(context, h: 0.02, v: 0),
@@ -39,7 +41,7 @@ class AppDropDownButton extends StatelessWidget {
           hint: Text(
             label,
             style: AppTextStyles.labelText(context).copyWith(
-              color: onPanel,
+              color: labelColor,
               fontWeight: FontWeight.w800,
               fontSize: AppResponsive.scaleSize(context, 10),
             ),
@@ -50,6 +52,9 @@ class AppDropDownButton extends StatelessWidget {
             color: onPanel,
             size: AppResponsive.iconSize(context),
           ),
+          style: AppTextStyles.labelText(
+            context,
+          ).copyWith(color: onPanel, fontWeight: FontWeight.w600),
           items: items
               .map(
                 (item) => DropdownMenuItem<String>(

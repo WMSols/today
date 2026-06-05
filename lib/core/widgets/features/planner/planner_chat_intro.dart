@@ -1,68 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
-
-import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
-import 'package:today/core/utils/app_texts/app_texts.dart';
-import 'package:today/core/widgets/features/planner/planner_message_bubble.dart';
+import 'package:today/core/widgets/features/planner/planner_chat_message_list.dart';
+import 'package:today/presentation/controllers/planner/planner_controller.dart';
 
-class PlannerChatIntro extends StatelessWidget {
-  const PlannerChatIntro({super.key, required this.userMessages});
-
-  final List<String> userMessages;
+class PlannerChatIntro extends GetView<PlannerController> {
+  const PlannerChatIntro({super.key});
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AppSpacing.vertical(context, 0.02),
-        const PlannerMessageBubble(
-          avatarPath: AppImages.aiAvatar,
-          sender: PlannerMessageSender.ai,
-          message: AppTexts.plannerWelcomeMessage,
-        ),
-        AppSpacing.vertical(context, 0.02),
-        const PlannerMessageBubble(
-          avatarPath: AppImages.aiAvatar,
-          sender: PlannerMessageSender.ai,
-          message: AppTexts.plannerNamePrompt,
-        ),
-        AppSpacing.vertical(context, 0.03),
-        userMessages.isEmpty
-            ? const PlannerMessageBubble(
-                avatarPath: AppImages.userProfile,
-                sender: PlannerMessageSender.user,
-                isTyping: true,
-              )
-            : Column(
-                children: List.generate(userMessages.length, (index) {
-                  final msg = userMessages[index];
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      bottom: index == userMessages.length - 1
-                          ? 0
-                          : AppSpacing.verticalValue(context, 0.02),
-                    ),
-                    child: PlannerMessageBubble(
-                      avatarPath: AppImages.userProfile,
-                      sender: PlannerMessageSender.user,
-                      message: msg,
-                    ),
-                  );
-                }),
-              ),
-        const Spacer(),
-        IgnorePointer(
-          child: Container(
-            color: isDark
-                ? AppColors.black
-                : AppColors.white.withValues(alpha: 0),
+
+    return Obx(
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppSpacing.vertical(context, 0.02),
+          PlannerChatMessageList(items: controller.chatMessageItems),
+          const Spacer(),
+          IgnorePointer(
+            child: Container(
+              color: isDark
+                  ? AppColors.black
+                  : AppColors.white.withValues(alpha: 0),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

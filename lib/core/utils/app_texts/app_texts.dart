@@ -99,6 +99,39 @@ class AppTexts {
       "Heyy 👋 and welcome to your daily task planner - Today";
   static const String plannerNamePrompt = "What would you like to be called?";
 
+  // Initial plan funnel
+  static const String initialPlanChatWelcome =
+      "Heyy 👋 What do you want to achieve?";
+  static const String initialPlanChatPrompt =
+      "Pick one of the goals below or tell me in your own words.";
+  static const String initialPlanCustomGoalHint = "Enter your own goal...";
+  static const String initialPlanSkipCta = "Skip";
+  static const String initialPlanSeeMoreSnippets = "See more";
+  static const String initialPlanSeeLessSnippets = "See less";
+  static const List<String> initialPlanGoalSnippets = [
+    'Lose weight and get fitter',
+    'Wake up earlier',
+    'Read more books',
+    'Learn a new skill',
+    'Save more money',
+    'Eat healthier',
+    'Exercise consistently',
+    'Reduce screen time',
+    'Build a morning routine',
+    'Improve focus at work',
+    'Drink more water',
+  ];
+  static const String initialPlanAlreadyHaveAccount =
+      "Already have an account?";
+  static const String planStatusReadyTitle = "Your plan is ready";
+  static const String planStatusReadySubtitle =
+      "We've prepared your daily tasks based on your goal. Let's get started.";
+  static const String planStatusPendingTitle = "Plan setup incomplete";
+  static const String planStatusPendingSubtitle =
+      "Add a goal anytime from the home screen to unlock your full AI plan.";
+  static const String planStatusContinueCta = "Continue";
+  static const String planStatusSkipCta = "Skip";
+
   // Planner
   static const String creatingPlanTitle =
       "Sit back and relax while we set your tasks for you.";
