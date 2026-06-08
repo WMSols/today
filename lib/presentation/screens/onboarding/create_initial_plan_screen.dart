@@ -5,6 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
+import 'package:today/core/widgets/buttons/app_button.dart';
 import 'package:today/core/widgets/buttons/app_icon_button.dart';
 import 'package:today/core/widgets/buttons/app_text_button.dart';
 import 'package:today/core/widgets/features/onboarding/initial_plan_goal_snippets.dart';
@@ -29,14 +30,22 @@ class CreateInitialPlanScreen extends GetView<CreateInitialPlanController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              InitialPlanHeader(onSkipTap: controller.skipForNow),
-              AppSpacing.vertical(context, 0.01),
+              Align(
+                alignment: Alignment.centerRight,
+                child: AppButton(
+                  label: AppTexts.initialPlanSkipCta,
+                  size: AppButtonSize.small,
+                  onPressed: controller.skipForNow,
+                ),
+              ),
               Expanded(
                 child: Obx(
                   () => ListView(
                     controller: controller.chatScrollController,
                     padding: EdgeInsets.zero,
                     children: [
+                      const InitialPlanHeader(),
+                      AppSpacing.vertical(context, 0.01),
                       PlannerChatMessageList(
                         items: controller.chatMessageItems,
                       ),

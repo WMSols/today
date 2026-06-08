@@ -9,3 +9,9 @@ abstract class CreatingPlanRouteArgs {
 }
 
 enum CreatingPlanFlow { initial, planner }
+
+enum ProfileSetupMode { onboarding, settings }
+
+abstract class ProfileSetupRouteArgs {
+  static const mode = 'mode';
+}

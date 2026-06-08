@@ -20,9 +20,11 @@ import 'package:today/presentation/bindings/onboarding/create_initial_plan_bindi
 import 'package:today/presentation/bindings/onboarding/creating_plan_binding.dart';
 import 'package:today/presentation/bindings/onboarding/onboarding_binding.dart';
 import 'package:today/presentation/bindings/onboarding/plan_status_binding.dart';
+import 'package:today/presentation/bindings/onboarding/profile_setup_binding.dart';
 import 'package:today/presentation/screens/onboarding/create_initial_plan_screen.dart';
 import 'package:today/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:today/presentation/screens/onboarding/plan_status_screen.dart';
+import 'package:today/presentation/screens/onboarding/profile_setup_screen.dart';
 import 'package:today/presentation/screens/planner/creating_plan_screen.dart';
 import 'package:today/presentation/bindings/planner/create_task_binding.dart';
 import 'package:today/presentation/bindings/planner/planner_binding.dart';
@@ -55,6 +57,14 @@ abstract class AppPages {
       name: AppRoutes.planStatus,
       page: () => const PlanStatusScreen(),
       binding: PlanStatusBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.profileSetup,
+      page: () => const ProfileSetupScreen(),
+      binding: ProfileSetupBinding(),
+      transition: AppAnimationController.pushTransition,
+      transitionDuration: AppAnimationController.pushDuration,
+      curve: AppAnimationController.pushCurve,
     ),
     GetPage(
       name: AppRoutes.auth,
