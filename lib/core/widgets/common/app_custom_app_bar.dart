@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_formatter/app_formatter.dart';
@@ -191,7 +192,7 @@ class AppCustomAppBar extends StatelessWidget {
             IconButton(
               onPressed: onBack,
               icon: Icon(
-                Icons.arrow_back,
+                Iconsax.arrow_left_2,
                 color: onSurface,
                 size: AppResponsive.iconSize(context),
               ),
@@ -214,7 +215,7 @@ class AppCustomAppBar extends StatelessWidget {
               IconButton(
                 onPressed: onBack,
                 icon: Icon(
-                  Icons.arrow_back,
+                  Iconsax.arrow_left_2,
                   color: onSurface,
                   size: AppResponsive.iconSize(context),
                 ),
