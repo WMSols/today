@@ -13,11 +13,13 @@ class SettingsControlTile extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.trailing,
+    this.onTap,
   });
 
   final String title;
   final String subtitle;
   final Widget trailing;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class SettingsControlTile extends StatelessWidget {
     final subtitleColor = titleColor.withValues(alpha: 0.55);
 
     return AppSectionCard(
+      onTap: onTap,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

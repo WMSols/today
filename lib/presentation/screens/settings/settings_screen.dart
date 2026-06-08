@@ -38,6 +38,8 @@ class SettingsScreen extends GetView<SettingsController> {
             AppSpacing.vertical(context, 0.03),
             Obx(
               () => SettingsControlsCard(
+                profileSetupSubtitle: controller.profileSetupSummary.value,
+                onProfileSetupTap: controller.openProfileSetup,
                 hapticsEnabled: controller.haptics.enabled.value,
                 notificationsEnabled: controller.notificationsEnabled.value,
                 vacationModeEnabled: controller.vacationMode.enabled.value,

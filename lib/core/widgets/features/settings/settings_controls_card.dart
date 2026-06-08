@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
+import 'package:today/core/extensions/theme_context_extension.dart';
+import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/features/settings/settings_accent_color_row.dart';
@@ -11,6 +14,8 @@ import 'package:today/presentation/controllers/settings/theme_controller.dart';
 class SettingsControlsCard extends StatelessWidget {
   const SettingsControlsCard({
     super.key,
+    required this.profileSetupSubtitle,
+    required this.onProfileSetupTap,
     required this.hapticsEnabled,
     required this.notificationsEnabled,
     required this.vacationModeEnabled,
@@ -19,6 +24,8 @@ class SettingsControlsCard extends StatelessWidget {
     required this.onVacationModeChanged,
   });
 
+  final String profileSetupSubtitle;
+  final VoidCallback onProfileSetupTap;
   final bool hapticsEnabled;
   final bool notificationsEnabled;
   final bool vacationModeEnabled;
@@ -31,6 +38,17 @@ class SettingsControlsCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SettingsControlTile(
+          title: AppTexts.settingsProfileSetupLabel,
+          subtitle: profileSetupSubtitle,
+          onTap: onProfileSetupTap,
+          trailing: Icon(
+            Iconsax.arrow_right_3,
+            size: AppResponsive.iconSize(context, factor: 0.7),
+            color: context.onSectionCardColor,
+          ),
+        ),
+        AppSpacing.vertical(context, 0.015),
         SettingsControlTile(
           title: AppTexts.settingsHapticsLabel,
           subtitle: AppTexts.settingsHapticsSubtitle,
