@@ -19,6 +19,7 @@ class AppLotties {
   static const String creatingPlan = 'assets/lotties/creating_plan.json';
   static const String planReady = 'assets/lotties/plan_ready.json';
   static const String planNotReady = 'assets/lotties/plan_not_ready.json';
+  static const String profileSetup = 'assets/lotties/profile_setup.json';
 
   // Theo
   static const String theoDocument = 'assets/lotties/theo_document.json';

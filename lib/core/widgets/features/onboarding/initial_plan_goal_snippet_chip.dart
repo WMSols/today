@@ -34,7 +34,6 @@ class InitialPlanGoalSnippetChip extends StatelessWidget {
             borderRadius: BorderRadius.circular(
               AppResponsive.radius(context, factor: 4),
             ),
-            border: Border.all(color: palette.buttonOutlinedBorder),
           ),
           child: Text(
             label,

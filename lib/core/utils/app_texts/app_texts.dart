@@ -132,6 +132,38 @@ class AppTexts {
   static const String planStatusContinueCta = "Continue";
   static const String planStatusSkipCta = "Skip";
 
+  // Profile setup
+  static const String profileSetupSkipCta = "Skip";
+  static const String profileSetupTitle = "Refining your rhythm";
+  static const String profileSetupSubtitleLead = "Tell ";
+  static const String profileSetupSubtitleBrand = "todAI";
+  static const String profileSetupSubtitleTail =
+      " about your typical day. Our AI uses these markers to schedule high-focus tasks when you're most alert.";
+  static const String profileSetupWakeUpLabel = "WAKE-UP";
+  static const String profileSetupBedtimeLabel = "BEDTIME";
+  static const String profileSetupOfficeHoursTitle = "Office Hours";
+  static const String profileSetupOfficeHoursSubtitle =
+      "Your usual work or meeting hours.";
+  static const String profileSetupOfficeHoursMorning = "MORNING";
+  static const String profileSetupOfficeHoursEvening = "EVENING";
+  static const String profileSetupOfficeHoursNight = "NIGHT";
+  static const String profileSetupWorkoutWindowTitle = "Workout Window";
+  static const String profileSetupWorkoutWindowSubtitle =
+      "When you usually exercise.";
+  static const String profileSetupWorkoutMorning = "Morning";
+  static const String profileSetupWorkoutAfternoon = "Afternoon";
+  static const String profileSetupWorkoutEvening = "Evening";
+  static const String profileSetupDeepWorkTitle = "Deep Work Preference";
+  static const String profileSetupDeepWorkSubtitle = "When you focus best.";
+  static const String profileSetupDeepWorkEarlyBird = "Early Bird";
+  static const String profileSetupDeepWorkMidDay = "Mid-Day";
+  static const String profileSetupDeepWorkNightOwl = "Night Owl";
+  static const String profileSetupCompleteCta = "Complete Setup";
+  static const String profileSetupSaveCta = "Save";
+  static const String profileSetupResetDefaultsCta = "Reset to defaults";
+  static const String profileSetupOfficeHoursInvalid =
+      "Office end time must be after start time.";
+
   // Planner
   static const String creatingPlanTitle =
       "Sit back and relax while we set your tasks for you.";
@@ -321,6 +353,17 @@ class AppTexts {
       "Select a schedule date first";
   static const String toastTaskCreated = "Task created";
   static const String createTaskUnableToCreate = "Unable to create task";
+  static const String createTaskHeroTitle =
+      "How would you like to add your task?";
+  static const String createTaskHeroSubtitle =
+      "Fill in the details yourself, or chat with Today to plan it.";
+  static const String createTaskModeManual = "Manual";
+  static const String createTaskModeChat = "Chat";
+  static const String createTaskChatWelcome =
+      "Heyy 👋 Let's add something to your day.";
+  static const String createTaskChatPrompt =
+      "Tell me what task you'd like to create.";
+  static const String createTaskChatInputHint = "Describe your task...";
 
   // Home — goal entry card
   static const String goalDurationLabel = "GOAL DURATION";
@@ -362,6 +405,8 @@ class AppTexts {
 
   // Settings — controls
   static const String settingsSectionHeading = "SETTINGS";
+  static const String settingsProfileSetupLabel = "PROFILE SETUP";
+  static const String settingsProfileSetupSaved = "Profile setup updated";
   static const String settingsHapticsLabel = "HAPTICS";
   static const String settingsHapticsSubtitle = "Tap feedback on actions";
   static const String settingsNotificationsLabel = "NOTIFICATIONS";

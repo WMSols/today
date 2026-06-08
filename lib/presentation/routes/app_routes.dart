@@ -4,6 +4,7 @@ abstract class AppRoutes {
   static const onboarding = '/onboarding';
   static const createInitialPlan = '/create-initial-plan';
   static const planStatus = '/plan-status';
+  static const profileSetup = '/profile-setup';
   static const auth = '/auth';
   static const mainApp = '/main-app';
   static const home = '/home';

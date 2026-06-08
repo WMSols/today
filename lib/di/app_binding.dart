@@ -5,6 +5,7 @@ import 'package:today/core/network/connectivity_service.dart';
 import 'package:today/core/network/dio_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:today/core/storage/initial_plan_storage.dart';
+import 'package:today/core/storage/profile_setup_storage.dart';
 import 'package:today/core/storage/session_storage.dart';
 import 'package:today/data/datasources/local/goal_local_data_source.dart';
 import 'package:today/data/datasources/local/subscription_local_data_source.dart';
@@ -54,6 +55,10 @@ class AppBinding extends Bindings {
     if (Get.isRegistered<SharedPreferences>()) {
       Get.put<InitialPlanStorage>(
         InitialPlanStorage(Get.find<SharedPreferences>()),
+        permanent: true,
+      );
+      Get.put<ProfileSetupStorage>(
+        ProfileSetupStorage(Get.find<SharedPreferences>()),
         permanent: true,
       );
     }
