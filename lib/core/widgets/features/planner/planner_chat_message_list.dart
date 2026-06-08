@@ -45,17 +45,14 @@ class PlannerChatMessageList extends StatelessWidget {
     if (items.isEmpty) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (leading != null) leading!,
-          if (trailing != null) trailing!,
-        ],
+        children: [?leading, ?trailing],
       );
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (leading != null) leading!,
+        ?leading,
         ...List.generate(items.length, (index) {
           final item = items[index];
           final previous = index > 0 ? items[index - 1] : null;
@@ -84,7 +81,7 @@ class PlannerChatMessageList extends StatelessWidget {
             ),
           );
         }),
-        if (trailing != null) trailing!,
+        ?trailing,
       ],
     );
   }

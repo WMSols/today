@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_formatter/app_formatter.dart';
+import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
+import 'package:today/core/widgets/buttons/app_button.dart';
 import 'package:today/core/widgets/feedback/app_toast.dart';
+import 'package:today/core/widgets/features/planner/planner_chat_message_list.dart';
+import 'package:today/core/widgets/features/planner/planner_message_bubble.dart';
 import 'package:today/core/widgets/form/app_datetime_picker/app_datetime_picker.dart';
 import 'package:today/domain/entities/create_today_task_params.dart';
 import 'package:today/domain/usecases/create_today_task_usecase.dart';
@@ -11,6 +16,7 @@ import 'package:today/presentation/controllers/animation/app_animation_controlle
 import 'package:today/presentation/controllers/home/home_controller.dart';
 import 'package:today/presentation/controllers/settings/haptics_controller.dart';
 import 'package:today/presentation/routes/app_routes.dart';
+import 'package:today/presentation/routes/route_arguments.dart';
 
 class CreateTaskController extends GetxController {
   CreateTaskController(this._createTodayTaskUseCase);
@@ -26,6 +32,40 @@ class CreateTaskController extends GetxController {
   final Rxn<DateTime> endDateTime = Rxn<DateTime>();
   final RxBool isRecurring = false.obs;
   final RxBool isSubmitting = false.obs;
+
+  final isManualMode = true.obs;
+  final messageInputController = TextEditingController();
+  final chatScrollController = ScrollController();
+  final RxList<String> userMessages = <String>[].obs;
+  final showConfirmButton = false.obs;
+  final keyboardInset = 0.0.obs;
+
+  List<PlannerChatMessageItem> get chatMessageItems => [
+    const PlannerChatMessageItem(
+      avatarPath: AppImages.aiAvatar,
+      sender: PlannerMessageSender.ai,
+      message: AppTexts.createTaskChatWelcome,
+    ),
+    const PlannerChatMessageItem(
+      avatarPath: AppImages.aiAvatar,
+      sender: PlannerMessageSender.ai,
+      message: AppTexts.createTaskChatPrompt,
+    ),
+    if (userMessages.isEmpty)
+      const PlannerChatMessageItem(
+        avatarPath: AppImages.userProfile,
+        sender: PlannerMessageSender.user,
+        isTyping: true,
+      )
+    else
+      ...userMessages.map(
+        (msg) => PlannerChatMessageItem(
+          avatarPath: AppImages.userProfile,
+          sender: PlannerMessageSender.user,
+          message: msg,
+        ),
+      ),
+  ];
 
   String get scheduleDisplay {
     final date = scheduledDate.value;
@@ -58,7 +98,60 @@ class CreateTaskController extends GetxController {
   void onClose() {
     titleController.dispose();
     notesController.dispose();
+    messageInputController.dispose();
+    chatScrollController.dispose();
     super.onClose();
+  }
+
+  void switchMode(bool manual) {
+    if (isManualMode.value == manual) return;
+    _impact();
+    isManualMode.value = manual;
+  }
+
+  AppButtonColors modeTabColors(bool isDark) {
+    return AppButtonColors(
+      filledBackground: isDark ? AppColors.secondary : AppColors.primary,
+      filledForeground: isDark ? AppColors.primary : AppColors.secondary,
+      outlinedBackground: Colors.transparent,
+      outlinedForeground: isDark ? AppColors.secondary : AppColors.primary,
+      outlinedBorder: isDark ? AppColors.secondary : AppColors.primary,
+    );
+  }
+
+  void updateKeyboardInset(double inset) {
+    if (keyboardInset.value == inset) return;
+    keyboardInset.value = inset;
+  }
+
+  void onSendChatMessage() {
+    final text = messageInputController.text.trim();
+    if (text.isEmpty) return;
+
+    _impact();
+    userMessages.add(text);
+    showConfirmButton.value = true;
+    messageInputController.clear();
+    scrollChatToBottom();
+  }
+
+  void onConfirmChatTap() {
+    _impact();
+    Get.toNamed<void>(
+      AppRoutes.creatingPlan,
+      arguments: {CreatingPlanRouteArgs.flow: CreatingPlanFlow.planner.name},
+    );
+  }
+
+  void scrollChatToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (isClosed || !chatScrollController.hasClients) return;
+      chatScrollController.animateTo(
+        chatScrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    });
   }
 
   void toggleRecurring(bool value) {
