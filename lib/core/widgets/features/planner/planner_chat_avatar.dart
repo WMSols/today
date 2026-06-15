@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:today/core/extensions/theme_context_extension.dart';
@@ -5,20 +6,25 @@ import 'package:today/core/theme/app_accent_color.dart';
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 
-enum PlannerChatAvatarKind { image, brandLogo }
+enum PlannerChatAvatarKind { brandLogo, userPhoto }
 
 class PlannerChatAvatar extends StatelessWidget {
   const PlannerChatAvatar({
     super.key,
-    this.imagePath,
-    this.kind = PlannerChatAvatarKind.image,
-  }) : assert(
-         kind == PlannerChatAvatarKind.brandLogo || imagePath != null,
-         'imagePath is required for image avatars',
-       );
+    this.kind = PlannerChatAvatarKind.userPhoto,
+    this.photoUrl,
+  });
 
-  final String? imagePath;
   final PlannerChatAvatarKind kind;
+  final String? photoUrl;
+
+  String? get _resolvedPhotoUrl {
+    final explicit = photoUrl?.trim();
+    if (explicit != null && explicit.isNotEmpty) return explicit;
+    final fromAuth = FirebaseAuth.instance.currentUser?.photoURL?.trim();
+    if (fromAuth != null && fromAuth.isNotEmpty) return fromAuth;
+    return null;
+  }
 
   String _brandLogoAsset(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -26,6 +32,23 @@ class PlannerChatAvatar extends StatelessWidget {
       return AppImages.appLogoWhite;
     }
     return isDark ? AppImages.appLogoWhite : AppImages.appLogoBlack;
+  }
+
+  Widget _userPhotoFallback(BuildContext context, double size) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: context.accentPalette.fabBackground,
+      ),
+      alignment: Alignment.center,
+      child: Icon(
+        Icons.person_rounded,
+        size: size * 0.55,
+        color: context.accentPalette.accent,
+      ),
+    );
   }
 
   @override
@@ -45,16 +68,18 @@ class PlannerChatAvatar extends StatelessWidget {
       );
     }
 
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: context.surfaceColor,
-        image: DecorationImage(
-          image: AssetImage(imagePath!),
-          fit: BoxFit.cover,
-        ),
+    final url = _resolvedPhotoUrl;
+    if (url == null) {
+      return _userPhotoFallback(context, size);
+    }
+
+    return ClipOval(
+      child: Image.network(
+        url,
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        errorBuilder: (_, _, _) => _userPhotoFallback(context, size),
       ),
     );
   }

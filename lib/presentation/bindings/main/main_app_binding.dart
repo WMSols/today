@@ -9,9 +9,10 @@ import 'package:today/domain/usecases/get_active_goal_tasks_usecase.dart';
 import 'package:today/domain/usecases/get_goal_cards_usecase.dart';
 import 'package:today/domain/usecases/get_goal_history_usecase.dart';
 import 'package:today/domain/usecases/skip_task_usecase.dart';
-import 'package:today/domain/usecases/get_me_usecase.dart';
 import 'package:today/domain/usecases/get_analytics_dashboard_usecase.dart';
+import 'package:today/domain/usecases/delete_calendar_event_usecase.dart';
 import 'package:today/domain/usecases/get_weekly_calendar_usecase.dart';
+import 'package:today/domain/usecases/update_calendar_event_usecase.dart';
 import 'package:today/domain/repositories/home_today_tasks_repository.dart';
 import 'package:today/domain/usecases/get_home_today_tasks_usecase.dart';
 import 'package:today/domain/repositories/auth_repository.dart';
@@ -46,6 +47,8 @@ class MainAppBinding extends Bindings {
         Get.find<GetWeeklyCalendarUseCase>(),
         Get.find<GetHomeTodayTasksUseCase>(),
         Get.find<HomeTodayTasksRepository>(),
+        Get.find<DeleteCalendarEventUseCase>(),
+        Get.find<UpdateCalendarEventUseCase>(),
       ),
     );
     Get.lazyPut<AnalyticsController>(
@@ -53,7 +56,6 @@ class MainAppBinding extends Bindings {
     );
     Get.lazyPut<SettingsController>(
       () => SettingsController(
-        Get.find<GetMeUseCase>(),
         Get.find<AuthRepository>(),
         Get.find<FirebaseAuthGateway>(),
         Get.find<ProfileSetupStorage>(),

@@ -4,6 +4,10 @@ class StorageKeys {
 
   static const String savedLoginEmail = 'saved_login_email';
   static const String savedLoginPassword = 'saved_login_password';
+  static const String bootstrapUser = 'bootstrap_user';
+  static const String scheduleVersion = 'schedule_version';
+  static const String calendarChatSessions = 'calendar_chat_sessions';
+  static const String createTaskChat = 'create_task_chat';
 
   static const String hasCompletedOnboarding = 'has_completed_onboarding';
   static const String hasCompletedInitialPlanFlow =

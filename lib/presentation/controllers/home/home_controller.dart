@@ -19,7 +19,11 @@ import 'package:today/domain/usecases/delete_goal_usecase.dart';
 import 'package:today/domain/usecases/get_active_goal_tasks_usecase.dart';
 import 'package:today/domain/usecases/get_goal_history_usecase.dart';
 import 'package:today/domain/usecases/skip_task_usecase.dart';
+import 'package:today/core/constants/api_constants.dart';
+import 'package:today/domain/entities/update_calendar_event_params.dart';
+import 'package:today/domain/usecases/delete_calendar_event_usecase.dart';
 import 'package:today/domain/usecases/get_weekly_calendar_usecase.dart';
+import 'package:today/domain/usecases/update_calendar_event_usecase.dart';
 import 'package:today/domain/repositories/home_daily_calendar_repository.dart';
 import 'package:today/presentation/controllers/goals/goal_cards_controller.dart';
 import 'package:today/presentation/controllers/main/main_app_controller.dart';
@@ -79,6 +83,8 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     this._getWeeklyCalendarUseCase,
     this._getHomeTodayTasksUseCase,
     this._homeTodayTasksRepository,
+    this._deleteCalendarEventUseCase,
+    this._updateCalendarEventUseCase,
   );
 
   final GoalCardsController _goalCardsController;
@@ -91,6 +97,8 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   final GetWeeklyCalendarUseCase _getWeeklyCalendarUseCase;
   final GetHomeTodayTasksUseCase _getHomeTodayTasksUseCase;
   final HomeTodayTasksRepository _homeTodayTasksRepository;
+  final DeleteCalendarEventUseCase _deleteCalendarEventUseCase;
+  final UpdateCalendarEventUseCase _updateCalendarEventUseCase;
 
   final RxBool isLoading = false.obs;
   final RxBool isRefreshing = false.obs;
@@ -251,6 +259,14 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     return (todayCompletionProgress * 6).round();
   }
 
+  List<HomeTodayTaskEntity> get todayCalendarEvents => todayTasks
+      .where((task) => task.source == HomeTodayTaskSource.calendarEvent)
+      .toList(growable: false);
+
+  List<HomeTodayTaskEntity> get todayGoalTasks => todayTasks
+      .where((task) => task.source == HomeTodayTaskSource.goalTask)
+      .toList(growable: false);
+
   List<HomeTodayTaskEntity> get homeTodayTasksPreview =>
       todayTasks.take(homeTodayTasksPreviewLimit).toList(growable: false);
 
@@ -294,6 +310,10 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     }
   }
 
+  Future<void> refreshAgendaFromCalendar() async {
+    await Future.wait([loadTodayTasks(), loadWeeklyCalendar()]);
+  }
+
   Future<void> refreshHome() async {
     isRefreshing.value = true;
     try {
@@ -308,12 +328,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   }
 
   Future<void> refreshTodaysTasks() async {
-    isRefreshing.value = true;
-    try {
-      await Future.wait([loadTodayTasks(), loadWeeklyCalendar()]);
-    } finally {
-      isRefreshing.value = false;
-    }
+    await refreshAgendaFromCalendar();
   }
 
   void selectTodayTask(String taskId) {
@@ -326,6 +341,9 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   }
 
   Future<void> completeTodayTask(String taskId) async {
+    if (ApiConstants.backendApiEnabled) {
+      return;
+    }
     await _homeTodayTasksRepository.updateTodayTaskStatus(
       taskId: taskId,
       status: HomeTodayTaskStatus.completed,
@@ -336,6 +354,9 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   }
 
   Future<void> skipTodayTask(String taskId) async {
+    if (ApiConstants.backendApiEnabled) {
+      return;
+    }
     await _homeTodayTasksRepository.updateTodayTaskStatus(
       taskId: taskId,
       status: HomeTodayTaskStatus.skipped,
@@ -343,6 +364,65 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     _setTodayTaskStatus(taskId, HomeTodayTaskStatus.skipped);
     selectedTodayTaskId.value = '';
     AppToast.showError(AppTexts.toastTaskSkippedTitle);
+  }
+
+  Future<void> onCalendarEventLongPress(HomeTodayTaskEntity task) async {
+    if (!task.isCalendarEvent) return;
+    final context = Get.context;
+    if (context == null) return;
+
+    final delete = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(AppTexts.deleteEventTitle),
+        content: Text(AppTexts.deleteEventBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(AppTexts.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(AppTexts.delete),
+          ),
+        ],
+      ),
+    );
+    if (delete != true) return;
+    await deleteCalendarEvent(task);
+  }
+
+  Future<void> deleteCalendarEvent(
+    HomeTodayTaskEntity task, {
+    bool deleteSeries = false,
+  }) async {
+    try {
+      await _deleteCalendarEventUseCase(
+        eventId: task.id,
+        deleteSeries: deleteSeries,
+      );
+      selectedTodayTaskId.value = '';
+      await refreshAgendaFromCalendar();
+      AppToast.showSuccess(AppTexts.calendarEventDeleted);
+    } catch (_) {
+      AppToast.showError(AppTexts.calendarEventDeleteFailed);
+    }
+  }
+
+  Future<void> updateCalendarEventTitle({
+    required HomeTodayTaskEntity task,
+    required String title,
+  }) async {
+    try {
+      await _updateCalendarEventUseCase(
+        eventId: task.id,
+        params: UpdateCalendarEventParams(title: title),
+      );
+      await refreshAgendaFromCalendar();
+      AppToast.showSuccess(AppTexts.calendarEventUpdated);
+    } catch (_) {
+      AppToast.showError(AppTexts.calendarEventUpdateFailed);
+    }
   }
 
   void _setTodayTaskStatus(String taskId, HomeTodayTaskStatus status) {
@@ -413,6 +493,10 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     Get.toNamed<void>(AppRoutes.planner);
   }
 
+  void openNewGoalChat() {
+    AppAnimationController.pushNamed<void>(AppRoutes.goalsChat);
+  }
+
   void openCreateTask() {
     AppAnimationController.pushNamed<void>(AppRoutes.createTask);
   }
@@ -429,9 +513,8 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     }
   }
 
-  void openTodaysTasksScreen() {
-    ensureCalendarQuoteLoaded();
-    AppAnimationController.pushNamed<void>(AppRoutes.todaysTasks);
+  void openAgendaScreen() {
+    AppAnimationController.pushNamed<void>(AppRoutes.agenda);
   }
 
   void openStatsTab() {

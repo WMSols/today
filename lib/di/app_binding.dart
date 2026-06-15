@@ -1,12 +1,23 @@
 import 'package:get/get.dart';
 
 import 'package:today/core/auth/firebase_auth_gateway.dart';
+import 'package:today/core/auth/firebase_token_provider.dart';
 import 'package:today/core/network/connectivity_service.dart';
 import 'package:today/core/network/dio_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:today/core/storage/initial_plan_storage.dart';
 import 'package:today/core/storage/profile_setup_storage.dart';
+import 'package:today/core/storage/calendar_cache_storage.dart';
+import 'package:today/core/storage/calendar_chat_history_storage.dart';
 import 'package:today/core/storage/session_storage.dart';
+import 'package:today/data/datasources/remote/calendar_remote_data_source.dart';
+import 'package:today/data/repositories/calendar_repository_impl.dart';
+import 'package:today/domain/repositories/calendar_repository.dart';
+import 'package:today/domain/usecases/create_calendar_event_usecase.dart';
+import 'package:today/domain/usecases/delete_calendar_event_usecase.dart';
+import 'package:today/domain/usecases/get_calendar_agenda_usecase.dart';
+import 'package:today/domain/usecases/send_calendar_chat_message_usecase.dart';
+import 'package:today/domain/usecases/update_calendar_event_usecase.dart';
 import 'package:today/data/datasources/local/goal_local_data_source.dart';
 import 'package:today/data/datasources/local/subscription_local_data_source.dart';
 import 'package:today/data/datasources/remote/planner_remote_data_source.dart';
@@ -33,11 +44,11 @@ import 'package:today/domain/repositories/auth_repository.dart';
 import 'package:today/domain/repositories/goal_repository.dart';
 import 'package:today/domain/repositories/planner_repository.dart';
 import 'package:today/domain/repositories/subscription_repository.dart';
+import 'package:today/domain/usecases/bootstrap_user_usecase.dart';
+import 'package:today/domain/usecases/check_health_usecase.dart';
+import 'package:today/domain/usecases/get_auth_config_usecase.dart';
 import 'package:today/domain/usecases/get_active_goal_tasks_usecase.dart';
-import 'package:today/domain/usecases/get_me_usecase.dart';
 import 'package:today/domain/usecases/get_goal_cards_usecase.dart';
-import 'package:today/domain/usecases/login_usecase.dart';
-import 'package:today/domain/usecases/signup_usecase.dart';
 import 'package:today/domain/usecases/get_subscription_plans_usecase.dart';
 import 'package:today/domain/usecases/get_today_plan_usecase.dart';
 import 'package:today/domain/usecases/get_goal_history_usecase.dart';
@@ -61,11 +72,18 @@ class AppBinding extends Bindings {
         ProfileSetupStorage(Get.find<SharedPreferences>()),
         permanent: true,
       );
+      Get.put<CalendarChatHistoryStorage>(
+        CalendarChatHistoryStorage(Get.find<SharedPreferences>()),
+        permanent: true,
+      );
     }
     final sessionStorage = SessionStorage();
     Get.put<SessionStorage>(sessionStorage, permanent: true);
     Get.lazyPut<FirebaseAuthGateway>(() => FirebaseAuthGateway(), fenix: true);
-    final dio = DioClient.instanceWith(sessionStorage: sessionStorage);
+    Get.put<FirebaseTokenProvider>(FirebaseTokenProvider(), permanent: true);
+    final dio = DioClient.instanceWith(
+      tokenProvider: Get.find<FirebaseTokenProvider>(),
+    );
     Get.put<ConnectivityService>(ConnectivityService(), permanent: true);
     // Data sources
     Get.lazyPut<GoalLocalDataSource>(GoalLocalDataSource.new, fenix: true);
@@ -97,6 +115,11 @@ class AppBinding extends Bindings {
       HomeTodayTasksRemoteDataSource.new,
       fenix: true,
     );
+    Get.lazyPut<CalendarRemoteDataSource>(
+      () => CalendarRemoteDataSource(dio),
+      fenix: true,
+    );
+    Get.put<CalendarCacheStorage>(CalendarCacheStorage(), permanent: true);
 
     // Repositories
     Get.lazyPut<GoalRepository>(
@@ -126,15 +149,24 @@ class AppBinding extends Bindings {
       () => AnalyticsRepositoryImpl(Get.find<AnalyticsRemoteDataSource>()),
       fenix: true,
     );
+    Get.lazyPut<CalendarRepository>(
+      () => CalendarRepositoryImpl(
+        Get.find<CalendarRemoteDataSource>(),
+        Get.find<CalendarCacheStorage>(),
+      ),
+      fenix: true,
+    );
     Get.lazyPut<HomeDailyCalendarRepository>(
       () => HomeDailyCalendarRepositoryImpl(
         Get.find<HomeDailyCalendarRemoteDataSource>(),
+        Get.find<CalendarRepository>(),
       ),
       fenix: true,
     );
     Get.lazyPut<HomeTodayTasksRepository>(
       () => HomeTodayTasksRepositoryImpl(
         Get.find<HomeTodayTasksRemoteDataSource>(),
+        Get.find<CalendarRepository>(),
       ),
       fenix: true,
     );
@@ -152,16 +184,36 @@ class AppBinding extends Bindings {
       () => GetSubscriptionPlansUseCase(Get.find<SubscriptionRepository>()),
       fenix: true,
     );
-    Get.lazyPut<LoginUseCase>(
-      () => LoginUseCase(Get.find<AuthRepository>()),
+    Get.lazyPut<BootstrapUserUseCase>(
+      () => BootstrapUserUseCase(Get.find<AuthRepository>()),
       fenix: true,
     );
-    Get.lazyPut<SignupUseCase>(
-      () => SignupUseCase(Get.find<AuthRepository>()),
+    Get.lazyPut<GetAuthConfigUseCase>(
+      () => GetAuthConfigUseCase(Get.find<AuthRepository>()),
       fenix: true,
     );
-    Get.lazyPut<GetMeUseCase>(
-      () => GetMeUseCase(Get.find<AuthRepository>()),
+    Get.lazyPut<CheckHealthUseCase>(
+      () => CheckHealthUseCase(Get.find<AuthRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<SendCalendarChatMessageUseCase>(
+      () => SendCalendarChatMessageUseCase(Get.find<CalendarRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetCalendarAgendaUseCase>(
+      () => GetCalendarAgendaUseCase(Get.find<CalendarRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<CreateCalendarEventUseCase>(
+      () => CreateCalendarEventUseCase(Get.find<CalendarRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateCalendarEventUseCase>(
+      () => UpdateCalendarEventUseCase(Get.find<CalendarRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<DeleteCalendarEventUseCase>(
+      () => DeleteCalendarEventUseCase(Get.find<CalendarRepository>()),
       fenix: true,
     );
     Get.lazyPut<GetGoalCardsUseCase>(

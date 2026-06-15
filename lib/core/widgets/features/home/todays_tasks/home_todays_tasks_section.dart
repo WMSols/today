@@ -9,7 +9,7 @@ import 'package:today/core/utils/app_styles/app_text_styles.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/buttons/app_button.dart';
 import 'package:today/core/widgets/buttons/app_text_button.dart';
-import 'package:today/core/widgets/features/home/todays_tasks/home_today_tasks_timeline.dart';
+import 'package:today/core/widgets/features/home/todays_tasks/home_agenda_sections.dart';
 import 'package:today/presentation/controllers/home/home_controller.dart';
 
 class HomeTodaysTasksSection extends GetView<HomeController> {
@@ -33,7 +33,7 @@ class HomeTodaysTasksSection extends GetView<HomeController> {
             ),
             AppTextButton(
               label: AppTexts.viewAll,
-              onPressed: controller.openTodaysTasksScreen,
+              onPressed: controller.openAgendaScreen,
               color: context.accentPalette.accent,
               icon: Iconsax.arrow_right_3,
               iconPosition: IconPosition.right,
@@ -41,16 +41,18 @@ class HomeTodaysTasksSection extends GetView<HomeController> {
           ],
         ),
         AppSpacing.vertical(context, 0.012),
-        Obx(() {
-          final tasks = controller.homeTodayTasksPreview;
-          return HomeTodayTasksTimeline(
-            tasks: tasks,
+        Obx(
+          () => HomeAgendaSections(
+            calendarEvents: controller.todayCalendarEvents,
+            goalTasks: controller.todayGoalTasks,
             selectedTaskId: controller.selectedTodayTaskId.value,
             onTaskTap: controller.selectTodayTask,
             onTaskDone: controller.completeTodayTask,
             onTaskSkip: controller.skipTodayTask,
-          );
-        }),
+            onCalendarEventLongPress: controller.onCalendarEventLongPress,
+            previewLimit: 3,
+          ),
+        ),
       ],
     );
   }

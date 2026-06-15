@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:today/core/storage/initial_plan_storage.dart';
-import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/features/planner/planner_chat_avatar.dart';
@@ -45,7 +44,6 @@ class CreateInitialPlanController extends GetxController {
       (msg) => PlannerChatMessageItem(
         sender: PlannerMessageSender.user,
         message: msg,
-        avatarPath: AppImages.userProfile,
       ),
     ),
   ];

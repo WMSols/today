@@ -9,17 +9,12 @@ class PlannerChatMessageItem {
     required this.sender,
     this.message,
     this.isTyping = false,
-    this.avatarPath,
-    this.avatarKind = PlannerChatAvatarKind.image,
-  }) : assert(
-         avatarKind == PlannerChatAvatarKind.brandLogo || avatarPath != null,
-         'avatarPath is required for image avatars',
-       );
+    this.avatarKind = PlannerChatAvatarKind.userPhoto,
+  });
 
   final PlannerMessageSender sender;
   final String? message;
   final bool isTyping;
-  final String? avatarPath;
   final PlannerChatAvatarKind avatarKind;
 }
 
@@ -71,7 +66,6 @@ class PlannerChatMessageList extends StatelessWidget {
                   : AppSpacing.verticalValue(context, spacingFactor),
             ),
             child: PlannerMessageBubble(
-              avatarPath: item.avatarPath,
               sender: item.sender,
               message: item.message,
               isTyping: item.isTyping,

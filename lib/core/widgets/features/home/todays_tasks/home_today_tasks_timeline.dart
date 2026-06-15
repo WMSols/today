@@ -12,6 +12,7 @@ class HomeTodayTasksTimeline extends StatelessWidget {
     required this.onTaskTap,
     required this.onTaskDone,
     required this.onTaskSkip,
+    this.onCalendarEventLongPress,
   });
 
   final List<HomeTodayTaskEntity> tasks;
@@ -19,6 +20,7 @@ class HomeTodayTasksTimeline extends StatelessWidget {
   final ValueChanged<String> onTaskTap;
   final ValueChanged<String> onTaskDone;
   final ValueChanged<String> onTaskSkip;
+  final ValueChanged<HomeTodayTaskEntity>? onCalendarEventLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,9 @@ class HomeTodayTasksTimeline extends StatelessWidget {
           onTap: () => onTaskTap(task.id),
           onDone: () => onTaskDone(task.id),
           onSkip: () => onTaskSkip(task.id),
+          onLongPress: task.isCalendarEvent && onCalendarEventLongPress != null
+              ? () => onCalendarEventLongPress!(task)
+              : null,
         );
       }),
     );

@@ -172,6 +172,49 @@ class AppTexts {
       "Your brain uses less energy starting a task than avoiding it.";
   // Goals
   static const String goals = "Goals";
+  static const String goalsChat = "Goals Chat";
+  static const String goalsChatNewChat = "New Chat";
+  static const String goalsChatRecent = "RECENT";
+  static const String goalsChatWelcomeMessage =
+      "Hey! 👋 Tell me about a goal you'd like to achieve.";
+  static const String goalsChatYesterday = "Yesterday";
+  static String goalsChatDaysAgo(int days) => "$days days ago";
+  static const String goalsChatLastWeek = "Last week";
+  static const String goalsChatStubReplyGeneric1 =
+      "Great start — let's break that into smaller weekly milestones.";
+  static const String goalsChatStubReplyGeneric2 =
+      "I can help you shape a realistic plan. What does success look like in 30 days?";
+  static const String goalsChatStubReplyGeneric3 =
+      "Noted. We'll focus on consistency first, then ramp up intensity.";
+  static const String goalsChatHistoryFitnessTitle = "Fitness goal planning";
+  static const String goalsChatHistoryFitnessPreview =
+      "Let's build a 12-week running plan…";
+  static const String goalsChatHistoryFitnessUserMessage =
+      "I want to run a marathon in 6 months";
+  static const String goalsChatStubReplyFitness =
+      "A 12-week base plan is a solid start — we'll add speed work in phase two.";
+  static const String goalsChatHistorySpanishTitle = "Learn Spanish in 90 days";
+  static const String goalsChatHistorySpanishPreview =
+      "Daily practice schedule for A2…";
+  static const String goalsChatHistorySpanishUserMessage =
+      "I want to reach conversational Spanish in 90 days";
+  static const String goalsChatStubReplySpanish =
+      "Twenty minutes daily plus one speaking session per week will compound fast.";
+  static const String goalsChatHistoryMorningTitle =
+      "Morning routine restructure";
+  static const String goalsChatHistoryMorningPreview =
+      "Wake at 6am, meditation, workout…";
+  static const String goalsChatHistoryMorningUserMessage =
+      "Help me build a morning routine I can stick to";
+  static const String goalsChatStubReplyMorning =
+      "Start with three anchors: wake time, hydration, and a 10-minute movement block.";
+  static const String goalsChatHistoryCareerTitle = "Career transition roadmap";
+  static const String goalsChatHistoryCareerPreview =
+      "Skills to learn before Q3 switch…";
+  static const String goalsChatHistoryCareerUserMessage =
+      "I'm planning a career switch into product design";
+  static const String goalsChatStubReplyCareer =
+      "Let's map portfolio milestones and weekly learning blocks before Q3.";
   static const String goalsProgressLabel = 'PROGRESS';
   static const String goalsTotalLabel = 'GOALS';
   static const String goalsCompletedTasksLabel = 'COMPLETED';
@@ -389,11 +432,48 @@ class AppTexts {
       "DAY 1 IS ABOUT SHOWING UP - LET'S KEEP IT SIMPLE AND\nBUILD MOMENTUM BACK, YOU'VE GOT THIS!";
 
   // Home — tasks section
+  static const String agendaCalendarSection = 'CALENDAR';
+  static const String agendaGoalTasksSection = 'GOAL TASKS';
+  static const String scheduleDisplayHeading = 'Suggested schedule';
+  static const String scheduleDisplayEmptyDay = 'No slots for this day';
+
+  static const List<String> chatTypingPhrases = [
+    'Planning your schedule…',
+    'Finding the best times…',
+    'Organizing your tasks…',
+    'Building your day…',
+    'Almost there…',
+  ];
+  static const String calendarChatSendFailed =
+      'Unable to reach the calendar assistant';
+  static const String calendarEventDeleted = 'Event deleted';
+  static const String calendarEventUpdated = 'Event updated';
+  static const String calendarEventDeleteFailed = 'Unable to delete event';
+  static const String calendarEventUpdateFailed = 'Unable to update event';
+  static const String delete = 'Delete';
+  static const String deleteEventTitle = 'Delete event?';
+  static const String deleteEventBody =
+      'Remove this calendar event from your schedule.';
+  static const String deleteSeriesLabel = 'Delete entire series';
+
   static const String todaysTasksHeading = "TODAY'S TASKS";
   static const String todaysTasksProgressLabel = 'PROGRESS';
   static const String todaysTasksTotalLabel = 'TOTAL';
   static const String todaysTasksCompletedLabel = 'COMPLETED';
   static const String viewAll = 'View All';
+  static const String viewFullAgenda = 'View full agenda';
+
+  // Agenda — full schedule (view all)
+  static const String agendaHeading = 'YOUR AGENDA';
+  static const String agendaSubtitle = 'All tasks and events in your schedule';
+  static const String agendaProgressLabel = 'OVERALL PROGRESS';
+  static const String agendaTotalLabel = 'TOTAL';
+  static const String agendaCompletedLabel = 'DONE';
+  static const String agendaEmpty = 'Nothing scheduled in this range';
+  static const String agendaFilterAll = 'All';
+  static const String agendaFilterCalendar = 'Calendar';
+  static const String agendaFilterGoals = 'Goals';
+  static const String homeUnableLoadAgenda = 'Unable to load your agenda';
 
   // Home — default goal title
   static const String goalDefaultTitle = "Goal";
@@ -491,7 +571,7 @@ class AppTexts {
   static const String unauthorizedBody = "Invalid email or session.";
   static const String serverNotConfiguredTitle = "Server not configured";
   static const String serverNotConfiguredBody =
-      "Add POST /auth/firebase on your API to exchange Firebase ID tokens.";
+      "Your account could not be initialized on the server. Please try again.";
   static const String authenticationFailedTitle = "Authentication failed";
 
   // HTTP status messages (API layer)
