@@ -1,49 +1,63 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:today/core/utils/app_images/app_images.dart';
+import 'package:today/core/extensions/theme_context_extension.dart';
 
-/// Circular user avatar: network [photoUrl] with [imagePath] fallback.
+/// Circular user avatar from Firebase [photoUrl] or [FirebaseAuth] with icon fallback.
 class AppUserProfileImage extends StatelessWidget {
   const AppUserProfileImage({
     super.key,
     required this.size,
-    this.imagePath = AppImages.userProfile,
     this.photoUrl,
     this.onTap,
   });
 
   final double size;
-  final String imagePath;
   final String? photoUrl;
   final VoidCallback? onTap;
 
+  String? get _resolvedPhotoUrl {
+    final explicit = photoUrl?.trim();
+    if (explicit != null && explicit.isNotEmpty) return explicit;
+    final fromAuth = FirebaseAuth.instance.currentUser?.photoURL?.trim();
+    if (fromAuth != null && fromAuth.isNotEmpty) return fromAuth;
+    return null;
+  }
+
+  Widget _fallback(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: context.accentPalette.fabBackground,
+      ),
+      alignment: Alignment.center,
+      child: Icon(
+        Icons.person_rounded,
+        size: size * 0.5,
+        color: context.accentPalette.accent,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final url = photoUrl?.trim();
-    final Widget image;
-    if (url != null && url.isNotEmpty) {
-      image = Image.network(
-        url,
-        width: size,
-        height: size,
-        fit: BoxFit.cover,
-        errorBuilder: (_, _, _) => Image.asset(
-          imagePath,
+    final url = _resolvedPhotoUrl;
+    final Widget avatar;
+    if (url != null) {
+      avatar = ClipOval(
+        child: Image.network(
+          url,
           width: size,
           height: size,
           fit: BoxFit.cover,
+          errorBuilder: (_, _, _) => _fallback(context),
         ),
       );
     } else {
-      image = Image.asset(
-        imagePath,
-        width: size,
-        height: size,
-        fit: BoxFit.cover,
-      );
+      avatar = _fallback(context);
     }
-
-    final avatar = ClipOval(child: image);
 
     if (onTap == null) return avatar;
 

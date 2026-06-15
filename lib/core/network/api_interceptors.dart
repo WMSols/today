@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:today/core/auth/firebase_token_provider.dart';
 import 'package:today/core/constants/api_constants.dart';
 import 'package:today/core/network/api_debug_logger.dart';
-import 'package:today/core/storage/session_storage.dart';
 
-/// Interceptor for API requests.
+/// Interceptor for TodAI API requests.
 class ApiInterceptors extends Interceptor {
-  ApiInterceptors(this._sessionStorage);
+  ApiInterceptors(this._tokenProvider);
 
-  final SessionStorage _sessionStorage;
+  final FirebaseTokenProvider _tokenProvider;
 
   @override
   Future<void> onRequest(
@@ -21,7 +21,7 @@ class ApiInterceptors extends Interceptor {
     ApiDebugLogger.request(options);
     options.headers['Accept'] = 'application/json';
     options.headers['Content-Type'] = 'application/json';
-    final token = await _sessionStorage.getAccessToken();
+    final token = await _tokenProvider.getBearerToken();
     if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
     }

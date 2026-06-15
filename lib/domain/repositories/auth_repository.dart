@@ -1,44 +1,19 @@
-import 'package:today/domain/entities/auth_session_entity.dart';
-import 'package:today/domain/entities/auth_user_entity.dart';
-import 'package:today/domain/entities/me_entity.dart';
-
-class AuthResultEntity {
-  const AuthResultEntity({required this.user, required this.session});
-
-  final AuthUserEntity user;
-  final AuthSessionEntity session;
-}
+import 'package:today/domain/entities/auth_bootstrap_entity.dart';
+import 'package:today/domain/entities/auth_config_entity.dart';
+import 'package:today/domain/entities/health_status_entity.dart';
 
 abstract class AuthRepository {
-  Future<AuthResultEntity> signup({
-    required String username,
-    required String password,
-    String? timezone,
-    bool autoLogin = false,
-  });
+  Future<HealthStatusEntity> checkHealth();
 
-  Future<AuthResultEntity> login({
-    required String username,
-    required String password,
-    bool rememberMe = true,
-  });
+  Future<AuthConfigEntity> getAuthConfig();
 
-  /// Exchanges a Firebase ID token for an API session (`POST /auth/firebase`).
-  Future<AuthResultEntity> exchangeFirebaseSession({
-    required String idToken,
-    bool rememberMe = true,
-    String? timezone,
-  });
+  /// Creates or verifies the TodAI user profile (`POST /api/auth/bootstrap`).
+  Future<AuthBootstrapEntity> bootstrapUser({bool rememberMe = true});
 
-  /// Stores a Firebase ID token locally when the API exchange endpoint is unavailable.
-  Future<void> saveFirebaseIdTokenSession({
-    required String idToken,
-    bool rememberMe = true,
-  });
+  Future<AuthBootstrapEntity?> getCachedBootstrapUser();
 
-  Future<MeEntity> getMe();
-  Future<String?> getAccessToken();
   Future<bool> getRememberMePreference({bool defaultValue = true});
+
   Future<void> saveRememberMePreference(bool value);
 
   Future<void> saveLoginCredentials({

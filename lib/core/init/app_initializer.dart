@@ -12,7 +12,9 @@ import 'package:today/core/config/env_config.dart';
 import 'package:today/core/constants/api_constants.dart';
 import 'package:today/core/init/app_system_ui.dart';
 import 'package:today/di/app_binding.dart';
-import 'package:today/domain/usecases/get_me_usecase.dart';
+import 'package:today/domain/usecases/bootstrap_user_usecase.dart';
+import 'package:today/domain/usecases/check_health_usecase.dart';
+import 'package:today/domain/usecases/get_auth_config_usecase.dart';
 import 'package:today/domain/repositories/auth_repository.dart';
 import 'package:today/presentation/controllers/settings/accent_color_controller.dart';
 import 'package:today/presentation/controllers/settings/haptics_controller.dart';
@@ -46,7 +48,33 @@ abstract class AppInitializer {
     Get.put<VacationModeController>(VacationModeController(), permanent: true);
     await Get.find<HapticsController>().loadFromStorage();
     await Get.find<VacationModeController>().loadFromStorage();
+    if (ApiConstants.backendApiEnabled) {
+      await _runStartupApiChecks();
+    }
     initialRoute = await _resolveInitialRoute();
+  }
+
+  static Future<void> _runStartupApiChecks() async {
+    try {
+      await Get.find<CheckHealthUseCase>()();
+    } catch (e) {
+      debugPrint('TodAI health check failed: $e');
+    }
+
+    try {
+      final config = await Get.find<GetAuthConfigUseCase>()();
+      final expectedProjectId =
+          DefaultFirebaseOptions.currentPlatform.projectId;
+      if (config.firebaseProjectId.isNotEmpty &&
+          config.firebaseProjectId != expectedProjectId) {
+        debugPrint(
+          'TodAI firebase_project_id mismatch: '
+          'expected $expectedProjectId, got ${config.firebaseProjectId}',
+        );
+      }
+    } catch (e) {
+      debugPrint('TodAI auth config check failed: $e');
+    }
   }
 
   static Future<void> _ensureCoreServices() async {
@@ -64,63 +92,28 @@ abstract class AppInitializer {
   }
 
   static Future<String> _resolveInitialRoute() async {
-    if (!ApiConstants.backendApiEnabled) {
-      return _resolveInitialRouteOffline();
-    }
-
-    try {
-      final authRepository = Get.find<AuthRepository>();
-      if (!await authRepository.getRememberMePreference()) {
-        await _clearFirebaseSession(authRepository);
-        return UnauthenticatedRouteResolver.resolve();
-      }
-      final token = await authRepository.getAccessToken();
-      if (token == null || token.isEmpty) {
-        return await _tryRestoreFromFirebase(authRepository);
-      }
-      final getMe = Get.find<GetMeUseCase>();
-      await getMe();
-      return AppRoutes.mainApp;
-    } catch (_) {
-      try {
-        await Get.find<AuthRepository>().clearSession();
-      } catch (_) {}
-      return await _tryRestoreFromFirebase(Get.find<AuthRepository>());
-    }
-  }
-
-  /// Firebase + local session only (no Dio / getMe / exchangeFirebaseSession).
-  static Future<String> _resolveInitialRouteOffline() async {
     final authRepository = Get.find<AuthRepository>();
     if (!await authRepository.getRememberMePreference()) {
       await _clearFirebaseSession(authRepository);
       return UnauthenticatedRouteResolver.resolve();
     }
-    final token = await authRepository.getAccessToken();
-    if (token != null && token.isNotEmpty) {
-      return AppRoutes.mainApp;
+
+    if (!ApiConstants.backendApiEnabled) {
+      return _resolveInitialRouteOffline(authRepository);
     }
-    return _tryRestoreFromFirebaseOffline(authRepository);
+
+    return _resolveInitialRouteOnline(authRepository);
   }
 
-  static Future<String> _tryRestoreFromFirebaseOffline(
+  static Future<String> _resolveInitialRouteOnline(
     AuthRepository authRepository,
   ) async {
-    if (!await authRepository.getRememberMePreference()) {
-      await _clearFirebaseSession(authRepository);
-      return UnauthenticatedRouteResolver.resolve();
-    }
     try {
       final firebaseUser = FirebaseAuth.instance.currentUser;
-      if (firebaseUser == null) return UnauthenticatedRouteResolver.resolve();
-      final idToken = await firebaseUser.getIdToken();
-      if (idToken == null || idToken.isEmpty) {
+      if (firebaseUser == null) {
         return UnauthenticatedRouteResolver.resolve();
       }
-      await authRepository.saveFirebaseIdTokenSession(
-        idToken: idToken,
-        rememberMe: true,
-      );
+      await Get.find<BootstrapUserUseCase>()(rememberMe: true);
       return AppRoutes.mainApp;
     } catch (_) {
       await _clearFirebaseSession(authRepository);
@@ -128,25 +121,16 @@ abstract class AppInitializer {
     }
   }
 
-  static Future<String> _tryRestoreFromFirebase(
+  /// Firebase session only when the backend API is disabled.
+  static Future<String> _resolveInitialRouteOffline(
     AuthRepository authRepository,
   ) async {
-    if (!await authRepository.getRememberMePreference()) {
-      await _clearFirebaseSession(authRepository);
-      return UnauthenticatedRouteResolver.resolve();
-    }
     try {
       final firebaseUser = FirebaseAuth.instance.currentUser;
-      if (firebaseUser == null) return UnauthenticatedRouteResolver.resolve();
-      final idToken = await firebaseUser.getIdToken();
-      if (idToken == null || idToken.isEmpty) {
+      if (firebaseUser == null) {
         return UnauthenticatedRouteResolver.resolve();
       }
-      await authRepository.exchangeFirebaseSession(
-        idToken: idToken,
-        rememberMe: true,
-      );
-      await Get.find<GetMeUseCase>()();
+      await Get.find<BootstrapUserUseCase>()(rememberMe: true);
       return AppRoutes.mainApp;
     } catch (_) {
       await _clearFirebaseSession(authRepository);

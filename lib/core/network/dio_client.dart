@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
 
+import 'package:today/core/auth/firebase_token_provider.dart';
 import 'package:today/core/config/env_config.dart';
 import 'package:today/core/constants/api_constants.dart';
 import 'package:today/core/network/api_interceptors.dart';
-import 'package:today/core/storage/session_storage.dart';
+import 'package:today/core/network/bootstrap_retry_interceptor.dart';
 
 /// Singleton Dio instance with base URL and interceptors.
 class DioClient {
@@ -20,10 +21,7 @@ class DioClient {
     return _dio!;
   }
 
-  static Dio instanceWith({
-    required SessionStorage sessionStorage,
-    List<Interceptor>? interceptors,
-  }) {
+  static Dio instanceWith({required FirebaseTokenProvider tokenProvider}) {
     final dio = Dio(
       BaseOptions(
         baseUrl: EnvConfig.baseUrl,
@@ -35,10 +33,8 @@ class DioClient {
         ),
       ),
     );
-    dio.interceptors.add(ApiInterceptors(sessionStorage));
-    if (interceptors != null && interceptors.isNotEmpty) {
-      dio.interceptors.addAll(interceptors);
-    }
+    dio.interceptors.add(ApiInterceptors(tokenProvider));
+    dio.interceptors.add(BootstrapRetryInterceptor(dio));
     _dio = dio;
     return dio;
   }
