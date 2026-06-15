@@ -67,7 +67,7 @@ class AppTextButton extends StatelessWidget {
       onPressed: onPressed,
       style: TextButton.styleFrom(
         foregroundColor: textStyle.color,
-        padding: AppSpacing.symmetric(context, h: 0.02, v: 0.01),
+        padding: AppSpacing.symmetric(context, h: 0.014, v: 0.005),
       ),
       child: content,
     );

@@ -21,19 +21,19 @@ class SocialActionButton extends StatelessWidget {
     return Material(
       color: tint,
       borderRadius: BorderRadius.circular(
-        AppResponsive.radius(context, factor: 5),
+        AppResponsive.radius(context, factor: 4),
       ),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(
-          AppResponsive.radius(context, factor: 5),
+          AppResponsive.radius(context, factor: 4),
         ),
         child: Padding(
-          padding: AppSpacing.symmetric(context, h: 0.04, v: 0.015),
+          padding: AppSpacing.symmetric(context, h: 0.021, v: 0.008),
           child: Image.asset(
             image,
-            width: AppResponsive.iconSize(context),
-            height: AppResponsive.iconSize(context),
+            width: AppResponsive.iconSize(context, factor: 0.96),
+            height: AppResponsive.iconSize(context, factor: 0.96),
             fit: BoxFit.contain,
           ),
         ),

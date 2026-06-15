@@ -94,21 +94,21 @@ class _AppButtonMetrics {
         );
       case AppButtonSize.medium:
         return const _AppButtonMetrics(
-          paddingHorizontal: 0.04,
-          paddingVertical: 0.015,
-          fontScale: 1,
-          iconScale: 1,
-          radiusFactor: 5,
-          loaderScale: 1,
+          paddingHorizontal: 0.021,
+          paddingVertical: 0.008,
+          fontScale: 0.96,
+          iconScale: 0.96,
+          radiusFactor: 4,
+          loaderScale: 0.96,
         );
       case AppButtonSize.large:
         return const _AppButtonMetrics(
-          paddingHorizontal: 0.05,
-          paddingVertical: 0.02,
-          fontScale: 1.08,
-          iconScale: 1.08,
-          radiusFactor: 5,
-          loaderScale: 1.08,
+          paddingHorizontal: 0.025,
+          paddingVertical: 0.01,
+          fontScale: 1,
+          iconScale: 1,
+          radiusFactor: 4,
+          loaderScale: 1,
         );
     }
   }

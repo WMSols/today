@@ -42,7 +42,7 @@ class AppBottomNavBarScaffold extends StatelessWidget {
           Positioned(
             left: 0,
             right: 0,
-            bottom: AppResponsive.scaleSize(context, 10),
+            bottom: AppResponsive.scaleSize(context, 6),
             child: AppBottomNavBar(currentIndex: currentIndex, onTap: onTap),
           ),
           ?overlay,
@@ -98,8 +98,8 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
 
   @override
   Widget build(BuildContext context) {
-    final barHeight = AppResponsive.screenHeight(context) * 0.07;
-    final radius = AppResponsive.radius(context, factor: 5);
+    final barHeight = AppResponsive.screenHeight(context) * 0.055;
+    final radius = AppResponsive.radius(context, factor: 4);
     const itemsCount = 4;
     final palette = context.accentPalette;
     final barColor = palette.navBar;
@@ -117,12 +117,12 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
               color: barColor,
               borderRadius: BorderRadius.circular(radius),
             ),
-            padding: EdgeInsets.all(AppResponsive.scaleSize(context, 3)),
+            padding: EdgeInsets.all(AppResponsive.scaleSize(context, 2)),
             child: LayoutBuilder(
               builder: (context, constraints) {
                 final totalWidth = constraints.maxWidth;
                 final itemWidth = totalWidth / itemsCount;
-                final bubbleInset = AppResponsive.scaleSize(context, 2);
+                final bubbleInset = AppResponsive.scaleSize(context, 1);
                 final prevLeft = itemWidth * _previousIndex + bubbleInset;
                 final targetLeft =
                     itemWidth * widget.currentIndex + bubbleInset;
@@ -134,7 +134,7 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
                     final t = Curves.elasticOut.transform(_controller.value);
                     final left = lerpDouble(prevLeft, targetLeft, t)!;
                     final stretch =
-                        AppResponsive.scaleSize(context, 8) *
+                        AppResponsive.scaleSize(context, 5) *
                         (1 - ((t * 2) - 1).abs());
                     final width = baseWidth + stretch;
                     final correctedLeft = left - (stretch / 2);
@@ -148,7 +148,7 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
                           height: constraints.maxHeight - (bubbleInset * 2),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(
-                              AppResponsive.scaleSize(context, 26),
+                              AppResponsive.scaleSize(context, 20),
                             ),
                             child: BackdropFilter(
                               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -156,7 +156,7 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
                                 decoration: BoxDecoration(
                                   color: bubbleColor,
                                   borderRadius: BorderRadius.circular(
-                                    AppResponsive.scaleSize(context, 26),
+                                    AppResponsive.scaleSize(context, 20),
                                   ),
                                 ),
                               ),

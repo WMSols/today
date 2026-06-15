@@ -25,7 +25,7 @@ class AppBottomNavItem extends StatelessWidget {
     final isSelected = index == currentIndex;
     final targetIconSize = AppResponsive.iconSize(
       context,
-      factor: isSelected ? 1.2 : 1.4,
+      factor: isSelected ? 1.1 : 1.25,
     );
     return Expanded(
       child: GestureDetector(
@@ -35,11 +35,11 @@ class AppBottomNavItem extends StatelessWidget {
           duration: const Duration(milliseconds: 260),
           curve: Curves.easeOutCubic,
           margin: EdgeInsets.symmetric(
-            horizontal: AppResponsive.scaleSize(context, 2),
-            vertical: AppResponsive.scaleSize(context, 1),
+            horizontal: AppResponsive.scaleSize(context, 1),
+            vertical: AppResponsive.scaleSize(context, 0.5),
           ),
           padding: EdgeInsets.symmetric(
-            vertical: AppResponsive.scaleSize(context, 2),
+            vertical: AppResponsive.scaleSize(context, 1),
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(AppResponsive.radius(context)),
@@ -66,13 +66,13 @@ class AppBottomNavItem extends StatelessWidget {
                     },
                   ),
                   if (isSelected) ...[
-                    SizedBox(height: AppResponsive.scaleSize(context, 1)),
+                    SizedBox(height: AppResponsive.scaleSize(context, 0.5)),
                     Text(
                       label,
                       style: AppTextStyles.hintText(context).copyWith(
                         color: AppColors.white,
                         fontWeight: FontWeight.w600,
-                        fontSize: AppResponsive.scaleSize(context, 10),
+                        fontSize: AppResponsive.scaleSize(context, 9),
                         height: 1,
                       ),
                     ),
