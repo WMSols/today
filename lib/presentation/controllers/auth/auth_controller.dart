@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:today/core/constants/api_constants.dart';
 import 'package:today/core/auth/firebase_auth_gateway.dart';
 import 'package:today/presentation/controllers/settings/haptics_controller.dart';
 import 'package:today/core/auth/auth_error_messages.dart';
@@ -13,7 +12,7 @@ import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/widgets/buttons/app_button.dart';
 import 'package:today/core/widgets/feedback/app_toast.dart';
 import 'package:today/domain/repositories/auth_repository.dart';
-import 'package:today/domain/usecases/get_me_usecase.dart';
+import 'package:today/domain/usecases/bootstrap_user_usecase.dart';
 import 'package:today/core/navigation/post_auth_navigation.dart';
 import 'package:today/presentation/routes/route_arguments.dart';
 
@@ -85,10 +84,7 @@ class AuthController extends GetxController {
     try {
       final cred = await _firebaseAuth.signInWithGoogle();
       await _linkEmailPasswordFromActiveForm(cred.user);
-      await _persistApiSessionAfterFirebase(
-        cred,
-        timezone: DateTime.now().timeZoneName,
-      );
+      await _bootstrapAfterFirebase(cred);
       await _completeAuthAndGoHome(AppTexts.signedInWithGoogle);
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled ||
@@ -123,7 +119,7 @@ class AuthController extends GetxController {
     try {
       final cred = await _firebaseAuth.signInWithApple();
       await _linkEmailPasswordFromActiveForm(cred.user);
-      await _persistApiSessionAfterFirebase(cred);
+      await _bootstrapAfterFirebase(cred);
       await _completeAuthAndGoHome(AppTexts.signedInWithApple);
     } on FirebaseAuthException catch (e) {
       AppToast.showError(AuthErrorMessages.firebase(e));
@@ -151,7 +147,7 @@ class AuthController extends GetxController {
           email: loginEmailController.text.trim(),
           password: loginPasswordController.text,
         );
-        await _persistApiSessionAfterFirebase(cred);
+        await _bootstrapAfterFirebase(cred);
         await _persistLoginCredentialsIfNeeded();
         await _completeAuthAndGoHome(AppTexts.loginSuccessful);
       } else {
@@ -159,10 +155,7 @@ class AuthController extends GetxController {
           email: signupEmailController.text.trim(),
           password: signupPasswordController.text,
         );
-        await _persistApiSessionAfterFirebase(
-          cred,
-          timezone: DateTime.now().timeZoneName,
-        );
+        await _bootstrapAfterFirebase(cred);
         await _completeAuthAndGoHome(AppTexts.accountCreatedSuccess);
       }
     } on FirebaseAuthException catch (e) {
@@ -218,10 +211,7 @@ class AuthController extends GetxController {
     );
   }
 
-  Future<void> _persistApiSessionAfterFirebase(
-    UserCredential cred, {
-    String? timezone,
-  }) async {
+  Future<void> _bootstrapAfterFirebase(UserCredential cred) async {
     final user = cred.user;
     if (user == null) {
       throw FirebaseAuthException(
@@ -236,22 +226,13 @@ class AuthController extends GetxController {
         message: AppTexts.firebaseMissingIdTokenMessage,
       );
     }
-    if (!ApiConstants.backendApiEnabled) {
-      await _authRepository.saveFirebaseIdTokenSession(
-        idToken: idToken,
-        rememberMe: rememberMe.value,
-      );
+
+    if (Get.isRegistered<BootstrapUserUseCase>()) {
+      await Get.find<BootstrapUserUseCase>()(rememberMe: rememberMe.value);
       return;
     }
 
-    await _authRepository.exchangeFirebaseSession(
-      idToken: idToken,
-      rememberMe: rememberMe.value,
-      timezone: timezone,
-    );
-    if (Get.isRegistered<GetMeUseCase>()) {
-      await Get.find<GetMeUseCase>()();
-    }
+    await _authRepository.bootstrapUser(rememberMe: rememberMe.value);
   }
 
   Future<void> _completeAuthAndGoHome(String title) async {

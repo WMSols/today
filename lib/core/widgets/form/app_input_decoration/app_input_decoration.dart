@@ -20,7 +20,7 @@ class AppInputDecoration {
     final surface = isDark ? AppColors.black : AppColors.white;
     final onSurface = isDark ? AppColors.white : AppColors.black;
     final borderColor = isDark ? AppColors.lightGrey : AppColors.grey;
-    final radius = AppResponsive.radius(context, factor: 5);
+    final radius = AppResponsive.radius(context, factor: 4);
     return InputDecoration(
       hintText: hintText,
       hintStyle: AppTextStyles.hintText(
@@ -29,7 +29,7 @@ class AppInputDecoration {
       prefixIcon: prefixIcon != null
           ? Icon(
               prefixIcon,
-              size: AppResponsive.iconSize(context),
+              size: AppResponsive.iconSize(context, factor: 0.96),
               color: AppColors.grey,
             )
           : null,
@@ -52,7 +52,7 @@ class AppInputDecoration {
         borderRadius: BorderRadius.circular(radius),
         borderSide: const BorderSide(color: AppColors.error),
       ),
-      contentPadding: AppSpacing.symmetric(context, h: 0.04, v: 0.01),
+      contentPadding: AppSpacing.symmetric(context, h: 0.021, v: 0.005),
     );
   }
 }

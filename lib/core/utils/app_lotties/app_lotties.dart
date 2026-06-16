@@ -8,6 +8,8 @@ class AppLotties {
   static const String loadingBlack = 'assets/lotties/loading_black.json';
   static const String loadingWhite = 'assets/lotties/loading_white.json';
   static const String typing = 'assets/lotties/typing.json';
+  static const String typingBlack = 'assets/lotties/typing_black.json';
+  static const String typingWhite = 'assets/lotties/typing white.json';
   static const String refresh = 'assets/lotties/refresh.json';
 
   // Onboarding

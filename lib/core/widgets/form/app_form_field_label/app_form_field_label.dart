@@ -45,7 +45,7 @@ class AppFormFieldLabel extends StatelessWidget {
               ),
           ],
         ),
-        AppSpacing.vertical(context, 0.005),
+        AppSpacing.vertical(context, 0.003),
       ],
     );
   }

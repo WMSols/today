@@ -35,7 +35,7 @@ class AppIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final palette = context.accentPalette;
-    final iconSize = size ?? AppResponsive.iconSize(context, factor: 1.3);
+    final iconSize = size ?? AppResponsive.iconSize(context, factor: 1.15);
     final iconColor =
         color ??
         (useAccentPalette
@@ -59,7 +59,7 @@ class AppIconButton extends StatelessWidget {
               },
         customBorder: const CircleBorder(),
         child: Padding(
-          padding: AppSpacing.all(context, factor: paddingFactor ?? 1),
+          padding: AppSpacing.all(context, factor: paddingFactor ?? 0.65),
           child: Icon(icon, size: iconSize, color: iconColor),
         ),
       ),

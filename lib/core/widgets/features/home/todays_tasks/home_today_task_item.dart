@@ -45,6 +45,7 @@ class HomeTodayTaskItem extends StatelessWidget {
     required this.onTap,
     required this.onDone,
     required this.onSkip,
+    this.onLongPress,
   });
 
   static const Duration _animDuration = Duration(milliseconds: 220);
@@ -56,6 +57,7 @@ class HomeTodayTaskItem extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onDone;
   final VoidCallback onSkip;
+  final VoidCallback? onLongPress;
 
   static _HomeTodayTaskRowColors _resolveColors(
     BuildContext context, {
@@ -171,6 +173,7 @@ class HomeTodayTaskItem extends StatelessWidget {
                       Expanded(
                         child: GestureDetector(
                           onTap: task.isPending ? onTap : null,
+                          onLongPress: onLongPress,
                           behavior: HitTestBehavior.opaque,
                           child: Align(
                             alignment: Alignment.centerLeft,

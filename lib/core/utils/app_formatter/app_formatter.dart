@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
 
 import 'package:today/core/utils/app_helper/app_helper.dart';
 import 'package:today/core/utils/app_images/app_images.dart';
@@ -122,5 +123,161 @@ class AppFormatter {
       AppTexts.daySun,
     ];
     return names[weekday - 1];
+  }
+
+  /// API date `yyyy-MM-dd` in local time.
+  static String apiDate(DateTime date) {
+    final local = DateTime(date.year, date.month, date.day);
+    final month = local.month.toString().padLeft(2, '0');
+    final day = local.day.toString().padLeft(2, '0');
+    return '${local.year}-$month-$day';
+  }
+
+  /// API date-time without timezone suffix (local).
+  static String apiDateTime(DateTime dateTime) {
+    final local = dateTime.toLocal();
+    final month = local.month.toString().padLeft(2, '0');
+    final day = local.day.toString().padLeft(2, '0');
+    final hour = local.hour.toString().padLeft(2, '0');
+    final minute = local.minute.toString().padLeft(2, '0');
+    final second = local.second.toString().padLeft(2, '0');
+    return '${local.year}-$month-$day'
+        'T$hour:$minute:$second';
+  }
+
+  /// Parses API date-time values from JSON.
+  static DateTime? parseApiDateTime(dynamic raw) {
+    if (raw == null) return null;
+    if (raw is DateTime) return raw;
+    if (raw is! String || raw.trim().isEmpty) return null;
+    return DateTime.tryParse(raw);
+  }
+
+  /// Inline chat formatting: `**bold**`, `*italic*`, `~~strike~~`, `__underline__`, `` `code` ``.
+  static List<InlineSpan> chatMessageSpans(String input, TextStyle style) {
+    return _ChatMessageSpanParser.parse(input, style);
+  }
+
+  /// Capitalizes the first character of [text] (e.g. user chat prompts).
+  static String capitalizeFirstLetter(String text) {
+    final trimmed = text.trim();
+    if (trimmed.isEmpty) return trimmed;
+    return trimmed[0].toUpperCase() + trimmed.substring(1);
+  }
+
+  /// Parses API `yyyy-MM-dd` (or ISO) into "13 June 2026".
+  static String scheduleDisplayDate(String? rawDate) {
+    final parsed = AppHelper.parseDateTimeOrNull(rawDate);
+    if (parsed == null) {
+      return rawDate?.trim() ?? '';
+    }
+    return dayMonthYear(parsed);
+  }
+
+  /// Weekday label for schedule slots (API weekday or derived from date).
+  static String scheduleDisplayWeekday({String? weekday, String? apiDate}) {
+    final label = weekday?.trim();
+    if (label != null && label.isNotEmpty) return label;
+    final parsed = AppHelper.parseDateTimeOrNull(apiDate);
+    if (parsed == null) return '';
+    return dayNameFull(parsed.weekday);
+  }
+
+  /// Section title for agenda screens, e.g. "Today · 15 June 2026".
+  static String agendaDayHeading(DateTime date) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final day = DateTime(date.year, date.month, date.day);
+    final diff = day.difference(today).inDays;
+    final dateLabel = dayMonthYear(day);
+    if (diff == 0) return 'Today · $dateLabel';
+    if (diff == 1) return 'Tomorrow · $dateLabel';
+    if (diff == -1) return 'Yesterday · $dateLabel';
+    return '${dayNameFull(day.weekday)} · $dateLabel';
+  }
+
+  /// Short drawer / app-bar title from a chat message (first [maxWords] words).
+  static String chatSessionTitle(String text, {int maxWords = 4}) {
+    final normalized = text.trim();
+    if (normalized.isEmpty) return '';
+    final words = normalized
+        .split(RegExp(r'\s+'))
+        .where((word) => word.isNotEmpty)
+        .toList();
+    if (words.isEmpty) return '';
+    if (words.length <= maxWords) return words.join(' ');
+    return '${words.take(maxWords).join(' ')}…';
+  }
+}
+
+class _ChatMessageFormatRule {
+  const _ChatMessageFormatRule({required this.pattern, required this.apply});
+
+  final RegExp pattern;
+  final TextStyle Function(TextStyle style) apply;
+}
+
+class _ChatMessageSpanParser {
+  _ChatMessageSpanParser._();
+
+  static final List<_ChatMessageFormatRule> _rules = [
+    _ChatMessageFormatRule(
+      pattern: RegExp(r'\*\*\*(.+?)\*\*\*'),
+      apply: (style) => style.copyWith(
+        fontWeight: FontWeight.w700,
+        fontStyle: FontStyle.italic,
+      ),
+    ),
+    _ChatMessageFormatRule(
+      pattern: RegExp(r'\*\*(.+?)\*\*'),
+      apply: (style) => style.copyWith(fontWeight: FontWeight.w700),
+    ),
+    _ChatMessageFormatRule(
+      pattern: RegExp(r'(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)'),
+      apply: (style) => style.copyWith(fontStyle: FontStyle.italic),
+    ),
+    _ChatMessageFormatRule(
+      pattern: RegExp(r'~~(.+?)~~'),
+      apply: (style) => style.copyWith(decoration: TextDecoration.lineThrough),
+    ),
+    _ChatMessageFormatRule(
+      pattern: RegExp(r'__(.+?)__'),
+      apply: (style) => style.copyWith(decoration: TextDecoration.underline),
+    ),
+    _ChatMessageFormatRule(
+      pattern: RegExp(r'`(.+?)`'),
+      apply: (style) =>
+          style.copyWith(fontFamily: 'monospace', fontWeight: FontWeight.w500),
+    ),
+  ];
+
+  static List<InlineSpan> parse(String input, TextStyle style) {
+    if (input.isEmpty) return const [];
+
+    _ChatMessageFormatRule? matchedRule;
+    RegExpMatch? match;
+
+    for (final rule in _rules) {
+      final candidate = rule.pattern.firstMatch(input);
+      if (candidate == null) continue;
+      if (match == null || candidate.start < match.start) {
+        match = candidate;
+        matchedRule = rule;
+      }
+    }
+
+    if (match == null || matchedRule == null) {
+      return [TextSpan(text: input, style: style)];
+    }
+
+    final before = input.substring(0, match.start);
+    final inner = match.group(1) ?? '';
+    final after = input.substring(match.end);
+
+    return [
+      ...parse(before, style),
+      ...parse(inner, matchedRule.apply(style)),
+      ...parse(after, style),
+    ];
   }
 }

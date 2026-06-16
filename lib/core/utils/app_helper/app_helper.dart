@@ -3,6 +3,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_formatter/app_formatter.dart';
+import 'package:today/domain/entities/schedule_display_entity.dart';
 
 enum HomeDailyCalendarActivityLevel { none, success, warning, error }
 
@@ -61,6 +62,23 @@ class AppHelper {
   static IconData goalIconForTitle(String title) {
     final normalized = title.toLowerCase();
     if (_titleMatches(normalized, const [
+      'cycle',
+      'cycling',
+      'bike',
+      'bicycle',
+    ])) {
+      return Iconsax.routing_2;
+    }
+    if (_titleMatches(normalized, const ['swim', 'swimming', 'pool'])) {
+      return Iconsax.drop;
+    }
+    if (_titleMatches(normalized, const ['hike', 'hiking', 'trek', 'trail'])) {
+      return Iconsax.tree;
+    }
+    if (_titleMatches(normalized, const ['yoga', 'stretch', 'pilates'])) {
+      return Iconsax.health;
+    }
+    if (_titleMatches(normalized, const [
       'run',
       'cardio',
       'workout',
@@ -70,6 +88,8 @@ class AppHelper {
       'jog',
       'fitness',
       'sport',
+      'lift',
+      'weight',
     ])) {
       return Iconsax.activity;
     }
@@ -176,6 +196,19 @@ class AppHelper {
 
   static DateTime weekSundayStart(DateTime day) {
     return day.subtract(Duration(days: day.weekday % 7));
+  }
+
+  static DateTime weekSaturdayEnd(DateTime weekSunday) {
+    return weekSunday.add(const Duration(days: 6));
+  }
+
+  /// Days that contain at least one scheduled slot.
+  static List<ScheduleDisplayDayEntity> scheduleDaysWithSlots(
+    ScheduleDisplayEntity display,
+  ) {
+    return display.days
+        .where((day) => day.slots.any((slot) => slot.title.trim().isNotEmpty))
+        .toList();
   }
 
   static bool isSameDay(DateTime a, DateTime b) {

@@ -1,10 +1,11 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:today/core/constants/storage_keys.dart';
+import 'package:today/data/models/auth_bootstrap_model.dart';
 
 class SessionStorage {
-  static const String _accessTokenKey = 'access_token';
   static const String _rememberMeKey = 'remember_me';
-  String? _runtimeAccessToken;
 
   Future<void> saveRememberMePreference(bool value) async {
     final prefs = await SharedPreferences.getInstance();
@@ -16,24 +17,25 @@ class SessionStorage {
     return prefs.getBool(_rememberMeKey) ?? defaultValue;
   }
 
-  Future<void> saveAccessToken(String token, {bool persist = true}) async {
-    _runtimeAccessToken = token;
+  Future<void> saveBootstrapUser(AuthBootstrapModel user) async {
     final prefs = await SharedPreferences.getInstance();
-    if (persist) {
-      await prefs.setString(_accessTokenKey, token);
-      return;
-    }
-    await prefs.remove(_accessTokenKey);
+    await prefs.setString(StorageKeys.bootstrapUser, jsonEncode(user.toJson()));
   }
 
-  Future<String?> getAccessToken() async {
-    if (_runtimeAccessToken != null && _runtimeAccessToken!.isNotEmpty) {
-      return _runtimeAccessToken;
-    }
+  Future<Map<String, dynamic>?> getBootstrapUser() async {
     final prefs = await SharedPreferences.getInstance();
-    final stored = prefs.getString(_accessTokenKey);
-    _runtimeAccessToken = stored;
-    return stored;
+    final raw = prefs.getString(StorageKeys.bootstrapUser);
+    if (raw == null || raw.isEmpty) return null;
+    try {
+      final decoded = jsonDecode(raw);
+      if (decoded is Map<String, dynamic>) return decoded;
+    } catch (_) {}
+    return null;
+  }
+
+  Future<void> clearBootstrapUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(StorageKeys.bootstrapUser);
   }
 
   Future<void> saveLoginCredentials({
@@ -60,8 +62,6 @@ class SessionStorage {
   }
 
   Future<void> clearSession() async {
-    _runtimeAccessToken = null;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_accessTokenKey);
+    await clearBootstrapUser();
   }
 }

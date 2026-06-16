@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
+import 'package:today/core/widgets/feedback/app_loading_indicator.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/buttons/app_button.dart';
 import 'package:today/core/widgets/features/settings/settings_controls_card.dart';
@@ -16,9 +16,6 @@ class SettingsScreen extends GetView<SettingsController> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final progressColor = isDark ? AppColors.white : AppColors.black;
-
     return AppPageScaffold(
       child: SingleChildScrollView(
         padding: AppPageScaffold.defaultBodyPadding(context),
@@ -28,7 +25,7 @@ class SettingsScreen extends GetView<SettingsController> {
             Obx(
               () => Center(
                 child: controller.isProfileLoading.value
-                    ? CircularProgressIndicator(color: progressColor)
+                    ? const AppLoadingIndicator()
                     : SettingsProfileHeader(
                         username: controller.profileName,
                         photoUrl: controller.profilePhotoUrl,

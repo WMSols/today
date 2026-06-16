@@ -38,11 +38,6 @@ class AppImages {
   /// Bottom nav — reuses lifetime stats icon until a dedicated asset exists.
   static const String analyticsNav = 'assets/images/icons/tasks_completed.png';
 
-  // Avatars
-  static const String aiAvatar = 'assets/images/avatars/ai_avatar.png';
-  static const String userAvatar = 'assets/images/avatars/user_avatar.png';
-  static const String userProfile = 'assets/images/avatars/profile.png';
-
   // No data yet
   static const String noDataYet = 'assets/images/common/no_data_yet.png';
   static const String noInternet = 'assets/images/common/no_internet.png';

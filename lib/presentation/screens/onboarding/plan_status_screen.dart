@@ -9,6 +9,7 @@ import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/buttons/app_button.dart';
+import 'package:today/core/widgets/feedback/app_loading_indicator.dart';
 import 'package:today/presentation/controllers/onboarding/plan_status_controller.dart';
 
 class PlanStatusScreen extends GetView<PlanStatusController> {
@@ -35,7 +36,7 @@ class PlanStatusScreen extends GetView<PlanStatusController> {
               Expanded(
                 child: Obx(() {
                   if (controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: AppLoadingIndicator());
                   }
 
                   final isReady =

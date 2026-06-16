@@ -41,7 +41,7 @@ class AuthSocialSection extends GetView<AuthController> {
             ],
           ),
         ),
-        AppSpacing.vertical(context, 0.015),
+        AppSpacing.vertical(context, 0.008),
         SizedBox(
           width: AppResponsive.screenWidth(context) * 0.8,
           child: Row(

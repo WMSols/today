@@ -6,12 +6,15 @@ import 'package:today/presentation/screens/splash/splash_screen.dart';
 import 'package:today/presentation/bindings/auth/auth_binding.dart';
 import 'package:today/presentation/screens/auth/auth_screen.dart';
 import 'package:today/presentation/bindings/goals/goals_binding.dart';
+import 'package:today/presentation/bindings/goals/goals_chat_binding.dart';
+import 'package:today/presentation/screens/goals/goals_chat_screen.dart';
 import 'package:today/presentation/screens/goals/goals_screen.dart';
 import 'package:today/presentation/screens/home/active_goal_details_screen.dart';
 import 'package:today/presentation/bindings/home/home_binding.dart';
 import 'package:today/presentation/screens/home/home_calendar_screen.dart';
 import 'package:today/presentation/screens/home/home_screen.dart';
-import 'package:today/presentation/screens/home/todays_tasks_screen.dart';
+import 'package:today/presentation/screens/agenda/agenda_screen.dart';
+import 'package:today/presentation/bindings/agenda/agenda_binding.dart';
 import 'package:today/presentation/bindings/main/main_app_binding.dart';
 import 'package:today/presentation/screens/main/main_app_screen.dart';
 import 'package:today/presentation/bindings/settings/notifications_binding.dart';
@@ -82,9 +85,9 @@ abstract class AppPages {
       binding: HomeBinding(),
     ),
     GetPage(
-      name: AppRoutes.todaysTasks,
-      page: () => const TodaysTasksScreen(),
-      binding: HomeBinding(),
+      name: AppRoutes.agenda,
+      page: () => const AgendaScreen(),
+      binding: AgendaBinding(),
       transition: AppAnimationController.pushTransition,
       transitionDuration: AppAnimationController.pushDuration,
       curve: AppAnimationController.pushCurve,
@@ -126,6 +129,14 @@ abstract class AppPages {
       name: AppRoutes.goals,
       page: () => const GoalsScreen(),
       binding: GoalsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.goalsChat,
+      page: () => const GoalsChatScreen(),
+      binding: GoalsChatBinding(),
+      transition: AppAnimationController.pushTransition,
+      transitionDuration: AppAnimationController.pushDuration,
+      curve: AppAnimationController.pushCurve,
     ),
     GetPage(
       name: AppRoutes.settings,

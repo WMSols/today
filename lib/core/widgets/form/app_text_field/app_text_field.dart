@@ -23,6 +23,7 @@ class AppTextField extends StatelessWidget {
     this.onChanged,
     this.onSubmitted,
     this.maxLines = 1,
+    this.minLines,
     this.inputFormatters,
     this.readOnly = false,
   });
@@ -42,6 +43,7 @@ class AppTextField extends StatelessWidget {
   final void Function(String)? onChanged;
   final void Function(String)? onSubmitted;
   final int maxLines;
+  final int? minLines;
   final List<TextInputFormatter>? inputFormatters;
   final bool readOnly;
 
@@ -68,6 +70,7 @@ class AppTextField extends StatelessWidget {
             onSubmitted?.call(v);
           },
           maxLines: maxLines,
+          minLines: minLines,
           inputFormatters: inputFormatters,
           readOnly: readOnly,
           decoration: AppInputDecoration.decoration(
