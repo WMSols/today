@@ -50,6 +50,13 @@ class HomeTodaysTasksSection extends GetView<HomeController> {
             onTaskDone: controller.completeTodayTask,
             onTaskSkip: controller.skipTodayTask,
             onCalendarEventLongPress: controller.onCalendarEventLongPress,
+            onCalendarEventEdit: controller.onCalendarEventEdit,
+            onCalendarEventDelete: controller.deleteCalendarEvent,
+            onCalendarEventComplete:
+                controller.onCalendarEventCompletePlaceholder,
+            onCalendarEventSkip: controller.onCalendarEventSkipPlaceholder,
+            onGoalTaskEdit: controller.onGoalTaskEdit,
+            onGoalTaskDelete: controller.onGoalTaskDelete,
             previewLimit: 3,
           ),
         ),

@@ -5,14 +5,15 @@ import 'package:today/core/network/zen_quote_service.dart';
 import 'package:today/core/utils/app_formatter/app_formatter.dart';
 import 'package:today/core/utils/app_images/app_images.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
+import 'package:today/core/widgets/common/app_action_dialog.dart';
 import 'package:today/core/widgets/feedback/app_toast.dart';
 import 'package:today/domain/entities/home_daily_calendar_day_entity.dart';
 import 'package:today/domain/entities/goal_card_entity.dart';
 import 'package:today/domain/entities/active_goal_task_entity.dart';
 import 'package:today/domain/entities/goal_history_day_entity.dart';
 import 'package:today/domain/entities/home_today_task_entity.dart';
+import 'package:today/core/storage/today_schedule_store.dart';
 import 'package:today/domain/repositories/home_today_tasks_repository.dart';
-import 'package:today/domain/usecases/get_home_today_tasks_usecase.dart';
 import 'package:today/domain/usecases/create_goal_usecase.dart';
 import 'package:today/domain/usecases/complete_task_usecase.dart';
 import 'package:today/domain/usecases/delete_goal_usecase.dart';
@@ -23,7 +24,9 @@ import 'package:today/core/constants/api_constants.dart';
 import 'package:today/domain/entities/update_calendar_event_params.dart';
 import 'package:today/domain/usecases/delete_calendar_event_usecase.dart';
 import 'package:today/domain/usecases/get_weekly_calendar_usecase.dart';
+import 'package:today/domain/usecases/delete_goal_task_usecase.dart';
 import 'package:today/domain/usecases/update_calendar_event_usecase.dart';
+import 'package:today/domain/usecases/update_goal_task_usecase.dart';
 import 'package:today/domain/repositories/home_daily_calendar_repository.dart';
 import 'package:today/presentation/controllers/goals/goal_cards_controller.dart';
 import 'package:today/presentation/controllers/main/main_app_controller.dart';
@@ -81,10 +84,12 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     this._getGoalHistoryUseCase,
     this._deleteGoalUseCase,
     this._getWeeklyCalendarUseCase,
-    this._getHomeTodayTasksUseCase,
+    this._scheduleStore,
     this._homeTodayTasksRepository,
     this._deleteCalendarEventUseCase,
     this._updateCalendarEventUseCase,
+    this._updateGoalTaskUseCase,
+    this._deleteGoalTaskUseCase,
   );
 
   final GoalCardsController _goalCardsController;
@@ -95,10 +100,12 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   final GetGoalHistoryUseCase _getGoalHistoryUseCase;
   final DeleteGoalUseCase _deleteGoalUseCase;
   final GetWeeklyCalendarUseCase _getWeeklyCalendarUseCase;
-  final GetHomeTodayTasksUseCase _getHomeTodayTasksUseCase;
+  final TodayScheduleStore _scheduleStore;
   final HomeTodayTasksRepository _homeTodayTasksRepository;
   final DeleteCalendarEventUseCase _deleteCalendarEventUseCase;
   final UpdateCalendarEventUseCase _updateCalendarEventUseCase;
+  final UpdateGoalTaskUseCase _updateGoalTaskUseCase;
+  final DeleteGoalTaskUseCase _deleteGoalTaskUseCase;
 
   final RxBool isLoading = false.obs;
   final RxBool isRefreshing = false.obs;
@@ -109,7 +116,6 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       <GoalHistoryDayEntity>[].obs;
   final RxList<HomeDailyCalendarDayEntity> calendarDays =
       <HomeDailyCalendarDayEntity>[].obs;
-  final RxList<HomeTodayTaskEntity> todayTasks = <HomeTodayTaskEntity>[].obs;
   final RxString selectedTodayTaskId = ''.obs;
   final Rxn<DateTime> lastAiPlanGeneratedAt = Rxn<DateTime>();
 
@@ -193,6 +199,11 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       return days[todayIndex - 1].progress.clamp(0.0, 1.0);
     }
     return 0;
+  }
+
+  List<HomeTodayTaskEntity> get todayTasks {
+    _scheduleStore.agendaTasks.length;
+    return _scheduleStore.todayTasks;
   }
 
   int get todayTasksTotalCount => todayTasks.length;
@@ -297,13 +308,12 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     _loadLastAiPlanTime();
     loadGoalCards();
     loadWeeklyCalendar();
-    loadTodayTasks();
+    _scheduleStore.ensureLoaded().then((_) => _playTodayProgressRingAnimation());
   }
 
   Future<void> loadTodayTasks() async {
     try {
-      final items = await _getHomeTodayTasksUseCase();
-      todayTasks.assignAll(items);
+      await _scheduleStore.ensureLoaded();
       _playTodayProgressRingAnimation();
     } catch (_) {
       _showError(AppTexts.homeUnableLoadTodayTasks);
@@ -311,7 +321,11 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   }
 
   Future<void> refreshAgendaFromCalendar() async {
-    await Future.wait([loadTodayTasks(), loadWeeklyCalendar()]);
+    await Future.wait([
+      _scheduleStore.refreshFromApi(),
+      loadWeeklyCalendar(),
+    ]);
+    _playTodayProgressRingAnimation();
   }
 
   Future<void> refreshHome() async {
@@ -341,9 +355,15 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   }
 
   Future<void> completeTodayTask(String taskId) async {
+    final task = todayTasks.firstWhereOrNull((t) => t.id == taskId);
+    if (task == null || !task.isGoalTask) return;
+
     if (ApiConstants.backendApiEnabled) {
+      await completeTask(taskId);
+      selectedTodayTaskId.value = '';
       return;
     }
+
     await _homeTodayTasksRepository.updateTodayTaskStatus(
       taskId: taskId,
       status: HomeTodayTaskStatus.completed,
@@ -354,9 +374,15 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   }
 
   Future<void> skipTodayTask(String taskId) async {
+    final task = todayTasks.firstWhereOrNull((t) => t.id == taskId);
+    if (task == null || !task.isGoalTask) return;
+
     if (ApiConstants.backendApiEnabled) {
+      await skipTask(taskId);
+      selectedTodayTaskId.value = '';
       return;
     }
+
     await _homeTodayTasksRepository.updateTodayTaskStatus(
       taskId: taskId,
       status: HomeTodayTaskStatus.skipped,
@@ -368,68 +394,172 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
 
   Future<void> onCalendarEventLongPress(HomeTodayTaskEntity task) async {
     if (!task.isCalendarEvent) return;
+    await deleteCalendarEvent(task);
+  }
+
+  Future<void> onCalendarEventEdit(HomeTodayTaskEntity task) async {
+    if (!task.isCalendarEvent) return;
     final context = Get.context;
     if (context == null) return;
 
-    final delete = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(AppTexts.deleteEventTitle),
-        content: Text(AppTexts.deleteEventBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(AppTexts.cancel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(AppTexts.delete),
-          ),
-        ],
+    var updateSeries = false;
+    if (task.isRecurring) {
+      final scope = await AppActionDialog.showRecurringScope(
+        context,
+        title: AppTexts.recurringEventTitle,
+        subtitle: AppTexts.recurringEventEditSubtitle,
+        seriesLabel: AppTexts.updateSeriesLabel,
+      );
+      if (scope == null) return;
+      updateSeries = scope;
+    }
+
+    await AppActionDialog.showTextInput(
+      context,
+      title: AppTexts.editEventTitle,
+      initialValue: task.title,
+      onSubmit: (title) => updateCalendarEventTitle(
+        task: task,
+        title: title,
+        updateSeries: updateSeries,
       ),
     );
-    if (delete != true) return;
-    await deleteCalendarEvent(task);
+  }
+
+  Future<void> onGoalTaskEdit(HomeTodayTaskEntity task) async {
+    if (!task.isGoalTask) return;
+    final context = Get.context;
+    if (context == null) return;
+    await AppActionDialog.showTextInput(
+      context,
+      title: AppTexts.editGoalTaskTitle,
+      subtitle: AppTexts.editGoalTaskSubtitle,
+      initialValue: task.title,
+      onSubmit: (title) => updateGoalTaskTitle(task: task, title: title),
+    );
+  }
+
+  Future<void> onGoalTaskDelete(HomeTodayTaskEntity task) async {
+    if (!task.isGoalTask) return;
+    final context = Get.context;
+    if (context == null) return;
+    await AppActionDialog.showConfirm(
+      context,
+      title: AppTexts.deleteGoalTaskTitle,
+      subtitle: AppTexts.deleteGoalTaskBody,
+      confirmLabel: AppTexts.delete,
+      onConfirm: () async {
+        try {
+          await _deleteGoalTaskUseCase(task.id);
+          selectedTodayTaskId.value = '';
+          await _scheduleStore.applyGoalTaskDeleted(taskId: task.id);
+          _playTodayProgressRingAnimation();
+          AppToast.showSuccess(AppTexts.goalTaskDeleted);
+          return true;
+        } catch (_) {
+          AppToast.showError(AppTexts.goalTaskDeleteFailed);
+          return false;
+        }
+      },
+    );
+  }
+
+  void onCalendarEventCompletePlaceholder(HomeTodayTaskEntity task) {
+    if (!task.isCalendarEvent) return;
+    AppToast.showInformation(AppTexts.calendarEventCompleteNotImplemented);
+  }
+
+  void onCalendarEventSkipPlaceholder(HomeTodayTaskEntity task) {
+    if (!task.isCalendarEvent) return;
+    AppToast.showInformation(AppTexts.calendarEventSkipNotImplemented);
   }
 
   Future<void> deleteCalendarEvent(
     HomeTodayTaskEntity task, {
-    bool deleteSeries = false,
+    bool? deleteSeries,
   }) async {
-    try {
-      await _deleteCalendarEventUseCase(
-        eventId: task.id,
-        deleteSeries: deleteSeries,
+    if (!task.isCalendarEvent) return;
+    final context = Get.context;
+    if (context == null) return;
+
+    var applyToSeries = deleteSeries ?? false;
+    if (deleteSeries == null && task.isRecurring) {
+      final scope = await AppActionDialog.showRecurringScope(
+        context,
+        title: AppTexts.recurringEventTitle,
+        subtitle: AppTexts.recurringEventDeleteSubtitle,
+        seriesLabel: AppTexts.deleteSeriesLabel,
       );
-      selectedTodayTaskId.value = '';
-      await refreshAgendaFromCalendar();
-      AppToast.showSuccess(AppTexts.calendarEventDeleted);
-    } catch (_) {
-      AppToast.showError(AppTexts.calendarEventDeleteFailed);
+      if (scope == null) return;
+      applyToSeries = scope;
     }
+
+    await AppActionDialog.showConfirm(
+      context,
+      title: AppTexts.deleteEventTitle,
+      subtitle: AppTexts.deleteEventBody,
+      confirmLabel: AppTexts.delete,
+      onConfirm: () async {
+        try {
+          await _deleteCalendarEventUseCase(
+            eventId: task.id,
+            deleteSeries: applyToSeries,
+          );
+          selectedTodayTaskId.value = '';
+          await _scheduleStore.applyCalendarEventDeleted(eventId: task.id);
+          _playTodayProgressRingAnimation();
+          AppToast.showSuccess(AppTexts.calendarEventDeleted);
+          return true;
+        } catch (_) {
+          AppToast.showError(AppTexts.calendarEventDeleteFailed);
+          return false;
+        }
+      },
+    );
   }
 
-  Future<void> updateCalendarEventTitle({
+  Future<bool> updateCalendarEventTitle({
     required HomeTodayTaskEntity task,
     required String title,
+    bool updateSeries = false,
   }) async {
     try {
       await _updateCalendarEventUseCase(
         eventId: task.id,
         params: UpdateCalendarEventParams(title: title),
+        updateSeries: updateSeries,
       );
-      await refreshAgendaFromCalendar();
+      await _scheduleStore.applyCalendarEventEdited(
+        eventId: task.id,
+        newTitle: title,
+      );
+      _playTodayProgressRingAnimation();
       AppToast.showSuccess(AppTexts.calendarEventUpdated);
+      return true;
     } catch (_) {
       AppToast.showError(AppTexts.calendarEventUpdateFailed);
+      return false;
+    }
+  }
+
+  Future<bool> updateGoalTaskTitle({
+    required HomeTodayTaskEntity task,
+    required String title,
+  }) async {
+    try {
+      await _updateGoalTaskUseCase(taskId: task.id, title: title);
+      await _scheduleStore.applyGoalTaskTitle(taskId: task.id, title: title);
+      _playTodayProgressRingAnimation();
+      AppToast.showSuccess(AppTexts.goalTaskUpdated);
+      return true;
+    } catch (_) {
+      AppToast.showError(AppTexts.goalTaskUpdateFailed);
+      return false;
     }
   }
 
   void _setTodayTaskStatus(String taskId, HomeTodayTaskStatus status) {
-    final index = todayTasks.indexWhere((t) => t.id == taskId);
-    if (index < 0) return;
-    todayTasks[index] = todayTasks[index].copyWith(status: status);
-    todayTasks.refresh();
+    _scheduleStore.applyGoalTaskStatus(taskId: taskId, status: status);
     _playTodayProgressRingAnimation();
   }
 
@@ -616,6 +746,11 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       if (selectedGoalId.value.isNotEmpty) {
         await loadActiveGoalTasks(selectedGoalId.value);
       }
+      await _scheduleStore.applyGoalTaskStatus(
+        taskId: taskId,
+        status: HomeTodayTaskStatus.completed,
+      );
+      _playTodayProgressRingAnimation();
       await _goalCardsController.loadGoalCards(force: true);
     } catch (_) {
       _showError(AppTexts.homeUnableCompleteTask);
@@ -639,6 +774,11 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       if (selectedGoalId.value.isNotEmpty) {
         await loadActiveGoalTasks(selectedGoalId.value);
       }
+      await _scheduleStore.applyGoalTaskStatus(
+        taskId: taskId,
+        status: HomeTodayTaskStatus.skipped,
+      );
+      _playTodayProgressRingAnimation();
       await _goalCardsController.loadGoalCards(force: true);
     } catch (_) {
       _showError(AppTexts.homeUnableSkipTask);

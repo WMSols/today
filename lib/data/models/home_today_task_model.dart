@@ -10,6 +10,7 @@ class HomeTodayTaskModel extends HomeTodayTaskEntity {
     super.startAt,
     super.endAt,
     super.description,
+    super.isRecurring = false,
   });
 
   factory HomeTodayTaskModel.fromJson(Map<String, dynamic> json) {
@@ -22,6 +23,7 @@ class HomeTodayTaskModel extends HomeTodayTaskEntity {
       startAt: DateTime.tryParse(json['start_at'] as String? ?? ''),
       endAt: DateTime.tryParse(json['end_at'] as String? ?? ''),
       description: json['description'] as String?,
+      isRecurring: json['is_recurring'] as bool? ?? false,
     );
   }
 

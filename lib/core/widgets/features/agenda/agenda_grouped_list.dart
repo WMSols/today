@@ -22,7 +22,17 @@ class AgendaGroupedList extends GetView<AgendaController> {
         if (display == null) {
           return _emptyHint(context);
         }
-        return ScheduleDisplaySection(display: display);
+        return ScheduleDisplaySection(
+          display: display,
+          interactive: true,
+          showHeading: false,
+          selectedSlotKey: controller.selectedSlotKey.value,
+          onSlotTap: controller.selectScheduleSlot,
+          onSlotEdit: controller.onScheduleSlotEdit,
+          onSlotDelete: controller.onScheduleSlotDelete,
+          onSlotComplete: controller.onScheduleSlotComplete,
+          onSlotSkip: controller.onScheduleSlotSkip,
+        );
       }
 
       final groups = controller.groupedTasks;
@@ -59,6 +69,14 @@ class AgendaGroupedList extends GetView<AgendaController> {
                   onTaskDone: controller.completeTask,
                   onTaskSkip: controller.skipTask,
                   onCalendarEventLongPress: controller.onCalendarEventLongPress,
+                  onCalendarEventEdit: controller.onCalendarEventEdit,
+                  onCalendarEventDelete: controller.deleteCalendarEvent,
+                  onCalendarEventComplete:
+                      controller.onCalendarEventCompletePlaceholder,
+                  onCalendarEventSkip:
+                      controller.onCalendarEventSkipPlaceholder,
+                  onGoalTaskEdit: controller.onGoalTaskEdit,
+                  onGoalTaskDelete: controller.onGoalTaskDelete,
                 ),
               ],
             ),

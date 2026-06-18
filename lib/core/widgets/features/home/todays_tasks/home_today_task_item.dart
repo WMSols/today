@@ -6,9 +6,9 @@ import 'package:today/core/utils/app_helper/app_helper.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
-import 'package:today/core/widgets/buttons/app_icon_button.dart';
 import 'package:today/core/widgets/common/app_timeline/app_timeline_node.dart';
 import 'package:today/core/widgets/common/app_timeline/app_vertical_timeline.dart';
+import 'package:today/core/widgets/features/calendar/calendar_event_action_buttons.dart';
 import 'package:today/core/widgets/form/app_checkbox/app_checkbox.dart';
 import 'package:today/domain/entities/home_today_task_entity.dart';
 
@@ -45,6 +45,8 @@ class HomeTodayTaskItem extends StatelessWidget {
     required this.onTap,
     required this.onDone,
     required this.onSkip,
+    this.onEdit,
+    this.onDelete,
     this.onLongPress,
   });
 
@@ -57,6 +59,8 @@ class HomeTodayTaskItem extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onDone;
   final VoidCallback onSkip;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
   final VoidCallback? onLongPress;
 
   static _HomeTodayTaskRowColors _resolveColors(
@@ -115,7 +119,7 @@ class HomeTodayTaskItem extends StatelessWidget {
 
     return _HomeTodayTaskRowColors(
       nodeColor: accent,
-      connectorColor: accent,
+      connectorColor: context.mutedOnSurfaceColor.withValues(alpha: 0.35),
       timeColor: context.mutedOnSurfaceColor,
       titleColor: context.onSurfaceColor,
       iconColor: onAccent,
@@ -246,7 +250,12 @@ class HomeTodayTaskItem extends StatelessWidget {
                           padding: EdgeInsets.only(
                             top: AppResponsive.scaleSize(context, 8),
                           ),
-                          child: _TaskActions(onDone: onDone, onSkip: onSkip),
+                          child: CalendarEventActionButtons(
+                                  onEdit: onEdit,
+                                  onDelete: onDelete,
+                                  onComplete: onDone,
+                                  onSkip: onSkip,
+                                ),
                         )
                       : const SizedBox.shrink(key: ValueKey('empty')),
                 ),
@@ -256,43 +265,6 @@ class HomeTodayTaskItem extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _TaskActions extends StatelessWidget {
-  const _TaskActions({required this.onDone, required this.onSkip});
-
-  final VoidCallback onDone;
-  final VoidCallback onSkip;
-
-  @override
-  Widget build(BuildContext context) {
-    final iconSize = AppResponsive.scaleSize(context, 18);
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        AppIconButton(
-          icon: Icons.check,
-          onPressed: onDone,
-          size: iconSize,
-          paddingFactor: 0.6,
-          backgroundColor: AppColors.success,
-          color: AppColors.white,
-          useAccentPalette: false,
-        ),
-        AppSpacing.horizontal(context, 0.015),
-        AppIconButton(
-          icon: Icons.close,
-          onPressed: onSkip,
-          size: iconSize,
-          paddingFactor: 0.6,
-          backgroundColor: AppColors.error,
-          color: AppColors.white,
-          useAccentPalette: false,
-        ),
-      ],
     );
   }
 }

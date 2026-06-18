@@ -46,10 +46,12 @@ class CalendarEventModel extends CalendarEventEntity {
     super.location,
     super.status,
     super.recurrence,
+    super.recurrenceId,
   });
 
   factory CalendarEventModel.fromJson(Map<String, dynamic> json) {
     final recurrenceRaw = json['recurrence'];
+    final recurrenceId = json['recurrence_id'] as String?;
     return CalendarEventModel(
       id: json['id'] as String? ?? '',
       title: json['title'] as String? ?? '',
@@ -62,6 +64,7 @@ class CalendarEventModel extends CalendarEventEntity {
       recurrence: recurrenceRaw is Map<String, dynamic>
           ? CalendarEventRecurrenceModel.fromJson(recurrenceRaw)
           : null,
+      recurrenceId: recurrenceId,
     );
   }
 }

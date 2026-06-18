@@ -16,6 +16,9 @@ abstract class CalendarAgendaMapper {
   }
 
   static HomeTodayTaskEntity _fromEvent(CalendarEventEntity event) {
+    final isRecurring =
+        event.recurrence?.enabled == true ||
+        (event.recurrenceId?.trim().isNotEmpty ?? false);
     return HomeTodayTaskModel(
       id: event.id,
       title: event.title,
@@ -25,6 +28,7 @@ abstract class CalendarAgendaMapper {
       startAt: event.start,
       endAt: event.end,
       description: event.description,
+      isRecurring: isRecurring,
     );
   }
 

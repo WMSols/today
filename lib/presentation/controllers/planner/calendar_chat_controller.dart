@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:today/core/auth/auth_error_messages.dart';
 import 'package:today/core/storage/calendar_chat_history_storage.dart';
+import 'package:today/core/storage/today_schedule_store.dart';
 import 'package:today/core/utils/app_formatter/app_formatter.dart';
 import 'package:today/core/utils/app_helper/app_helper.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
@@ -15,7 +16,6 @@ import 'package:today/core/widgets/feedback/app_toast.dart';
 import 'package:today/domain/entities/schedule_display_entity.dart';
 import 'package:today/domain/usecases/send_calendar_chat_message_usecase.dart';
 import 'package:today/presentation/controllers/animation/app_animation_controller.dart';
-import 'package:today/presentation/controllers/home/home_controller.dart';
 import 'package:today/presentation/controllers/planner/calendar_chat_session.dart';
 import 'package:today/presentation/controllers/settings/haptics_controller.dart';
 import 'package:today/presentation/routes/app_routes.dart';
@@ -112,6 +112,20 @@ abstract class CalendarChatController extends GetxController {
     return ScheduleDisplayEntity(schema: display.schema, days: days);
   }
 
+  /// Persists an updated schedule display back to chat history / active session.
+  Future<void> commitScheduleDisplay(ScheduleDisplayEntity display) async {
+    latestScheduleDisplay.value = display;
+    if (Get.isRegistered<TodayScheduleStore>()) {
+      await Get.find<TodayScheduleStore>().setPinnedSchedule(display);
+    }
+    if (usesMultiSessionHistory) {
+      _updateActiveSession();
+      await _persistChatHistory();
+      return;
+    }
+    await _persistChatHistory();
+  }
+
   /// Shown under suggested schedule until the user sends another message.
   bool get showViewFullAgendaButton =>
       hasPinnedSchedule &&
@@ -182,6 +196,7 @@ abstract class CalendarChatController extends GetxController {
     chatMessages.assignAll(session.messages);
     latestScheduleDisplay.value = session.scheduleDisplay;
     scheduleMessageAnchor.value = session.scheduleMessageAnchor;
+    _syncStorePinnedSchedule(session.scheduleDisplay);
     scrollChatToBottom(animated: false);
   }
 
@@ -326,6 +341,7 @@ abstract class CalendarChatController extends GetxController {
     chatMessages.assignAll(cached.messages);
     latestScheduleDisplay.value = cached.scheduleDisplay;
     scheduleMessageAnchor.value = cached.scheduleMessageAnchor;
+    _syncStorePinnedSchedule(cached.scheduleDisplay);
     if (cached.messages.isNotEmpty) {
       scrollChatToBottom(animated: false);
     }
@@ -363,6 +379,27 @@ abstract class CalendarChatController extends GetxController {
     chatMessages.clear();
     latestScheduleDisplay.value = null;
     scheduleMessageAnchor.value = null;
+    if (Get.isRegistered<TodayScheduleStore>()) {
+      Get.find<TodayScheduleStore>().clearPinnedSchedule();
+    }
+  }
+
+  void _syncStorePinnedSchedule(ScheduleDisplayEntity? display) {
+    if (!Get.isRegistered<TodayScheduleStore>()) return;
+    final store = Get.find<TodayScheduleStore>();
+    if (display == null) {
+      store.clearPinnedSchedule();
+      return;
+    }
+    final days = AppHelper.scheduleDaysWithSlots(display);
+    if (days.isEmpty) {
+      store.clearPinnedSchedule();
+      return;
+    }
+    store.setPinnedSchedule(
+      ScheduleDisplayEntity(schema: display.schema, days: days),
+      persist: false,
+    );
   }
 
   Future<void> _sendCalendarChatMessage(String text) async {
@@ -384,11 +421,11 @@ abstract class CalendarChatController extends GetxController {
           ),
         );
       }
-      _applyScheduleDisplay(response.scheduleDisplay);
+      await _applyScheduleDisplay(
+        response.scheduleDisplay,
+        scheduleVersion: response.scheduleVersion,
+      );
       _updateActiveSession();
-      if (Get.isRegistered<HomeController>()) {
-        await Get.find<HomeController>().refreshAgendaFromCalendar();
-      }
       scrollChatToBottom();
     } catch (e) {
       isAiTyping.value = false;
@@ -404,15 +441,29 @@ abstract class CalendarChatController extends GetxController {
     }
   }
 
-  void _applyScheduleDisplay(ScheduleDisplayEntity? display) {
-    if (display == null) return;
-    final days = AppHelper.scheduleDaysWithSlots(display);
-    if (days.isEmpty) return;
-    latestScheduleDisplay.value = ScheduleDisplayEntity(
-      schema: display.schema,
-      days: days,
-    );
-    scheduleMessageAnchor.value = chatMessages.length;
+  Future<void> _applyScheduleDisplay(
+    ScheduleDisplayEntity? display, {
+    int scheduleVersion = 0,
+  }) async {
+    if (display != null) {
+      final days = AppHelper.scheduleDaysWithSlots(display);
+      if (days.isEmpty) {
+        latestScheduleDisplay.value = null;
+      } else {
+        latestScheduleDisplay.value = ScheduleDisplayEntity(
+          schema: display.schema,
+          days: days,
+        );
+      }
+      scheduleMessageAnchor.value = chatMessages.length;
+    }
+
+    if (Get.isRegistered<TodayScheduleStore>()) {
+      await Get.find<TodayScheduleStore>().applyChatSchedule(
+        display: display,
+        scheduleVersion: scheduleVersion,
+      );
+    }
   }
 
   void _ensureActiveSession(String firstUserMessage) {

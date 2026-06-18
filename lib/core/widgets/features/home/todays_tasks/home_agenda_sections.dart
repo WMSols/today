@@ -18,6 +18,12 @@ class HomeAgendaSections extends StatelessWidget {
     required this.onTaskDone,
     required this.onTaskSkip,
     this.onCalendarEventLongPress,
+    this.onCalendarEventEdit,
+    this.onCalendarEventDelete,
+    this.onCalendarEventComplete,
+    this.onCalendarEventSkip,
+    this.onGoalTaskEdit,
+    this.onGoalTaskDelete,
     this.previewLimit,
   });
 
@@ -28,6 +34,12 @@ class HomeAgendaSections extends StatelessWidget {
   final ValueChanged<String> onTaskDone;
   final ValueChanged<String> onTaskSkip;
   final ValueChanged<HomeTodayTaskEntity>? onCalendarEventLongPress;
+  final ValueChanged<HomeTodayTaskEntity>? onCalendarEventEdit;
+  final ValueChanged<HomeTodayTaskEntity>? onCalendarEventDelete;
+  final ValueChanged<HomeTodayTaskEntity>? onCalendarEventComplete;
+  final ValueChanged<HomeTodayTaskEntity>? onCalendarEventSkip;
+  final ValueChanged<HomeTodayTaskEntity>? onGoalTaskEdit;
+  final ValueChanged<HomeTodayTaskEntity>? onGoalTaskDelete;
   final int? previewLimit;
 
   @override
@@ -54,6 +66,10 @@ class HomeAgendaSections extends StatelessWidget {
             onTaskDone: onTaskDone,
             onTaskSkip: onTaskSkip,
             onCalendarEventLongPress: onCalendarEventLongPress,
+            onCalendarEventEdit: onCalendarEventEdit,
+            onCalendarEventDelete: onCalendarEventDelete,
+            onCalendarEventComplete: onCalendarEventComplete,
+            onCalendarEventSkip: onCalendarEventSkip,
           ),
         AppSpacing.vertical(context, 0.016),
         _SectionHeader(title: AppTexts.agendaGoalTasksSection),
@@ -67,6 +83,8 @@ class HomeAgendaSections extends StatelessWidget {
             onTaskTap: onTaskTap,
             onTaskDone: onTaskDone,
             onTaskSkip: onTaskSkip,
+            onGoalTaskEdit: onGoalTaskEdit,
+            onGoalTaskDelete: onGoalTaskDelete,
           ),
       ],
     );

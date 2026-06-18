@@ -114,8 +114,13 @@ class CalendarRepositoryImpl implements CalendarRepository {
   Future<CalendarEventEntity> updateEvent({
     required String eventId,
     required UpdateCalendarEventParams params,
+    bool updateSeries = false,
   }) async {
-    final raw = await _remote.updateEvent(eventId: eventId, params: params);
+    final raw = await _remote.updateEvent(
+      eventId: eventId,
+      params: params,
+      updateSeries: updateSeries,
+    );
     final version = (raw['schedule_version'] as num?)?.toInt() ?? 0;
     if (version > 0) await applyScheduleVersion(version);
 

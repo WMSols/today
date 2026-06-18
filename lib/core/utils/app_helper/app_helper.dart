@@ -70,7 +70,7 @@ class AppHelper {
       return Iconsax.routing_2;
     }
     if (_titleMatches(normalized, const ['swim', 'swimming', 'pool'])) {
-      return Iconsax.drop;
+      return Iconsax.bubble;
     }
     if (_titleMatches(normalized, const ['hike', 'hiking', 'trek', 'trail'])) {
       return Iconsax.tree;
@@ -211,8 +211,31 @@ class AppHelper {
         .toList();
   }
 
+  static bool isCalendarScheduleSlot(ScheduleDisplaySlotEntity slot) {
+    final normalized = (slot.status ?? 'calendar').toLowerCase();
+    return normalized == 'calendar' || normalized.isEmpty;
+  }
+
   static bool isSameDay(DateTime a, DateTime b) {
     return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+
+  static DateTime startOfToday([DateTime? now]) {
+    final n = now ?? DateTime.now();
+    return DateTime(n.year, n.month, n.day);
+  }
+
+  /// True when [date] is today or later. Null [date] is treated as today.
+  static bool isTodayOrFuture(DateTime? date) {
+    if (date == null) return true;
+    return !date.isBefore(startOfToday());
+  }
+
+  /// True when an API date string (yyyy-mm-dd or ISO) is today or later.
+  static bool isTodayOrFutureApiDate(String? apiDate) {
+    final parsed = parseDateTimeOrNull(apiDate);
+    if (parsed == null) return true;
+    return isTodayOrFuture(parsed);
   }
 
   static String dayLabelFor(DateTime date) {

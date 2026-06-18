@@ -8,8 +8,6 @@ import 'package:today/core/auth/firebase_auth_gateway.dart';
 import 'package:today/presentation/controllers/settings/haptics_controller.dart';
 import 'package:today/core/auth/auth_error_messages.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
-import 'package:today/core/utils/app_colors/app_colors.dart';
-import 'package:today/core/widgets/buttons/app_button.dart';
 import 'package:today/core/widgets/feedback/app_toast.dart';
 import 'package:today/domain/repositories/auth_repository.dart';
 import 'package:today/domain/usecases/bootstrap_user_usecase.dart';
@@ -66,16 +64,6 @@ class AuthController extends GetxController {
       loginEmailController.clear();
       loginPasswordController.clear();
     }
-  }
-
-  AppButtonColors authTabColors(bool isDark) {
-    return AppButtonColors(
-      filledBackground: isDark ? AppColors.secondary : AppColors.primary,
-      filledForeground: isDark ? AppColors.primary : AppColors.secondary,
-      outlinedBackground: Colors.transparent,
-      outlinedForeground: isDark ? AppColors.secondary : AppColors.primary,
-      outlinedBorder: isDark ? AppColors.secondary : AppColors.primary,
-    );
   }
 
   Future<void> signInWithGoogle() async {

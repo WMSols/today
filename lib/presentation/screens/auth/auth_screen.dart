@@ -3,9 +3,10 @@ import 'package:get/get.dart';
 
 import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
+import 'package:today/core/utils/app_texts/app_texts.dart';
+import 'package:today/core/widgets/common/app_mode_tabs.dart';
 import 'package:today/core/widgets/features/auth/auth_footer.dart';
 import 'package:today/core/widgets/features/auth/auth_login_form.dart';
-import 'package:today/core/widgets/features/auth/auth_mode_tabs.dart';
 import 'package:today/core/widgets/features/auth/auth_signup_form.dart';
 import 'package:today/core/widgets/features/auth/auth_social_section.dart';
 import 'package:today/core/widgets/features/auth/auth_submit_section.dart';
@@ -31,9 +32,15 @@ class AuthScreen extends GetView<AuthController> {
                     children: [
                       const AuthWelcomeSection(),
                       AppSpacing.vertical(context, 0.04),
-                      AuthModeTabs(
-                        colors: controller.authTabColors(
-                          Theme.of(context).brightness == Brightness.dark,
+                      Obx(
+                        () => AppModeTabs(
+                          tabs: const [
+                            AppModeTab(label: AppTexts.login),
+                            AppModeTab(label: AppTexts.signUp),
+                          ],
+                          selectedIndex: controller.isLoginMode.value ? 0 : 1,
+                          onChanged: (index) =>
+                              controller.switchMode(index == 0),
                         ),
                       ),
                       AppSpacing.vertical(context, 0.025),

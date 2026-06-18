@@ -9,13 +9,13 @@ import 'package:today/core/storage/initial_plan_storage.dart';
 import 'package:today/core/storage/profile_setup_storage.dart';
 import 'package:today/core/storage/calendar_cache_storage.dart';
 import 'package:today/core/storage/calendar_chat_history_storage.dart';
+import 'package:today/core/storage/today_schedule_store.dart';
 import 'package:today/core/storage/session_storage.dart';
 import 'package:today/data/datasources/remote/calendar_remote_data_source.dart';
 import 'package:today/data/repositories/calendar_repository_impl.dart';
 import 'package:today/domain/repositories/calendar_repository.dart';
 import 'package:today/domain/usecases/create_calendar_event_usecase.dart';
 import 'package:today/domain/usecases/delete_calendar_event_usecase.dart';
-import 'package:today/domain/usecases/get_calendar_agenda_usecase.dart';
 import 'package:today/domain/usecases/send_calendar_chat_message_usecase.dart';
 import 'package:today/domain/usecases/update_calendar_event_usecase.dart';
 import 'package:today/data/datasources/local/goal_local_data_source.dart';
@@ -29,7 +29,6 @@ import 'package:today/data/datasources/remote/home_today_tasks_remote_data_sourc
 import 'package:today/data/repositories/home_today_tasks_repository_impl.dart';
 import 'package:today/domain/repositories/home_today_tasks_repository.dart';
 import 'package:today/domain/usecases/create_today_task_usecase.dart';
-import 'package:today/domain/usecases/get_home_today_tasks_usecase.dart';
 import 'package:today/data/repositories/active_goal_repository_impl.dart';
 import 'package:today/data/repositories/analytics_repository_impl.dart';
 import 'package:today/data/repositories/home_daily_calendar_repository_impl.dart';
@@ -55,7 +54,13 @@ import 'package:today/domain/usecases/get_goal_history_usecase.dart';
 import 'package:today/domain/usecases/create_goal_usecase.dart';
 import 'package:today/domain/usecases/complete_task_usecase.dart';
 import 'package:today/domain/usecases/skip_task_usecase.dart';
+import 'package:today/domain/usecases/delete_goal_task_usecase.dart';
 import 'package:today/domain/usecases/delete_goal_usecase.dart';
+import 'package:today/domain/usecases/get_goal_plan_usecase.dart';
+import 'package:today/domain/usecases/list_goal_plans_usecase.dart';
+import 'package:today/domain/usecases/send_goal_plan_message_usecase.dart';
+import 'package:today/domain/usecases/start_goal_plan_usecase.dart';
+import 'package:today/domain/usecases/update_goal_task_usecase.dart';
 import 'package:today/domain/usecases/get_analytics_dashboard_usecase.dart';
 import 'package:today/domain/usecases/get_weekly_calendar_usecase.dart';
 import 'package:today/domain/usecases/save_goal_usecase.dart';
@@ -170,6 +175,17 @@ class AppBinding extends Bindings {
       ),
       fenix: true,
     );
+    if (Get.isRegistered<SharedPreferences>()) {
+      Get.put<TodayScheduleStore>(
+        TodayScheduleStore(
+          Get.find<CalendarRepository>(),
+          Get.find<HomeTodayTasksRepository>(),
+          Get.find<CalendarChatHistoryStorage>(),
+          Get.find<SharedPreferences>(),
+        ),
+        permanent: true,
+      );
+    }
 
     // Use cases
     Get.lazyPut<GetTodayPlanUseCase>(
@@ -198,10 +214,6 @@ class AppBinding extends Bindings {
     );
     Get.lazyPut<SendCalendarChatMessageUseCase>(
       () => SendCalendarChatMessageUseCase(Get.find<CalendarRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<GetCalendarAgendaUseCase>(
-      () => GetCalendarAgendaUseCase(Get.find<CalendarRepository>()),
       fenix: true,
     );
     Get.lazyPut<CreateCalendarEventUseCase>(
@@ -244,16 +256,36 @@ class AppBinding extends Bindings {
       () => DeleteGoalUseCase(Get.find<ActiveGoalRepository>()),
       fenix: true,
     );
+    Get.lazyPut<UpdateGoalTaskUseCase>(
+      () => UpdateGoalTaskUseCase(Get.find<ActiveGoalRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<DeleteGoalTaskUseCase>(
+      () => DeleteGoalTaskUseCase(Get.find<ActiveGoalRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<StartGoalPlanUseCase>(
+      () => StartGoalPlanUseCase(Get.find<ActiveGoalRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<SendGoalPlanMessageUseCase>(
+      () => SendGoalPlanMessageUseCase(Get.find<ActiveGoalRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetGoalPlanUseCase>(
+      () => GetGoalPlanUseCase(Get.find<ActiveGoalRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<ListGoalPlansUseCase>(
+      () => ListGoalPlansUseCase(Get.find<ActiveGoalRepository>()),
+      fenix: true,
+    );
     Get.lazyPut<GetAnalyticsDashboardUseCase>(
       () => GetAnalyticsDashboardUseCase(Get.find<AnalyticsRepository>()),
       fenix: true,
     );
     Get.lazyPut<GetWeeklyCalendarUseCase>(
       () => GetWeeklyCalendarUseCase(Get.find<HomeDailyCalendarRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<GetHomeTodayTasksUseCase>(
-      () => GetHomeTodayTasksUseCase(Get.find<HomeTodayTasksRepository>()),
       fenix: true,
     );
     Get.lazyPut<CreateTodayTaskUseCase>(

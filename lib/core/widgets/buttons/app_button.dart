@@ -5,11 +5,11 @@ import 'package:lottie/lottie.dart';
 import 'package:today/core/extensions/theme_context_extension.dart';
 import 'package:today/presentation/controllers/settings/haptics_controller.dart';
 import 'package:today/core/utils/app_colors/app_colors.dart';
+import 'package:today/core/utils/app_formatter/app_formatter.dart';
 import 'package:today/core/utils/app_lotties/app_lotties.dart';
 import 'package:today/core/utils/app_responsive/app_responsive.dart';
 import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_styles/app_text_styles.dart';
-import 'package:today/core/utils/app_texts/app_texts.dart';
 
 /// Optional per-screen palette for [AppButton] filled vs outlined states.
 ///
@@ -128,6 +128,7 @@ class AppButton extends StatelessWidget {
     this.useAccentPalette = true,
     this.colors,
     this.size,
+    this.preserveStyleWhenDisabled = false,
   });
 
   final String label;
@@ -152,17 +153,14 @@ class AppButton extends StatelessWidget {
   /// When null, [AppButtonSize.medium] is used.
   final AppButtonSize? size;
 
+  /// When true and [onPressed] is null, keeps the normal filled/outlined
+  /// background but mutes border and label (dialog cancel during loading).
+  final bool preserveStyleWhenDisabled;
+
   static const _animationDuration = Duration(milliseconds: 220);
 
   static String _defaultLoadingLabel(String label) {
-    switch (label) {
-      case AppTexts.login:
-        return AppTexts.loggingIn;
-      case AppTexts.submit:
-        return AppTexts.submitting;
-      default:
-        return AppTexts.loading;
-    }
+    return AppFormatter.buttonLoadingLabel(label);
   }
 
   static String _lottieForContrast(Color reference) {
@@ -176,8 +174,9 @@ class AppButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final metrics = _AppButtonMetrics.forSize(size);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final isDisabled = !isLoading && onPressed == null;
-    final effectivePrimary = primary && !isDisabled;
+    final isDisabled = onPressed == null && !isLoading;
+    final effectivePrimary =
+        primary && (isLoading || !isDisabled || preserveStyleWhenDisabled);
     final baseButtonTextStyle = AppTextStyles.buttonText(context);
     final buttonTextStyle = baseButtonTextStyle.copyWith(
       fontSize: (baseButtonTextStyle.fontSize ?? 14) * metrics.fontScale,
@@ -196,10 +195,32 @@ class AppButton extends StatelessWidget {
     final Color foregroundColor;
     final BoxBorder? border;
 
-    if (isDisabled) {
+    if (isLoading) {
+      if (primary) {
+        backgroundColor = scheme.filledBackground;
+        foregroundColor = scheme.filledForeground;
+        border = null;
+      } else {
+        backgroundColor = scheme.outlinedBackground;
+        foregroundColor = scheme.outlinedForeground;
+        border = Border.all(color: scheme.outlinedBorder);
+      }
+    } else if (isDisabled && !preserveStyleWhenDisabled) {
       backgroundColor = isDark ? AppColors.darkGrey : AppColors.grey;
       foregroundColor = AppColors.grey;
       border = null;
+    } else if (isDisabled && preserveStyleWhenDisabled) {
+      if (primary) {
+        backgroundColor = scheme.filledBackground;
+        foregroundColor = scheme.filledForeground.withValues(alpha: 0.45);
+        border = null;
+      } else {
+        backgroundColor = scheme.outlinedBackground;
+        foregroundColor = scheme.outlinedForeground.withValues(alpha: 0.45);
+        border = Border.all(
+          color: scheme.outlinedBorder.withValues(alpha: 0.45),
+        );
+      }
     } else if (effectivePrimary) {
       backgroundColor = scheme.filledBackground;
       foregroundColor = scheme.filledForeground;

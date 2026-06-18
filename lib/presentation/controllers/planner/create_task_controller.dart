@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:today/core/utils/app_colors/app_colors.dart';
 import 'package:today/core/utils/app_formatter/app_formatter.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
-import 'package:today/core/widgets/buttons/app_button.dart';
 import 'package:today/core/widgets/feedback/app_toast.dart';
 import 'package:today/core/widgets/form/app_datetime_picker/app_datetime_picker.dart';
+import 'package:today/core/storage/today_schedule_store.dart';
 import 'package:today/domain/entities/create_today_task_params.dart';
 import 'package:today/domain/usecases/create_today_task_usecase.dart';
 import 'package:today/domain/usecases/send_calendar_chat_message_usecase.dart';
 import 'package:today/presentation/controllers/animation/app_animation_controller.dart';
-import 'package:today/presentation/controllers/home/home_controller.dart';
 import 'package:today/presentation/controllers/planner/calendar_chat_controller.dart';
 import 'package:today/presentation/controllers/settings/haptics_controller.dart';
 import 'package:today/presentation/routes/app_routes.dart';
@@ -55,6 +53,8 @@ class CreateTaskController extends CalendarChatController {
   final RxBool isSubmitting = false.obs;
   final isManualMode = true.obs;
 
+  bool get hasUserMessages => chatMessages.any((message) => message.isUser);
+
   String get scheduleDisplay {
     final date = scheduledDate.value;
     if (date == null) return '';
@@ -80,7 +80,7 @@ class CreateTaskController extends CalendarChatController {
     scheduledDate.value = DateTime(now.year, now.month, now.day);
     startDateTime.value = DateTime(now.year, now.month, now.day, 9);
     endDateTime.value = DateTime(now.year, now.month, now.day, 10);
-    if (chatMessages.any((message) => message.isUser)) {
+    if (hasUserMessages) {
       isManualMode.value = false;
     }
   }
@@ -99,16 +99,6 @@ class CreateTaskController extends CalendarChatController {
     if (!manual && chatMessages.isNotEmpty) {
       scrollChatToBottom(animated: false);
     }
-  }
-
-  AppButtonColors modeTabColors(bool isDark) {
-    return AppButtonColors(
-      filledBackground: isDark ? AppColors.secondary : AppColors.primary,
-      filledForeground: isDark ? AppColors.primary : AppColors.secondary,
-      outlinedBackground: Colors.transparent,
-      outlinedForeground: isDark ? AppColors.secondary : AppColors.primary,
-      outlinedBorder: isDark ? AppColors.secondary : AppColors.primary,
-    );
   }
 
   void toggleRecurring(bool value) {
@@ -236,8 +226,8 @@ class CreateTaskController extends CalendarChatController {
         isRecurring: isRecurring.value,
       );
       await _createTodayTaskUseCase(params);
-      if (Get.isRegistered<HomeController>()) {
-        await Get.find<HomeController>().refreshAgendaFromCalendar();
+      if (Get.isRegistered<TodayScheduleStore>()) {
+        await Get.find<TodayScheduleStore>().refreshFromApi();
       }
       AppToast.showSuccess(AppTexts.toastTaskCreated);
       await AppAnimationController.offNamed<void>(AppRoutes.agenda);

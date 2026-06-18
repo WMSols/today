@@ -10,12 +10,14 @@ class AppTimelineNode extends StatelessWidget {
     required this.child,
     this.size,
     this.iconColor,
+    this.borderColor,
   });
 
   final Color color;
   final Color? iconColor;
   final Widget child;
   final double? size;
+  final Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,13 @@ class AppTimelineNode extends StatelessWidget {
     return Container(
       width: diameter,
       height: diameter,
-      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: borderColor == null
+            ? null
+            : Border.all(color: borderColor!, width: 1.5),
+      ),
       alignment: Alignment.center,
       child: IconTheme(
         data: IconThemeData(

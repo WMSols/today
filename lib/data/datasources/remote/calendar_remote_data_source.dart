@@ -57,6 +57,7 @@ class CalendarRemoteDataSource {
   Future<Map<String, dynamic>> updateEvent({
     required String eventId,
     required UpdateCalendarEventParams params,
+    bool updateSeries = false,
   }) async {
     if (!ApiConstants.backendApiEnabled) {
       return ApiStubs.updateCalendarEvent(eventId: eventId);
@@ -64,6 +65,7 @@ class CalendarRemoteDataSource {
     final response = await _dio.patch<Map<String, dynamic>>(
       '${ApiConstants.calendarEventsPath}/$eventId',
       data: _updateBody(params),
+      queryParameters: <String, dynamic>{'update_series': updateSeries},
     );
     return response.data ?? <String, dynamic>{};
   }

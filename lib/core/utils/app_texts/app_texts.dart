@@ -450,11 +450,42 @@ class AppTexts {
   static const String calendarEventUpdated = 'Event updated';
   static const String calendarEventDeleteFailed = 'Unable to delete event';
   static const String calendarEventUpdateFailed = 'Unable to update event';
+  static const String edit = 'Edit';
+  static const String complete = 'Complete';
+  static const String skip = 'Skip';
+  static const String calendarEventActionHint = 'Select an action';
+  static const String calendarEventCompleteNotImplemented =
+      'Complete for calendar events will be added soon';
+  static const String calendarEventSkipNotImplemented =
+      'Skip for calendar events will be added soon';
+  static const String calendarEventNotFound =
+      'Could not link this item to a calendar event';
+  static const String editEventTitle = 'Edit event';
+  static const String editEventSubtitle =
+      'Update the title for this calendar event.';
+  static const String editEventHint = 'Event title';
   static const String delete = 'Delete';
   static const String deleteEventTitle = 'Delete event?';
   static const String deleteEventBody =
       'Remove this calendar event from your schedule.';
   static const String deleteSeriesLabel = 'Delete entire series';
+  static const String updateSeriesLabel = 'Update entire series';
+  static const String thisEventOnlyLabel = 'This event only';
+  static const String recurringEventTitle = 'Recurring event';
+  static const String recurringEventEditSubtitle =
+      'Apply this edit to this event only or the entire series?';
+  static const String recurringEventDeleteSubtitle =
+      'Delete this event only or the entire series?';
+  static const String editGoalTaskTitle = 'Edit goal task';
+  static const String editGoalTaskSubtitle = 'Update the title for this goal task.';
+  static const String deleteGoalTaskTitle = 'Delete goal task?';
+  static const String deleteGoalTaskBody =
+      'Remove this goal task from your plan.';
+  static const String goalTaskDeleted = 'Goal task deleted';
+  static const String goalTaskUpdated = 'Goal task updated';
+  static const String goalTaskDeleteFailed = 'Unable to delete goal task';
+  static const String goalTaskUpdateFailed = 'Unable to update goal task';
+  static const String goalsChatSendFailed = 'Unable to reach the goal assistant';
 
   static const String todaysTasksHeading = "TODAY'S TASKS";
   static const String todaysTasksProgressLabel = 'PROGRESS';
