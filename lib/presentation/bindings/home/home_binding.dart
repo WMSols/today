@@ -9,9 +9,11 @@ import 'package:today/domain/usecases/get_goal_history_usecase.dart';
 import 'package:today/domain/usecases/skip_task_usecase.dart';
 import 'package:today/domain/usecases/delete_calendar_event_usecase.dart';
 import 'package:today/domain/usecases/get_weekly_calendar_usecase.dart';
+import 'package:today/domain/usecases/delete_goal_task_usecase.dart';
 import 'package:today/domain/usecases/update_calendar_event_usecase.dart';
+import 'package:today/domain/usecases/update_goal_task_usecase.dart';
+import 'package:today/core/storage/today_schedule_store.dart';
 import 'package:today/domain/repositories/home_today_tasks_repository.dart';
-import 'package:today/domain/usecases/get_home_today_tasks_usecase.dart';
 import 'package:today/presentation/controllers/goals/goal_cards_controller.dart';
 import 'package:today/presentation/controllers/home/home_controller.dart';
 
@@ -34,10 +36,12 @@ class HomeBinding extends Bindings {
           Get.find<GetGoalHistoryUseCase>(),
           Get.find<DeleteGoalUseCase>(),
           Get.find<GetWeeklyCalendarUseCase>(),
-          Get.find<GetHomeTodayTasksUseCase>(),
+          Get.find<TodayScheduleStore>(),
           Get.find<HomeTodayTasksRepository>(),
           Get.find<DeleteCalendarEventUseCase>(),
           Get.find<UpdateCalendarEventUseCase>(),
+          Get.find<UpdateGoalTaskUseCase>(),
+          Get.find<DeleteGoalTaskUseCase>(),
         ),
       );
     }

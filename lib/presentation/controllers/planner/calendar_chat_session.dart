@@ -81,6 +81,7 @@ class CalendarChatSession {
                           description: slot.description,
                           time: slot.time,
                           status: slot.status,
+                          eventId: slot.eventId,
                         ),
                       )
                       .toList(),

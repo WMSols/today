@@ -10,7 +10,12 @@ class UpdateCalendarEventUseCase {
   Future<CalendarEventEntity> call({
     required String eventId,
     required UpdateCalendarEventParams params,
+    bool updateSeries = false,
   }) {
-    return _repository.updateEvent(eventId: eventId, params: params);
+    return _repository.updateEvent(
+      eventId: eventId,
+      params: params,
+      updateSeries: updateSeries,
+    );
   }
 }

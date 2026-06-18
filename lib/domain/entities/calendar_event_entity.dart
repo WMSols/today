@@ -23,6 +23,7 @@ class CalendarEventEntity {
     this.location,
     this.status,
     this.recurrence,
+    this.recurrenceId,
   });
 
   final String id;
@@ -34,4 +35,5 @@ class CalendarEventEntity {
   final String? location;
   final String? status;
   final CalendarEventRecurrenceEntity? recurrence;
+  final String? recurrenceId;
 }

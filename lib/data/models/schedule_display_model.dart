@@ -6,14 +6,17 @@ class ScheduleDisplaySlotModel extends ScheduleDisplaySlotEntity {
     super.description,
     super.time,
     super.status,
+    super.eventId,
   });
 
   factory ScheduleDisplaySlotModel.fromJson(Map<String, dynamic> json) {
+    final eventId = json['event_id'] as String? ?? json['id'] as String?;
     return ScheduleDisplaySlotModel(
       title: json['title'] as String? ?? '',
       description: json['description'] as String?,
       time: json['time'] as String?,
       status: json['status'] as String?,
+      eventId: eventId?.trim().isEmpty == true ? null : eventId?.trim(),
     );
   }
 
@@ -22,6 +25,7 @@ class ScheduleDisplaySlotModel extends ScheduleDisplaySlotEntity {
     if (description != null) 'description': description,
     if (time != null) 'time': time,
     if (status != null) 'status': status,
+    if (eventId != null) 'event_id': eventId,
   };
 }
 

@@ -22,6 +22,7 @@ abstract class CalendarRepository {
   Future<CalendarEventEntity> updateEvent({
     required String eventId,
     required UpdateCalendarEventParams params,
+    bool updateSeries = false,
   });
 
   Future<int> deleteEvent({required String eventId, bool deleteSeries = false});

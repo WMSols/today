@@ -6,9 +6,9 @@ import 'package:today/core/utils/app_spacing/app_spacing.dart';
 import 'package:today/core/utils/app_texts/app_texts.dart';
 import 'package:today/core/widgets/buttons/app_button.dart';
 import 'package:today/core/widgets/common/app_custom_app_bar.dart';
+import 'package:today/core/widgets/common/app_mode_tabs.dart';
 import 'package:today/core/widgets/common/app_page_scaffold.dart';
 import 'package:today/core/widgets/features/planner/create_task/create_task_hero_section.dart';
-import 'package:today/core/widgets/features/planner/create_task/create_task_mode_tabs.dart';
 import 'package:today/core/widgets/features/planner/create_task_form.dart';
 import 'package:today/core/widgets/features/planner/planner_chat_composer.dart';
 import 'package:today/core/widgets/features/planner/planner_chat_transcript.dart';
@@ -36,9 +36,7 @@ class CreateTaskScreen extends GetView<CreateTaskController> {
                 onBack: Get.back<void>,
               ),
               Obx(() {
-                final hasUserMessages = controller.chatMessages.any(
-                  (message) => message.isUser,
-                );
+                final hasUserMessages = controller.hasUserMessages;
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -47,9 +45,15 @@ class CreateTaskScreen extends GetView<CreateTaskController> {
                       const CreateTaskHeroSection(),
                       AppSpacing.vertical(context, 0.02),
                     ],
-                    CreateTaskModeTabs(
-                      colors: controller.modeTabColors(
-                        Theme.of(context).brightness == Brightness.dark,
+                    Obx(
+                      () => AppModeTabs(
+                        tabs: const [
+                          AppModeTab(label: AppTexts.createTaskModeManual),
+                          AppModeTab(label: AppTexts.createTaskModeChat),
+                        ],
+                        selectedIndex: controller.isManualMode.value ? 0 : 1,
+                        onChanged: (index) =>
+                            controller.switchMode(index == 0),
                       ),
                     ),
                     AppSpacing.vertical(context, 0.02),

@@ -12,6 +12,7 @@ class HomeTodayTaskEntity {
     this.startAt,
     this.endAt,
     this.description,
+    this.isRecurring = false,
   });
 
   final String id;
@@ -22,10 +23,13 @@ class HomeTodayTaskEntity {
   final DateTime? startAt;
   final DateTime? endAt;
   final String? description;
+  final bool isRecurring;
 
   bool get isPending => status == HomeTodayTaskStatus.pending;
 
   bool get isCalendarEvent => source == HomeTodayTaskSource.calendarEvent;
+
+  bool get isGoalTask => source == HomeTodayTaskSource.goalTask;
 
   HomeTodayTaskEntity copyWith({
     String? id,
@@ -36,6 +40,7 @@ class HomeTodayTaskEntity {
     DateTime? startAt,
     DateTime? endAt,
     String? description,
+    bool? isRecurring,
   }) {
     return HomeTodayTaskEntity(
       id: id ?? this.id,
@@ -46,6 +51,7 @@ class HomeTodayTaskEntity {
       startAt: startAt ?? this.startAt,
       endAt: endAt ?? this.endAt,
       description: description ?? this.description,
+      isRecurring: isRecurring ?? this.isRecurring,
     );
   }
 }

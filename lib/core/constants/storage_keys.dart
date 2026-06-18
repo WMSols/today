@@ -8,6 +8,7 @@ class StorageKeys {
   static const String scheduleVersion = 'schedule_version';
   static const String calendarChatSessions = 'calendar_chat_sessions';
   static const String createTaskChat = 'create_task_chat';
+  static const String agendaTasksCache = 'agenda_tasks_cache_v1';
 
   static const String hasCompletedOnboarding = 'has_completed_onboarding';
   static const String hasCompletedInitialPlanFlow =

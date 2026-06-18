@@ -13,7 +13,7 @@ class AppTimelineConnector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        width: width ?? AppResponsive.scaleSize(context, 2),
+        width: width ?? AppResponsive.scaleSize(context, 1.5),
         color: color,
       ),
     );

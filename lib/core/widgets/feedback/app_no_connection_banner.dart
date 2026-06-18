@@ -19,22 +19,24 @@ class AppNoConnectionBanner extends StatelessWidget {
     }
 
     final connectivity = Get.find<ConnectivityService>();
-    return Stack(
-      children: [
-        child,
-        Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: Obx(() {
-            if (connectivity.isOnline.value) return const SizedBox.shrink();
-            return AppToastBar(
-              message: AppTexts.noInternet,
-              style: AppToastStyle.neutral,
-            );
-          }),
-        ),
-      ],
-    );
+    return Obx(() {
+      final isOffline = !connectivity.isOnline.value;
+      return Stack(
+        clipBehavior: Clip.none,
+        children: [
+          child,
+          if (isOffline)
+            const Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: AppToastBar(
+                message: AppTexts.noInternet,
+                style: AppToastStyle.neutral,
+              ),
+            ),
+        ],
+      );
+    });
   }
 }

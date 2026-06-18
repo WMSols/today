@@ -10,6 +10,39 @@ import 'package:today/core/utils/app_texts/app_texts.dart';
 class AppFormatter {
   AppFormatter._();
 
+  static const Set<String> _loadingPrepositions = {
+    'in',
+    'up',
+    'out',
+    'on',
+    'off',
+    'to',
+    'for',
+    'with',
+    'from',
+  };
+
+  static const Map<String, String> _loadingVerbOverrides = {
+    'log in': 'logging in',
+    'sign up': 'signing up',
+    'sign in': 'signing in',
+    'signup': 'signing up',
+    'signin': 'signing in',
+    'save': 'saving',
+    'create': 'creating',
+    'delete': 'deleting',
+    'remove': 'removing',
+    'update': 'updating',
+    'edit': 'editing',
+    'submit': 'submitting',
+    'continue': 'continuing',
+    'retry': 'retrying',
+    'send': 'sending',
+    'sync': 'syncing',
+    'generate': 'generating',
+    'plan': 'planning',
+  };
+
   /// Full date-time string: "EEE MMM dd yyyy - h:mm a" (e.g. Tue Jun 21 2005 - 10:00 PM).
   static String dateTime(DateTime timestamp) {
     final datePart = DateFormat('EEE MMM dd yyyy').format(timestamp);
@@ -207,6 +240,50 @@ class AppFormatter {
     if (words.isEmpty) return '';
     if (words.length <= maxWords) return words.join(' ');
     return '${words.take(maxWords).join(' ')}…';
+  }
+
+  /// Derives a progress label for button loading states.
+  static String buttonLoadingLabel(String label) {
+    final normalized = label.trim().toLowerCase().replaceAll(RegExp(r'\s+'), ' ');
+    if (normalized.isEmpty) return AppTexts.loading;
+    if (_loadingVerbOverrides.containsKey(normalized)) {
+      return _sentenceCase(_loadingVerbOverrides[normalized]!);
+    }
+
+    final words = normalized.split(' ');
+    final firstGerund = _toGerund(words.first);
+    if (words.length == 1) return _sentenceCase(firstGerund);
+
+    final tail = words.skip(1).toList(growable: false);
+    final firstTail = tail.first;
+    final restTail = tail.skip(1).join(' ');
+    final phrase = _loadingPrepositions.contains(firstTail)
+        ? '$firstGerund $firstTail${restTail.isEmpty ? '' : ' $restTail'}'
+        : '$firstGerund ${tail.join(' ')}';
+    return _sentenceCase(phrase);
+  }
+
+  static String _toGerund(String word) {
+    final lower = word.toLowerCase();
+    if (lower.isEmpty) return lower;
+    if (_loadingVerbOverrides.containsKey(lower)) {
+      return _loadingVerbOverrides[lower]!;
+    }
+    if (lower.endsWith('ie') && lower.length > 2) {
+      return '${lower.substring(0, lower.length - 2)}ying';
+    }
+    if (lower.endsWith('e') &&
+        !lower.endsWith('ee') &&
+        !lower.endsWith('ye') &&
+        lower.length > 2) {
+      return '${lower.substring(0, lower.length - 1)}ing';
+    }
+    return '${lower}ing';
+  }
+
+  static String _sentenceCase(String value) {
+    if (value.isEmpty) return value;
+    return '${value[0].toUpperCase()}${value.substring(1)}';
   }
 }
 

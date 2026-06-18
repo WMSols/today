@@ -4,12 +4,14 @@ class ScheduleDisplaySlotEntity {
     this.description,
     this.time,
     this.status,
+    this.eventId,
   });
 
   final String title;
   final String? description;
   final String? time;
   final String? status;
+  final String? eventId;
 }
 
 class ScheduleDisplayDayEntity {
